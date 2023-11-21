@@ -1,0 +1,15 @@
+<body>
+<title>{{title}}</title>
+<main>
+    <h1>{{title}}</h1>
+    <h2>{{searchMarvelTerm}}</h2>
+    <ol>
+        {{#each drink}}
+            <li>
+                <a id="searchResults" href="/marvelcharacter/{{id}}">{{this.name}}</a>
+            </li>
+        {{/each}}
+    </ol>
+    <a href="/" id="searchMoreLink">Search for Another Character</a>
+</main>
+</body>

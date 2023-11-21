@@ -1,0 +1,20 @@
+{
+  "name": "aura-bar-liquor-review-system",
+  "version": "1.0.0",
+  "description": "Team project for CS546",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node app.js",
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XinJin96/Aura-Bar-Liquor-Review-System.git"
+  }
+}
