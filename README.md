@@ -1,4 +1,4 @@
-# StraySpotter
+# Aura-Bar-Liquor-Review-System 
 This is CS545 Project Repo
 
 <a name="readme-top"></a>
@@ -9,7 +9,7 @@ This is CS545 Project Repo
     <img src="logo.png" alt="Logo" width="600" >
   </a>
 
-  <h3 align="center">This is CS555 Project Repo</h3>
+  <h3 align="center">This is CS546 Project Repo</h3>
 
   <p align="center">
     Allowing User to Choose Favoriate Events with Integrating Eventbrite API
@@ -42,7 +42,7 @@ This is CS545 Project Repo
 ## Members
 
 <div align="left">
-Yetong Chen <br/>Xin Jin<br/>Suqi Lu
+Zimeng Zhao <br/>Ruikang Li<br/>Zijin Wang<br/>Xin Jin
 </div>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -84,7 +84,7 @@ To get a local copy up and running follow these simple example steps.
 
 3. Open your terminal, enter the command below, and choose a folder in which to clone the repository.
     ```sh
-    git clone https://github.com/yetongchen/StraySpotter.git
+    git clone https://github.com/XinJin96/Aura-Bar-Liquor-Review-System.git
     ```
 
 4. Go to the project root directory and run below code in terminal to install NPM packages
