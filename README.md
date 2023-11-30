@@ -1,5 +1,5 @@
 # Aura-Bar-Liquor-Review-System 
-This is CS545 Project Repo
+This is CS546 Project Repo
 
 <a name="readme-top"></a>
 
