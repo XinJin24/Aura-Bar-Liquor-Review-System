@@ -127,7 +127,7 @@ router
         //if login
         if (req.session.user) {
             try {
-                const userId = validation.validateId(req.params.id);
+                const userId = validation.validateId(req.params.id, "ID");
                 const userIdFromDB = await getUserIdByEmail(req.session.user.email);
                 if(userIdFromDB !== userId){
                     throw `Error: You don't have access to ${userId}`
