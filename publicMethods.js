@@ -190,6 +190,17 @@ const exportedMethods = {
             }
         });
         return Ids;
+    },
+    checkPhoto(photo){
+        if(!(photo instanceof Array)){
+            throw "photo should be an array of strings";
+        }
+        for(let i = 0; i < photo.length; i++){
+            if(typeof photo[i] !== "string"){
+                throw "each element in photo should be a string";
+            }
+        }
+        return photo;
     }
 }
 export default exportedMethods;

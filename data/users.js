@@ -12,7 +12,8 @@ export const createUser = async (
     email,
     state,
     password,
-    profilePictureLocation,
+    // profilePictureLocation,
+    photo,
     role
 ) => {
     firstName = validation.validateName(firstName, "firstName");
@@ -20,7 +21,8 @@ export const createUser = async (
     email = validation.validateEmail(email, "email");
     state = validation.validateState(state);
     password = validation.validatePassword(password, "password");
-    profilePictureLocation = validation.validateIfFileExist(profilePictureLocation);
+    // profilePictureLocation = validation.validateIfFileExist(profilePictureLocation);
+    photo = validation.checkPhoto(photo);
     role = validation.validateRole(role);
 
     const userCollection = await users();
@@ -35,7 +37,8 @@ export const createUser = async (
         state: state,
         password: await bcrypt.hash(password, 15),
         reviewIds: [],
-        profilePictureLocation: profilePictureLocation,
+        // profilePictureLocation: profilePictureLocation,
+        photo: photo,
         drinkReserved: [],
         role: role
     }
@@ -72,7 +75,8 @@ export const loginUser = async (email, password) => {
             email: user.email,
             state: user.state,
             reviewIds: user.reviewIds,
-            profilePictureLocation: user.profilePictureLocation,
+            photo: user.photo,
+            // profilePictureLocation: user.profilePictureLocation,
             drinkReserved: user.drinkReserved,
             role: user.role
         };
