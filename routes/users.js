@@ -1,16 +1,14 @@
 import Router from "express"
-
 const router = Router();
 import validation from "../publicMethods.js";
-import {
-    createUser,
-    getAllDrinkReservedByUserId, getAllReviewsByUserId,
-    getUserIdByEmail,
-    loginUser
-} from "../data/users.js";
-
+import {createUser,getAllDrinkReservedByUserId, getAllReviewsByUserId,getUserIdByEmail,loginUser} from "../data/users.js";
 import {getReviewDetailByReviewId}from "../data/reviews.js"
 import {getDrinkDetailByDrinkId}from "../data/drinks.js"
+const multer = require('multer');
+const upload = multer({
+    dest:"public/uploads/",
+    limits:{fileSize:maxsize}
+})
 router
     .route('/register')
     .get(async (req, res) => {
@@ -21,13 +19,13 @@ router
         }
     })
     .post(async (req, res) => {
-        let firstNameInput = req.body.firstNameInput;
+        let firstNameInput = req.body.firstNameInput;//same as frontend
         let lastNameInput = req.body.lastNameInput;
         let emailAddressInput = req.body.emailAddressInput;
         let stateInput = req.body.stateInput;
         let passwordInput = req.body.passwordInput;
         let confirmPasswordInput = req.body.confirmPasswordInput;
-        let profilePictureLocationInput = req.body.profilePictureLocationInput;
+        let photoInput = req.body.photoInput;
         let roleInput = req.body.roleInput;
         try {
             if (!firstNameInput || !lastNameInput || !emailAddressInput || !stateInput || !passwordInput || !confirmPasswordInput || !roleInput) {
@@ -40,8 +38,8 @@ router
             confirmPasswordInput = validation.validatePassword(confirmPasswordInput, "confirmPasswordInput");
             roleInput = validation.validateRole(roleInput);
 
-            const defaultProfilePictureLocation = "";
-            profilePictureLocationInput = profilePictureLocationInput ? profilePictureLocationInput : defaultProfilePictureLocation;
+            // const defaultProfilePictureLocation = "";
+            // photoInput = photoInput ? photoInput : defaultProfilePictureLocation;
 
             if (passwordInput !== confirmPasswordInput) {
                 throw "Error: Passwords do not match";
@@ -58,7 +56,8 @@ router
                 emailAddressInput,
                 stateInput,
                 passwordInput,
-                profilePictureLocationInput,
+                photoInput,
+                // profilePictureLocationInput,
                 roleInput);
             if (user.insertedUser) {
                 return res.redirect('/login');
