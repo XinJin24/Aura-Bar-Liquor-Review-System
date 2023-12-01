@@ -1,38 +1,179 @@
 import validation from "../publicMethods.js";
-import {users, drinks, reviews} from "../config/mongoCollections.js";
-import {getReviewDetailByReviewId} from "./reviews.js";
+import {drinks} from "../config/mongoCollections.js";
+import {ObjectId} from "mongodb";
 
 
 export const createDrink = async (
-)=> {
+    name,
+    category,
+    recipe,
+    rating,
+    drinkPictureLocation,
+    price,
+) => {
+    name = validation.validateDrinkName(name, "DrinkName");
+    category = validation.validateDrinkCategory(category, "DrinkCategory");
+    recipe = validation.validateDrinkRecipe(recipe);
+    rating = validation.validateRating(rating);
+    drinkPictureLocation = validation.validateIfFileExist(drinkPictureLocation);
+    price = validation.validatePrice(price, "Drink Price");
+
+    const drinkCollection = await drinks();
+    const ifExist = await drinkCollection.findOne({name: name});
+    if (ifExist) {
+        throw `Error: ${name} is already exist in the drinks library.`;
+    }
+    const drink = {
+        name: name,
+        category: category,
+        recipe: recipe,
+        rating: rating,
+        reviews: [],
+        drinkPictureLocation: drinkPictureLocation,
+        price: price,
+        reservedCounts: 0,
+        available: true
+    }
+
+    const insertDrink = await drinkCollection.insertOne(drink);
+    if (!insertDrink.acknowledged || !insertDrink.insertedId) {
+        throw `Error: couldn't add drink with the drink name: ${name}`;
+    }
+    return {insertedDrink: true};
 
 }
 
-export const mondifyDrink = async (
-    drinkId
-)=> {
+export const updateDrink = async (
+    drinkId,
+    name,
+    category,
+    recipe,
+    rating,
+    reviews,
+    drinkPictureLocation,
+    price,
+    reservedCounts,
+    available
+) => {
+    drinkId = validation.validateId(drinkId, "Drink Id");
+    name = validation.validateDrinkName(name, "Drink Name");
+    category = validation.validateDrinkCategory(category, "Drink Category");
+    recipe = validation.validateDrinkRecipe(recipe);
+    rating = validation.validateRating(rating);
+    reviews = validation.validateIfArray(reviews, "reviews array");
+    drinkPictureLocation = validation.validateIfFileExist(drinkPictureLocation);
+    price = validation.validatePrice(price, "Drink Price");
+    available = validation.validateIfTrueOrFalse(available, "drink's availability");
 
+    const drinkCollection = await drinks();
+    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId) });
+
+    if (!drink) {
+        throw `Error: drink with the drinkId: ${drink} not found`;
+    }
+
+    const updatedDrink = {
+        name: name,
+        category: category,
+        recipe: recipe,
+        rating: rating,
+        reviews: reviews,
+        drinkPictureLocation: drinkPictureLocation,
+        price: price,
+        reservedCounts: reservedCounts,
+        available: available
+    };
+    const updateDrink = await drinkCollection.updateOne(
+        { _id: drink._id },
+        { $set: updatedDrink }
+    );
+    if (updateDrink.modifiedCount === 0) {
+        throw `Error: Failed to update drink with drinkId: ${drink._id}, drink name: ${name}`;
+    }
+    return { updatedDrink: true };
 }
 
 export const deleteDrink = async (
     drinkId
-)=> {
+) => {
+    drinkId = validation.validateId(drinkId,"drinkId");
 
+    const drinkCollection = await drinks();
+    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId)});
+
+    if (!drink) {
+        throw `Error: drink with drinkId ${drinkId} not found, cannot delete`;
+    }
+    const updatedDrink ={
+        available: false
+    };
+    const updateDrink = await drinkCollection.updateOne(
+        { _id: drink._id },
+        { $set: updatedDrink }
+    );
+    if (updateDrink.modifiedCount === 0) {
+        throw `Error: Failed to delete drink with drinkId: ${drink._id}, drink name: ${name}`;
+    }
+    return { deleteDrink: true };
 }
 
-export const getDrinkDetailByDrinkId = async (
+export const getDrinkByDrinkId = async (
     drinkId
-)=> {
+) => {
+    drinkId = validation.validateId(drinkId,"drinkId");
 
+    const drinkCollection = await drinks();
+    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId)});
+
+    if (!drink) {
+        throw `Error: drink with drinkId ${drinkId} not found`;
+    }
+    return { drink: drink };
 }
 
-export const getAllDrinksId = async (
-)=> {
-
+export const getAllDrinks = async () => {
+    const drinkCollection = await drinks();
+    const drinks = await drinkCollection.find({});
+    if (!drinks) {
+        throw `Error: no Drinks found`;
+    }
+    return { drinks: drinks };
 }
+
 
 export const getAllReviewsOnADrink = async (
-)=> {
+    drinkId
+) => {
+    drinkId = validation.validateId(drinkId,"drinkId");
 
+    const drinkCollection = await drinks();
+    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId)});
+    if (!drink) {
+        throw `Error: drink with drinkId ${drinkId} not found`;
+    }
+    return drink.reviews;
 }
 
+export const increaseReservedCounts = async (
+    drinkId
+) => {
+    drinkId = validation.validateId(drinkId,"drinkId");
+
+    const drinkCollection = await drinks();
+    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId)});
+
+    if (!drink) {
+        throw `Error: drink with drinkId ${drinkId} not found, cannot increase ReservedCounts`;
+    }
+    const currentCounts =  drink.reservedCounts;
+    const updatedCounts = currentCounts + 1;
+    const updatedDrink = { reservedCounts: updatedCounts };
+    const updateDrink = await drinkCollection.updateOne(
+        { _id: drink._id },
+        { $set: updatedDrink }
+    );
+    if (updateDrink.modifiedCount === 0) {
+        throw `Error: Failed to increase ReservedCounts for drinkId: ${drink._id}, drink name: ${name}`;
+    }
+    return { increaseReservedCounts: true };
+}

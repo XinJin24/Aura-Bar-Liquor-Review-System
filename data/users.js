@@ -1,7 +1,4 @@
-import {drinks} from "../config/mongoCollections.js";
 import {users} from "../config/mongoCollections.js";
-import {reviews} from "../config/mongoCollections.js";
-
 import {ObjectId} from "mongodb";
 import validation from "../publicMethods.js";
 import bcrypt from 'bcrypt';
@@ -131,7 +128,7 @@ export const updateUser = async (
 export const getAllReviewsByUserId = async (
     userId
 ) => {
-    userId = validation.validateId(userId);
+    userId = validation.validateId(userId,"userId");
 
     const userCollection = await users();
     const user = await
@@ -147,7 +144,7 @@ export const getAllReviewsByUserId = async (
 export const getAllDrinkReservedByUserId = async (
     userId
 )=> {
-    userId = validation.validateId(userId);
+    userId = validation.validateId(userId,"userId");
     const userCollection = await users();
     const user = await userCollection.findOne({ _id: new ObjectId(userId) });
 
@@ -161,7 +158,7 @@ export const getAllDrinkReservedByUserId = async (
 export const getUserInfoByUserId = async (
     userId
 )=> {
-    userId = validation.validateId(userId);
+    userId = validation.validateId(userId,"userId");
     const userCollection = await users();
     const user = await userCollection.findOne({ _id: new ObjectId(userId) });
 
@@ -215,4 +212,31 @@ export const getUserIdByEmail = async (
     return {
         id: user._id.toString()
     };
+}
+
+
+export const deleteOneReviewFromUser = async (
+    reviewId, userId
+)=> {
+    reviewId = validation.validateId(reviewId, "reviewId");
+    const userCollection = await users();
+    const user = await userCollection.findOne({ _id: new ObjectId(userId)});
+    if (!user) {
+        throw `Error: User with email ${userId} not found`;
+    }
+    let reviewList = user.reviewIds;
+    for (let i = 0; i < reviewList.length; i++) {
+        const element = reviewList[i];
+        if (element === reviewId) {
+            reviewList.splice(i, 1);
+        }
+    }
+    const updateReviewIds = await userCollection.updateOne(
+        { _id: new ObjectId(userId) },
+        { $set: { reviewIds: reviewList } }
+    );
+    if (!updateReviewIds) {
+        throw `Error: Could not delete reviewId${reviewId} from user!`;
+    }
+    return true;
 }
