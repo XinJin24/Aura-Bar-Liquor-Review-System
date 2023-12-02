@@ -155,9 +155,19 @@ export const getAllDrinkReservedByUserId = async (
     if (!user) {
         throw `Error: User with ID ${userId} not found`;
     }
+    let drinkReserved = user.drinkReserved;
 
+    drinkReserved.sort((a, b) => {
+        let m = new Date(a.timestamp);
+        let n = new Date(b.timestamp);
+        if (m.getTime() < n.getTime()) {
+            return -1;
+        } else {
+            return 1;}
+    });
     return user.drinkReserved || [];
 }
+
 
 export const getUserInfoByUserId = async (
     userId
@@ -243,4 +253,40 @@ export const deleteOneReviewFromUser = async (
         throw `Error: Could not delete reviewId${reviewId} from user!`;
     }
     return true;
+}
+
+export const reserveDrink = async (
+    userId, drinkId
+)=>{
+    userId = validation.validateId(userId, "userId");
+    drinkId = validation.validateId(drinkId, "drinkId");
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+    if (!user) {
+        throw `Error: User with ID ${userId} not found`;
+    }
+
+    const drinkCollection = await drinks();
+    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId) });
+
+    if (!drink) {
+        throw `Error: drink with ID ${drinkId} not found`;
+    }
+
+    if (!drink.available) {
+        throw `Error: drink with ID ${drinkId} not available, cannot reverse`;
+    }
+
+    const timestamp = validation.generateCurrentDate();
+    const reservedDrink = { drinkId, timestamp };
+    const updatedReservedDrinks = [...user.drinkReserved, reservedDrink];
+    const updateResult = await userCollection.updateOne(
+        { _id: user._id },
+        { $set: { drinkReserved: updatedReservedDrinks } }
+    );
+    if (updateResult.modifiedCount === 0) {
+        throw `Error: Failed to reserve drink for user with ID ${userId}`;
+    }
+    return {reservedDrink, userId};
 }

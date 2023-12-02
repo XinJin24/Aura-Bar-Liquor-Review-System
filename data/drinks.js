@@ -1,5 +1,5 @@
 import validation from "../publicMethods.js";
-import {drinks} from "../config/mongoCollections.js";
+import {drinks, users} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 
 
@@ -117,7 +117,7 @@ export const deleteDrink = async (
     return { deleteDrink: true };
 }
 
-export const getDrinkByDrinkId = async (
+export const getDrinkInfoByDrinkId = async (
     drinkId
 ) => {
     drinkId = validation.validateId(drinkId,"drinkId");
@@ -128,7 +128,21 @@ export const getDrinkByDrinkId = async (
     if (!drink) {
         throw `Error: drink with drinkId ${drinkId} not found`;
     }
-    return { drink: drink };
+
+    const drinkInfo = {
+        _id:drink._id.toString(),
+        name: drink.name,
+        category: drink.category,
+        recipe: drink.recipe,
+        rating: drink.rating,
+        reviews: drink.reviews,
+        drinkPictureLocation: drink.drinkPictureLocation,
+        price: drink.price,
+        reservedCounts: drink.reservedCounts,
+        available: drink.available,
+    };
+
+    return drinkInfo;
 }
 
 export const getAllDrinks = async () => {
@@ -177,3 +191,31 @@ export const increaseReservedCounts = async (
     }
     return { increaseReservedCounts: true };
 }
+export const reserveDrink = async (userId, drinkId) => {
+    userId = validation.validateId(userId, "userId");
+    drinkId = validation.validateId(drinkId, "drinkId");
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+
+    if (!user) {
+        throw `Error: User with ID ${userId} not found`;
+    }
+
+    const timestamp = validation.generateCurrentDate();
+    const reservedDrink = { drinkId, timestamp };
+
+    const updatedReservedDrinks = [...user.drinkReserved, reservedDrink];
+
+    const updateResult = await userCollection.updateOne(
+        { _id: user._id },
+        { $set: { drinkReserved: updatedReservedDrinks } }
+    );
+
+    if (updateResult.modifiedCount === 0) {
+        throw `Error: Failed to reserve drink for user with ID ${userId}`;
+    }
+
+    return { reservedDrink, userId };
+};
+

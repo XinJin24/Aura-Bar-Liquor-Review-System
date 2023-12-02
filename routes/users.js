@@ -2,8 +2,8 @@ import Router from "express"
 const router = Router();
 import validation from "../publicMethods.js";
 import {createUser,getAllDrinkReservedByUserId, getAllReviewsByUserId,getUserIdByEmail,loginUser} from "../data/users.js";
-import {getReviewDetailByReviewId}from "../data/reviews.js"
-import {getDrinkDetailByDrinkId}from "../data/drinks.js"
+import {getReviewInfoByReviewId}from "../data/reviews.js"
+import {getDrinkInfoByDrinkId} from "../data/drinks.js"
 // const multer = require('multer');
 // const upload = multer({
 //     dest:"public/uploads/",
@@ -122,7 +122,7 @@ router.route("/logout").get(async (req, res) => {
 });
 
 router
-    .route('/user/:id')
+    .route('/profile/:id')
     .get(async (req, res) => {
         //if login
         if (req.session.user) {
@@ -136,8 +136,19 @@ router
                 let reviews = await getAllReviewsByUserId(userId);
 
                 //store drink and review into a array and display them to frontend
+                let drinkReservedArray = [];
+                let reviewsArray = [];
+                for (let i = 0; i < drinkReserved.length; i++) {
+                    drinkReservedArray.push(getDrinkInfoByDrinkId(drinkReserved[i]).toString());
+                }
+                for (let j = 0; j < reviews.length; j++) {
+                    reviewsArray.push(getReviewInfoByReviewId(reviews[j]).toString());
+                }
+                //render drink, review, user info to user home page
+                return res.render('profile',
+                    {title: "Profile", user: req.session.user, drinkReserved: drinkReservedArray, reviews: reviewsArray});
             } catch (error){
-
+                //throw error here
             }
         } else {
             return res.render('register', {title: "Register"});
