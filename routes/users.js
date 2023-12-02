@@ -4,11 +4,11 @@ import validation from "../publicMethods.js";
 import {createUser,getAllDrinkReservedByUserId, getAllReviewsByUserId,getUserIdByEmail,loginUser} from "../data/users.js";
 import {getReviewDetailByReviewId}from "../data/reviews.js"
 import {getDrinkDetailByDrinkId}from "../data/drinks.js"
-const multer = require('multer');
-const upload = multer({
-    dest:"public/uploads/",
-    limits:{fileSize:maxsize}
-})
+// const multer = require('multer');
+// const upload = multer({
+//     dest:"public/uploads/",
+//     limits:{fileSize:maxsize}
+// })
 router
     .route('/register')
     .get(async (req, res) => {
@@ -38,8 +38,8 @@ router
             confirmPasswordInput = validation.validatePassword(confirmPasswordInput, "confirmPasswordInput");
             roleInput = validation.validateRole(roleInput);
 
-            // const defaultProfilePictureLocation = "";
-            // photoInput = photoInput ? photoInput : defaultProfilePictureLocation;
+            const defaultProfilePictureLocation = "";
+            photoInput = photoInput ? photoInput : defaultProfilePictureLocation;
 
             if (passwordInput !== confirmPasswordInput) {
                 throw "Error: Passwords do not match";

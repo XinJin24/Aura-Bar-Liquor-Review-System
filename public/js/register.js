@@ -1,5 +1,7 @@
-let login_form = document.getElementById("login-form");
-let registration_form = document.getElementById("registration-form");
+
+import { access } from 'fs/promises';
+
+let registration_form = document.getElementById("registration_form");
 
 
 let checkName = (strVal) =>{
@@ -42,10 +44,10 @@ let checkPassword = (strVal)=>{
     if(strVal.length < 8){
         throw `password should be a minimum of 8 characters long`;
     }
-    if(!/A-Z/){
+    if(!/A-Z/.test(strVal)){
         throw `password needs to be at least one uppercase character`;
     }
-    if(!/\d/){
+    if(!/\d/.test(strVal)){
         throw `password needs to be at least one number `;
     }
     if(!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(strVal)){
@@ -77,62 +79,56 @@ let checkRole = (strVal) =>{
     }
 }
 
-//前端怎么验证照片？
-
-let clientError1 = document.getElementById("clientError1");
-clientError1.style.display = 'none';
-let valid1 = false;
-
-login_form.addEventListener = ('submit1', (event) =>{
-    //stop default behaviour of the form submission
-    if(!valid1){
-        event.preventDefault();
-        try{
-            if(document.getElementById(emailAddressInput1)){
-                checkEmail(document.getElementById(emailAddressInput1).value);
-            }
-            if(document.getElementById(passwordInput1)){
-                checkPassword(document.getElementById(passwordInput1).value);
-            }
-            valid1 = true;
-            login_form.submit();
-            valid1 = false;
-        }catch(e){
-            const errorInfo = <p>${e}</p>;
-            clientError1.innerHTML = errorInfo;
-            clientError1.style.display = 'block';
-        }
+let checkIfFileExist = async (filePath, valName) => {
+    if (typeof filePath !== "string") {
+        throw `Error: ${valName} must be a valid string(no empty spaces)!`;
+    } else if(filePath.trim().length === 0){
+        return "";
     }
-});
+    try {
+        await access(filePath);
+        return filePath;
+    } catch (err) {
+        throw `Error: File at path ${filePath} is inaccessible.`;
+    }
+}
 
 let clientError2 = document.getElementById("clientError2");
 clientError2.style.display = 'none';
 let valid2 = false;
 
-registration_form.addEventListener = ('submit2', (event) =>{
+registration_form.addEventListener = ('submit2', async (event) =>{
     if(!valid2){
         event.preventDefault();
         try{
-            if(document.getElementById(firstNameInput)){
-                checkName(document.getElementById(firstNameInput).value);
+            if(document.getElementById(firstNameInput2)){
+                checkName(document.getElementById(firstNameInput2).value);
             }
-            if(document.getElementById(lastNameInput)){
-                checkName(document.getElementById(lastNameInput).value);
+            if(document.getElementById(lastNameInput2)){
+                checkName(document.getElementById(lastNameInput2).value);
             }
-            if(document.getElementById(emailAddressInput)){
-                checkEmail(document.getElementById(emailAddressInput).value);
+            if(document.getElementById(emailAddressInput2)){
+                checkEmail(document.getElementById(emailAddressInput2).value);
             }
-            if(document.getElementById(passwordInput)){
-                checkPassword(document.getElementById(passwordInput).value);
+            if(document.getElementById(passwordInput2)){
+                checkPassword(document.getElementById(passwordInput2).value);
             }
-            if(document.getElementById(confirmPasswordInput)){
-                checkConfirm(document.getElementById(passwordInput).value, document.getElementById(confirmPasswordInput).value);
+            if(document.getElementById(confirmPasswordInput2)){
+                checkConfirm(document.getElementById(passwordInput2).value, document.getElementById(confirmPasswordInput2).value);
             }
-            // if(document.getElementById(profilePictureLocationInput)){
-            //     checkPassword(document.getElementById(profilePictureLocationInput).value);
-            // }
-            if(document.getElementById(roleInput)){
-                checkRole(document.getElementById(roleInput).value);
+            if(document.getElementById(photoInput2)){
+                let fileInput = document.getElementById(photoInput2);
+                if(fileInput.files.length > 0){
+                    try{
+                        await checkIfFileExist(fileInput.files[0]);
+                    }catch(e){
+                        console.error(e);
+                        throw e;
+                    }                
+                }
+            }
+            if(document.getElementById(roleInput2)){
+                checkRole(document.getElementById(roleInput2).value);
             }
             valid2 = true;
             registration_form.submit();
@@ -140,14 +136,14 @@ registration_form.addEventListener = ('submit2', (event) =>{
 
         }catch(e){
             const errorInfo = <p>${e}</p>;
-            clientError1.innerHTML = errorInfo;
-            clientError1.style.display = 'block';
+            clientError2.innerHTML = errorInfo;
+            clientError2.style.display = 'block';
         }
     }
 });
 
-let photoInput = document.getElementById('photoInput');
-let previewImg = document.getElementById('previewImg');
+let photoInput = document.getElementById('photoInput2');
+let previewImg = document.getElementById('previewImg2');
 
 photoInput.addEventListener('change', function(){
     if(this.files && this.files[0]){
