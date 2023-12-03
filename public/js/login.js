@@ -79,16 +79,16 @@ let clientError1 = document.getElementById("clientError1");
 clientError1.style.display = 'none';
 let valid1 = false;
 
-login_form.addEventListener = ('submit1', (event) =>{
+login_form.addEventListener = ('submit', (event) =>{
     //stop default behaviour of the form submission
     if(!valid1){
         event.preventDefault();
         try{
-            if(document.getElementById(emailAddressInput1)){
-                checkEmail(document.getElementById(emailAddressInput1).value);
+            if(document.getElementById(emailAddressInput)){
+                checkEmail(document.getElementById(emailAddressInput).value);
             }
-            if(document.getElementById(passwordInput1)){
-                checkPassword(document.getElementById(passwordInput1).value);
+            if(document.getElementById(passwordInput)){
+                checkPassword(document.getElementById(passwordInput).value);
             }
             valid1 = true;
             login_form.submit();

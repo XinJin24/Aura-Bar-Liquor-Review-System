@@ -10,15 +10,15 @@
     <form id="login_form" action="/login" method="POST">
         <label for="emailAddressInput">
             EmailAddress:
-            <input type="email" id="emailAddressInput1" name="emailAddressInput1">
+            <input type="email" id="emailAddressInput" name="emailAddressInput">
         </label>  
 
         <label for="passwordInput">
             Password:
-            <input type="password" id="passwordInput1" name="passwordInput1">
+            <input type="password" id="passwordInput" name="passwordInput">
         </label>
 
-        <button type="submit" id="submit1" >Submit</button>           
+        <button type="submit" id="submit" >Submit</button>           
     </form>
     {{#if loginfail}}
         <p>{{errormessage}}</p>
