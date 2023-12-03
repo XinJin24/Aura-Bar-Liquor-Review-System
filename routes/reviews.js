@@ -1,7 +1,7 @@
 import validation from "../publicMethods.js";
 
 router
-    .route('/login')
+    .route('/review/modify/:id')
     .get(async (req, res) => {
         //code here for GET
         return res.render("login", {title: "Login"});

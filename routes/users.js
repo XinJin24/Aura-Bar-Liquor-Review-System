@@ -1,125 +1,19 @@
 import Router from "express"
+
 const router = Router();
 import validation from "../publicMethods.js";
-import {createUser,getAllDrinkReservedByUserId, getAllReviewsByUserId,getUserIdByEmail,loginUser} from "../data/users.js";
-import {getReviewInfoByReviewId}from "../data/reviews.js"
+import {
+    createUser,
+    getAllDrinkReservedByUserId,
+    getAllReviewsByUserId,
+    getUserIdByEmail,
+    getUserInfoByUserId,
+    loginUser, updateUser
+} from "../data/users.js";
+import {getReviewInfoByReviewId} from "../data/reviews.js"
 import {getDrinkInfoByDrinkId} from "../data/drinks.js"
-// const multer = require('multer');
-// const upload = multer({
-//     dest:"public/uploads/",
-//     limits:{fileSize:maxsize}
-// })
-router
-    .route('/register')
-    .get(async (req, res) => {
-        if (req.session.user) {
-            return res.redirect('/home');
-        } else {
-            return res.render('register', {title: "Register"});
-        }
-    })
-    .post(async (req, res) => {
-        let firstNameInput = req.body.firstNameInput;//same as frontend
-        let lastNameInput = req.body.lastNameInput;
-        let emailAddressInput = req.body.emailAddressInput;
-        let stateInput = req.body.stateInput;
-        let passwordInput = req.body.passwordInput;
-        let confirmPasswordInput = req.body.confirmPasswordInput;
-        let photoInput = req.body.photoInput;
-        let roleInput = req.body.roleInput;
-        try {
-            if (!firstNameInput || !lastNameInput || !emailAddressInput || !stateInput || !passwordInput || !confirmPasswordInput || !roleInput) {
-                throw "Error: You must make sure that firstName, lastName, emailAddress,  password, confirmPassword, role are supplied"
-            }
-            lastNameInput = validation.validateName(lastNameInput, "lastname");
-            firstNameInput = validation.validateName(firstNameInput, "firstName");
-            emailAddressInput = validation.validateEmail(emailAddressInput);
-            passwordInput = validation.validatePassword(passwordInput, "password");
-            confirmPasswordInput = validation.validatePassword(confirmPasswordInput, "confirmPasswordInput");
-            roleInput = validation.validateRole(roleInput);
+import e from "express";
 
-            const defaultProfilePictureLocation = "";
-            photoInput = photoInput ? photoInput : defaultProfilePictureLocation;
-
-            if (passwordInput !== confirmPasswordInput) {
-                throw "Error: Passwords do not match";
-            }
-        } catch (error) {
-            return res.status(400).render('error', {
-                title: "InputError", message: error
-            });
-        }
-
-        try {
-            const user = await createUser(firstNameInput,
-                lastNameInput,
-                emailAddressInput,
-                stateInput,
-                passwordInput,
-                photoInput,
-                // profilePictureLocationInput,
-                roleInput);
-            if (user.insertedUser) {
-                return res.redirect('/login');
-            } else {
-                throw "Error: Internal Server Error"
-            }
-        } catch (error) {
-            return res.status(500).render('error', {
-                title: "Internal Server Error",
-                message: "Error: Internal Server Error"
-            });
-        }
-    });
-
-
-router
-    .route('/login')
-    .get(async (req, res) => {
-        //code here for GET
-        return res.render("login", {title: "Login"});
-    })
-    .post(async (req, res) => {
-        //code here for POST
-        let emailAddressInput = req.body.emailAddressInput;
-        let passwordInput = req.body.passwordInput;
-        try {
-            emailAddressInput = validation.validateEmail(emailAddressInput);
-            passwordInput = validation.validatePassword(passwordInput);
-            const user =
-                await loginUser(emailAddressInput, passwordInput);
-            req.session.user = {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                state: user.state,
-                role: user.role
-            };
-            res.cookie('AuthState', req.session.sessionID);
-            return res.redirect('/home');
-
-        } catch (error) {
-            return res.status(400).render('error', {
-                title: "Inputs Error",
-                message: error
-            });
-        }
-    });
-
-router.route("/logout").get(async (req, res) => {
-    if (req.session.user) {
-        req.session.destroy();
-        return res.render("logout", {
-            logMsg: "You have been logged out",
-            url: "/",
-            login: false,
-            title: "Logout",
-        });
-    } else {
-        res.status(400);
-        return res.redirect("/login");
-    }
-});
 
 router
     .route('/profile/:id')
@@ -129,7 +23,7 @@ router
             try {
                 const userId = validation.validateId(req.params.id, "ID");
                 const userIdFromDB = await getUserIdByEmail(req.session.user.email);
-                if(userIdFromDB !== userId){
+                if (userIdFromDB !== userId) {
                     throw `Error: You don't have access to ${userId}`
                 }
                 let drinkReserved = await getAllDrinkReservedByUserId(userId);
@@ -139,16 +33,21 @@ router
                 let drinkReservedArray = [];
                 let reviewsArray = [];
                 for (let i = 0; i < drinkReserved.length; i++) {
-                    drinkReservedArray.push(getDrinkInfoByDrinkId(drinkReserved[i]).toString());
+                    drinkReservedArray.push(getDrinkInfoByDrinkId(drinkReserved[i].toString()));
                 }
                 for (let j = 0; j < reviews.length; j++) {
-                    reviewsArray.push(getReviewInfoByReviewId(reviews[j]).toString());
+                    reviewsArray.push(getReviewInfoByReviewId(reviews[j].toString()));
                 }
                 //render drink, review, user info to user home page
                 return res.render('profile',
-                    {title: "Profile", user: req.session.user, drinkReserved: drinkReservedArray, reviews: reviewsArray});
-            } catch (error){
-                //throw error here
+                    {
+                        title: "Profile",
+                        user: req.session.user,
+                        drinkReserved: drinkReservedArray,
+                        reviews: reviewsArray
+                    });
+            } catch (error) {
+                //render error page that shows internal error
             }
         } else {
             return res.render('register', {title: "Register"});
@@ -156,4 +55,77 @@ router
     })
     .post(async (req, res) => {
 
+    });
+
+// ask user to enter firstName, LastName, oldPassword, newPassword, confirmNewPassword,
+// state, newProfilePictureLocation,
+router
+    .route('/modify/:id')
+    .get(async (req, res) => {
+        if (req.session.user) {
+            try {
+                const userId = validation.validateId(req.params.id, "ID");
+                const userIdFromDB = await getUserIdByEmail(req.session.user.email);
+                if (userIdFromDB !== userId) {
+                    throw `Error: You don't have access to others' account: ${userId}`
+                }
+                const user = await getUserInfoByUserId(userId);
+                const url = "/user/modify/" + userId + "?_method=PUT";
+                return res.render("modifyUserInfo", {
+                    title: "editUserInfo",
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    url: url,
+                    login: true
+                });
+            } catch (error) {
+                //return render error page, internal error
+            }
+        } else {
+            //return render error page
+        }
+    })
+    .post(async (req, res) => {
+        if (req.session.user) {
+            try {
+                const userId = validation.validateId(req.params.id, "ID");
+                const userIdFromDB = await getUserIdByEmail(req.session.user.email);
+                if (userIdFromDB !== userId) {
+                    throw `Error: You don't have access to others' account: ${userId}`
+                }
+
+                let firstName = validation.validateName(req.params.firstName, "firstName");
+                let lastName = validation.validateName(req.params.lastName, "lastName");
+                let oldPassword = validation.validatePassword(req.params.oldpassword, "password");
+                let newPassword = validation.validatePassword(req.params.newPassword, "new Password");
+                let confirmNewPassword = validation.validatePassword(req.params.confirmNewPassword, "confirm New Password");
+                let state = validation.validateState(req.params.state);
+                let newProfilePictureLocation = await validation.validateIfFileExist(req.params.newProfilePictureLocation);
+
+                if (oldPassword === newPassword) {
+                    throw "Error: New Password cannot be same as the previous password!";
+                }
+                if (newPassword !== confirmNewPassword) {
+                    throw "Error: New Password and Confirm New Password do not match!";
+                }
+                const user = await getUserInfoByUserId(userId);
+                const newUser = await updateUser(
+                    firstName,
+                    lastName,
+                    user.email,
+                    state,
+                    newPassword,
+                    user.reviewIds,
+                    newProfilePictureLocation,
+                    user.drinkReserved,
+                    user.role
+                );
+                req.session.destroy();
+                res.status(200).redirect("/user/login");
+            } catch (error) {
+                //return render internal error
+            }
+        } else {
+            //if not logged in, return error to guide user to log in first
+        }
     });

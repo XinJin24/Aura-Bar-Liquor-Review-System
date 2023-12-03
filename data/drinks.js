@@ -2,7 +2,18 @@ import validation from "../publicMethods.js";
 import {drinks, users} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 
-
+/**
+ * @param {ObjectId} _id - A globally unique identifier for the specific drink.
+ * @param {string} name - the Name of the drink.
+ * @param {string} category - The type (liquor, cocktails) of the drink..
+ * @param {string} recipe - The description of the drink.
+ * @param {number} rating - Average rating of the drinks.
+ * @param {array} reviews - An array that stores references (IDs) to the reviews.
+ * @param {Array(String)} drinkPictureLocation - the location of the drink picture.
+ * @param {number} price - the price of the drink.
+ * @param {number} reservedCounts - The number of users who have reserved the specific drink..
+ * @param {boolean} available - The boolean that indicate the available of the drink.
+ */
 export const createDrink = async (
     name,
     category,
@@ -15,7 +26,7 @@ export const createDrink = async (
     category = validation.validateDrinkCategory(category, "DrinkCategory");
     recipe = validation.validateDrinkRecipe(recipe);
     rating = validation.validateRating(rating);
-    drinkPictureLocation = validation.validateIfFileExist(drinkPictureLocation);
+    drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
     price = validation.validatePrice(price, "Drink Price");
 
     const drinkCollection = await drinks();
@@ -61,7 +72,7 @@ export const updateDrink = async (
     recipe = validation.validateDrinkRecipe(recipe);
     rating = validation.validateRating(rating);
     reviews = validation.validateIfArray(reviews, "reviews array");
-    drinkPictureLocation = validation.validateIfFileExist(drinkPictureLocation);
+    drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
     price = validation.validatePrice(price, "Drink Price");
     available = validation.validateIfTrueOrFalse(available, "drink's availability");
 

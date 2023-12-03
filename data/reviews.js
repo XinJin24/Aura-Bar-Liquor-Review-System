@@ -3,6 +3,14 @@ import {reviews} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 import {deleteOneReviewFromUser} from "./users.js";
 
+/**
+ * @param {ObjectId} _id - A unique identifier that guarantees the uniqueness of each review.
+ * @param {string} timestamp - The time that the review is posted.
+ * @param {string} drinkId - An identifier that represents each drink.
+ * @param {string} userId - TAn identifier that represents the user who wrote comments under the review.
+ * @param {string} reviewText - The detailed review text.
+ * @param {number} rating - The rating for that particular drink from range 1-5, provided by the user.
+ */
 export const createReview = async (
     drinkId,
     userId,
@@ -14,7 +22,7 @@ export const createReview = async (
     userId = validation.validateId(userId, "userId");
     reviewText = validation.validateReviewText(reviewText);
     rating = validation.validateRating(rating);
-    reviewPictureLocation = validation.validateIfFileExist(reviewPictureLocation, "Review Picture Location");
+    reviewPictureLocation = await validation.validateIfFileExist(reviewPictureLocation, "Review Picture Location");
 
     const reviewCollection = await reviews();
     const review = {
@@ -48,7 +56,7 @@ export const updateReview = async (
     userId = validation.validateId(userId, "userId");
     reviewText = validation.validateReviewText(reviewText);
     rating = validation.validateRating(rating);
-    reviewPictureLocation = validation.validateIfFileExist(reviewPictureLocation, "Review Picture Location");
+    reviewPictureLocation = await validation.validateIfFileExist(reviewPictureLocation, "Review Picture Location");
 
     const reviewCollection = await reviews();
     const review = await reviewCollection.findOne({_id: reviewId});

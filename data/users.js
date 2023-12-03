@@ -3,6 +3,19 @@ import {ObjectId} from "mongodb";
 import validation from "../publicMethods.js";
 import bcrypt from 'bcrypt';
 
+/**
+ * @param {ObjectId} _id - A globally unique identifier to represent the user.
+ * @param {string} firstName - First name of the user.
+ * @param {string} lastName - Last name of the user.
+ * @param {string} email - Email of the user.
+ * @param {string} state - State of the user.
+ * @param {number} password - The password when users log in.
+ * @param {Array(ObjectId)} reviewIds - A unique identifier that guarantees the uniqueness of each review.
+ * @param {String} profilePictureLocation - The location of the profile picture.
+ * @param {List{timestamp, drinkId}} drinkReserved - A collection of drink IDs that the user had already reserved.
+ * @param {String} role - A Stringvariable reflects whether the user is an admin or user.
+ */
+
 export const createUser = async (
     firstName,
     lastName,
@@ -17,7 +30,7 @@ export const createUser = async (
     email = validation.validateEmail(email, "email");
     state = validation.validateState(state);
     password = validation.validatePassword(password, "password");
-    profilePictureLocation = validation.validateIfFileExist(profilePictureLocation);
+    profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
     role = validation.validateRole(role);
 
     const userCollection = await users();
@@ -93,7 +106,7 @@ export const updateUser = async (
     state = validation.validateState(state);
     password = validation.validatePassword(password, "password");
     reviewIds = validation.validateArrayOfIds(reviewIds);
-    profilePictureLocation = validation.validateIfFileExist(profilePictureLocation);
+    profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
     drinkReserved = drinkReserved.validation.validateArrayOfIds(drinkReserved);
     role = validation.validateRole(role);
 
@@ -224,6 +237,20 @@ export const getUserIdByEmail = async (
     };
 }
 
+export const getUserPasswordById = async (
+    userId
+)=> {
+    userId = validation.validateId(userId, "userId");
+    const userCollection = await users();
+    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+
+    if (!user) {
+        throw `Error: User with _id ${userId} not found`;
+    }
+    return {
+        password: user.password
+    };
+}
 
 export const deleteOneReviewFromUser = async (
     reviewId, userId
