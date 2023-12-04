@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='/public/css/main.css' />
+</head>
+<body>
+    <h1>{{title}}</h1>
+    {{#if user}}
+        <h2>Welcome, {{user.firstName}} {{user.lastName}}!</h2>
+        <p Email:>{{user.email}}</p>
+        <p State:>{{user.state}}</p>
+        <p Role:>{{user.role}}</p>
+        {{!-- display reserved drinks --}}
+        <h3>Reserved Drinks:</h3>
+            <ul>
+                {{#each drinkReserved as |drink|}}
+                <li>{{drink}}</li>
+                {{/each}}
+            </ul>
+
+        {{!-- display reviews --}}
+        <h3>Reviews:</h3>
+        <ul>
+            {{#each reviews as |review|}}
+                <li>{{review}}</li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p>Please log in to view your profile.</p>
+    {{/if}}    
+
+</body>
+</html>

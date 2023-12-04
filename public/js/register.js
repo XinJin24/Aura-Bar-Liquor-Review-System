@@ -97,27 +97,27 @@ let clientError2 = document.getElementById("clientError2");
 clientError2.style.display = 'none';
 let valid2 = false;
 
-registration_form.addEventListener = ('submit2', async (event) =>{
+registration_form.addEventListener = ('submit', async (event) =>{
     if(!valid2){
         event.preventDefault();
         try{
             if(document.getElementById(firstNameInput2)){
-                checkName(document.getElementById(firstNameInput2).value);
+                checkName(document.getElementById(firstNameInput).value);
             }
             if(document.getElementById(lastNameInput2)){
-                checkName(document.getElementById(lastNameInput2).value);
+                checkName(document.getElementById(lastNameInput).value);
             }
             if(document.getElementById(emailAddressInput2)){
-                checkEmail(document.getElementById(emailAddressInput2).value);
+                checkEmail(document.getElementById(emailAddressInput).value);
             }
             if(document.getElementById(passwordInput2)){
-                checkPassword(document.getElementById(passwordInput2).value);
+                checkPassword(document.getElementById(passwordInput).value);
             }
-            if(document.getElementById(confirmPasswordInput2)){
+            if(document.getElementById(confirmPasswordInput)){
                 checkConfirm(document.getElementById(passwordInput2).value, document.getElementById(confirmPasswordInput2).value);
             }
-            if(document.getElementById(photoInput2)){
-                let fileInput = document.getElementById(photoInput2);
+            if(document.getElementById(photoInput)){
+                let fileInput = document.getElementById(photoInput);
                 if(fileInput.files.length > 0){
                     try{
                         await checkIfFileExist(fileInput.files[0]);
@@ -127,8 +127,8 @@ registration_form.addEventListener = ('submit2', async (event) =>{
                     }                
                 }
             }
-            if(document.getElementById(roleInput2)){
-                checkRole(document.getElementById(roleInput2).value);
+            if(document.getElementById(roleInput)){
+                checkRole(document.getElementById(roleInput).value);
             }
             valid2 = true;
             registration_form.submit();
@@ -142,8 +142,8 @@ registration_form.addEventListener = ('submit2', async (event) =>{
     }
 });
 
-let photoInput = document.getElementById('photoInput2');
-let previewImg = document.getElementById('previewImg2');
+let photoInput = document.getElementById('photoInput');
+let previewImg = document.getElementById('previewImg');
 
 photoInput.addEventListener('change', function(){
     if(this.files && this.files[0]){

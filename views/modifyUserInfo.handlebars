@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    <h1>{{title}}</h1>
+    {{#if login}}
+    {{!-- 这里用login还是user --}}
+    <form id="modify_form" action={{url}} method="POST">
+        <label for="firstName">
+            First Name:
+            <input type="text" id="firstNameInput" name="firstNameInput" value="{{firstName}}" required>
+        </label>
+        <br>
+
+        <label for="lastName">
+            Last Name:
+            <input type="text" id="lastNameInput" name="lastNameInput" value="{{lastName}}" required>
+        </label>
+        <br>
+
+        <label for="oldPassword">
+            Old Password:
+            <input type="password" id="oldPassword" name="oldPassword" required>
+        </label>
+        <br>
+
+        <label for="newPassword">
+            New Password:
+            <input type="password" id="newPassword" name="newPassword" required>
+        </label>
+        <br>
+        
+        <label for="confirmNewPassword">
+            Confirm New Password:
+            <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
+        </label>
+        <br>
+
+        <label for="state">
+            State:
+            <input type="text" id="state" name="state" value="state" required>
+        </label>
+        <br>
+        
+        <label for="newProfilePictureLocation">
+            Upload Image:
+            <input type="file" id=" newProfilePictureLocation" name=" newProfilePictureLocation" required>
+            <img id="previewImg" src="#">
+        </label>
+        <br>
+        <button type="submit" id="submit">Save Changes</button>
+    </form>
+    {{#else}}
+        <p id="clienterror3" ></p>
+    {{/if}}
+</body>
+</html>
