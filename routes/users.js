@@ -129,3 +129,5 @@ router
             //if not logged in, return error to guide user to log in first
         }
     });
+
+export default router;

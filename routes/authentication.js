@@ -3,6 +3,7 @@ import Router from "express"
 const router = Router();
 import validation from "../publicMethods.js";
 import {createUser, loginUser} from "../data/users.js";
+import {getAllDrinks} from "../data/drinks.js";
 
 router
     .route('/').get(async (req, res) => {
@@ -12,6 +13,23 @@ router
         return res.redirect('/login');
     }
 });
+
+router
+    .route('/home').get(async (req, res) => {
+    const userId = req.session.user.userId;
+    const userFirstName = req.session.user.firstName;
+    const userLstName = req.session.user.lastName;
+    const userProfilePictureLocation = req.session.user.profilePictureLocation
+
+    const allDrinks = await getAllDrinks();
+    if(req.session.user && req.session.user.role === "admin"){
+        for(let drink of allDrinks){
+            drink.editable = true;
+        }
+    }
+    return res.render('home', {title: "Aura Liquor", drinks: allDrinks, firstName: userFirstName, lastName : userLstName, userProfilePictureLocation: userProfilePictureLocation});
+});
+
 
 router
     .route('/register')
@@ -124,3 +142,5 @@ router.route("/logout").get(async (req, res) => {
         return res.redirect("/login");
     }
 });
+
+export default router;

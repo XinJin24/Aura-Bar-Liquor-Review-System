@@ -1,135 +1,225 @@
 import Router from "express";
+
 const router = Router();
 import validation from "../publicMethods.js";
-import { getAllDrinkReservedByUserId, getAllReviewsByUserId, getUserIdByEmail } from "../data/users.js";
-import { getDrinkInfoByDrinkId } from "../data/drinks.js";
-import { getReviewInfoByReviewId } from "../data/reviews.js";
-import {createReview, deleteReview, updateReview} from "./data/reviews.js";
+import {createDrink, deleteDrink, getAllReviewsOnADrink, getDrinkInfoByDrinkId, updateDrink} from "../data/drinks.js";
+
 
 //drink detail page and shows all reviews, if the review is made by the user, it will show the edit button
+
+
+// "/new" to create a drink, has method: get, post
 router
-    .route('/drinkInfo/:id')
+    .route('/new')
     .get(async (req, res) => {
-        // If logged in
-        if (req.session.user) {
-            try {
-                const drinkId = validation.validateId(req.params.id, "ID");
-                const drinkInfo = await getDrinkInfoByDrinkId(drinkId);
-                const reviews = await getAllReviewsByUserId(drinkInfo.userId);
-                if (req.session.user.role === "admin") {
-                    // Admin has all privileges above and can also delete a review from a user
-                    // Additional logic for admin privileges here
-                }
-
-                return res.render('drinkInfo', {
-                    title: "Drink Information",
-                    user: req.session.user,
-                    drinkInfo: drinkInfo,
-                    reviews: reviews
-                });
-            } catch (error) {
-                console.error(error);
-                return res.status(500).render('error', {
-                    title: "Internal Server Error",
-                    message: "Error: Internal Server Error"
-                });
-            }
+        // If logged in and the role is admin
+        if (req.session.user && req.session.user.role === "admin") {
+            return res.render("createDrink", {
+                title: "Add A Drink",
+                login: true
+            });
+            //if not admin
+        } else if (req.session.user && req.session.user.role !== "admin") {
+            res.status(403).render("error", {
+                errorMsg: "Sorry, You are not admin, hence you cannot add a drink...",
+                login: true,
+                title: "Authorization Error"
+            });
         } else {
-            return res.render('register', { title: "Register" });
-        }
-    })
-    .post(async (req, res) => {
-
-    });
-
-// if the user click on the edit button, it will direct the user to a new page exclusively for modifying the review information
-router
-    .route('/drinkInfo/:id')
-    .get(async (req, res) => {
-        // If logged in
-        if (req.session.user) {
-            try {
-                const drinkId = validation.validateId(req.params.id, "ID");
-                const drinkInfo = await getDrinkInfoByDrinkId(drinkId);
-                const reviews = await getAllReviewsByUserId(drinkInfo.userId);
-                if (req.session.user.role === "admin") {
-                    // Admin has all privileges above and can also delete a review from a user
-                    // Additional logic for admin privileges here
-                }
-
-                return res.render('drinkInfo', {
-                    title: "Drink Information",
-                    user: req.session.user,
-                    drinkInfo: drinkInfo,
-                    reviews: reviews
-                });
-            } catch (error) {
-                console.error(error);
-                return res.status(500).render('error', {
-                    title: "Internal Server Error",
-                    message: "Error: Internal Server Error"
-                });
-            }
-        } else {
-            return res.render('register', { title: "Register" });
-        }
-    })
-    .post(async (req, res) => {
-        // Handle creating a new review
-        try {
-            const drinkId = validation.validateId(req.params.id, "ID");
-            const userId = getUserIdByEmail(req.session.user.email);
-            const { rating, comment } = req.body;
-
-            // Call the createReview function to insert the new review into the database
-            await createReview(userId, drinkId, rating, comment);
-
-            // Redirect or send response accordingly
-            return res.redirect(`/drinkInfo/${drinkId}`);
-        } catch (error) {
-            console.error(error);
-            return res.status(500).render('error', {
-                title: "Internal Server Error",
-                message: "Error: Internal Server Error"
+            //if not logged in
+            return res.status(401).render("error", {
+                errorMsg: "Please Login to add a drink.",
+                login: false,
+                title: "Error"
             });
         }
     })
-    .put(async (req, res) => {
-        // Handle updating an existing review
-        try {
-            const reviewId = validation.validateId(req.params.id, "ID");
-            const { rating, comment } = req.body;
+    .post(async (req, res) => {
+        //adding a drink
+        if (req.session.user && req.session.user.role === "admin") {
+            let name = null;
+            let category = null;
+            let recipe = null;
+            let rating = null;
+            let drinkPictureLocation = null;
+            let price = null;
+            try {
+                name = validation.validateName(req.body.name, "Drink Name");
+                category = validation.validateDrinkCategory(req.body.category);
+                recipe = validation.validateDrinkRecipe(req.body.recipe);
+                rating = validation.validateRating(req.body.rating);
+                drinkPictureLocation = validation.validateIfFileExist(req.body.drinkPictureLocation);
+                price = validation.validatePrice(req.body.price);
+            } catch (error) {
+                return res.status(400).render("createDrink", {
+                    error: error,
+                    login: true,
+                    title: "Add A Drink"
+                });
+            }
 
-            // Call the updateReview function to update the review in the database
-            await updateReview(reviewId, { rating, comment });
+            try {
+                const newDrink = await createDrink(name, category, recipe, drinkPictureLocation, price);
+                res.status(200).redirect("/drinks/" + newDrink._id.toString());
+            } catch (error) {
+                return res.render("addPost", {
+                    error: error,
+                    login: true,
+                    title: "Add A Drink"
+                });
+            }
 
-            // Redirect or send response accordingly
-            return res.redirect(`/drinkInfo/${drinkId}`);
-        } catch (error) {
-            console.error(error);
-            return res.status(500).render('error', {
-                title: "Internal Server Error",
-                message: "Error: Internal Server Error"
+        } else {
+            //if not logged in, cannot create a new drink
+            return res.status(401).render("error", {
+                errorMsg: "Please Login to add a drink.",
+                login: false,
+                title: "Error"
+            });
+        }
+    });
+
+
+// "/:id" to see the detail about a drink, has method: get, delete, post
+router
+    .route('/:id')
+    .get(async (req, res) => {
+        // If logged in
+        if (req.session.user) {
+            //if the drinkId is wrong
+            let drinkId = null;
+            try{
+                drinkId = validation.validateId(req.params.id, "ID");
+            }catch(error){
+                return res.status(400).render("drinkInfo", {
+                    error: error,
+                    login: true,
+                    title: "Drink Detail"
+                });
+            }
+            // get the drinksInfo
+            try {
+                const drinkInfo = await getDrinkInfoByDrinkId(drinkId);
+                const reviews = await getAllReviewsOnADrink(drinkId);
+
+                return res.status(200).render('drinkInfo', {
+                    title: "Drink Detail",
+                    drinkInfo: drinkInfo,
+                    reviews: reviews
+                });
+            } catch (error) {
+                console.error(error);
+                return res.status(500).render('error', {
+                    title: "Error",
+                    message: "Internal Server Error"
+                });
+            }
+            //if not logged in
+        } else {
+            return res.status(401).render("error", {
+                errorMsg: "Please Login to view details about this drink.",
+                login: false,
+                title: "Error",
+            });
+        }
+    })
+    .post(async (req, res) => {
+        //post is to edit a drink
+        if(req.session.user && req.session.user.role ==="admin"){
+            let drinkId = null;
+            let name = null;
+            let category = null;
+            let recipe = null;
+            let drinkPictureLocation = null;
+            let price = null;
+            try{
+                drinkId = validation.validateId(req.params._id, "drinkId");
+                name = validation.validateName(req.body.name, "Drink Name");
+                category = validation.validateDrinkCategory(req.body.category, "Drink Category")
+                recipe = validation.validateDrinkRecipe(req.body.recipe);
+                drinkPictureLocation = validation.validateIfFileExist(req.body.drinkPictureLocation);
+                price = validation.validatePrice(req.body.price);
+            }catch (error){
+                return res.status(400).render("updateDrinkInfo", {
+                    error: error,
+                    login: true,
+                    title: "Update Drink"
+                });
+            }
+            try{
+                const updatedDrink = await updateDrink(drinkId, name, category, recipe, drinkPictureLocation, price);
+                if(updatedDrink.updatedDrink===true){
+                    return res.status(200).redirect('/drinkInfo/'+drinkId);
+                }else{
+                    throw "Error happened then updating a drink."
+                }
+
+            }catch (error){
+                console.error(error);
+                return res.status(500).render('error', {
+                    title: "Error",
+                    message: "Internal Server Error"
+                });
+            }
+            //if no admin,
+        } else if(req.session.user && req.session.user.role !=="admin"){
+            return res.status(401).render("error", {
+                errorMsg: "you do not have a privileges to edit a drink",
+                login: true,
+                title: "Error",
+            });
+        }else{
+            return res.status(401).render("error", {
+                errorMsg: "Olease login first to edit a drink",
+                login: false,
+                title: "Error",
             });
         }
     })
     .delete(async (req, res) => {
-        // Handle deleting an existing review
-        try {
-            const reviewId = validation.validateId(req.params.id, "ID");
-
-            // Call the deleteReview function to delete the review from the database
-            await deleteReview(reviewId);
-
-            // Redirect or send response accordingly
-            return res.redirect('/drinkInfo'); // Redirect to drink info page or wherever appropriate
-        } catch (error) {
-            console.error(error);
-            return res.status(500).render('error', {
-                title: "Internal Server Error",
-                message: "Error: Internal Server Error"
+        if(req.session.user && req.session.user.role ==="admin"){
+            let drinkId = null;
+            try{
+                drinkId = validation.validateId(req.params._id, "drinkId");
+            }catch (error){
+                return res.status(400).render("updateDrinkInfo", {
+                    error: error,
+                    login: true,
+                    title: "Update Drink"
+                });
+            }
+            try{
+                const deletedDrink = await deleteDrink(drinkId);
+                if(deletedDrink.deleteDrink===true){
+                    return res.status(200).redirect('/');
+                }else{
+                    throw "Error happened then deleting a drink."
+                }
+            }catch (error){
+                console.error(error);
+                return res.status(500).render('error', {
+                    title: "Error",
+                    message: "Internal Server Error"
+                });
+            }
+            //if no admin,
+        } else if(req.session.user && req.session.user.role !=="admin"){
+            return res.status(401).render("error", {
+                errorMsg: "you do not have a privileges to delete a drink",
+                login: true,
+                title: "Error",
+            });
+        }else{
+            //if no logged in
+            return res.status(401).render("error", {
+                errorMsg: "please login first to edit a drink",
+                login: false,
+                title: "Error",
             });
         }
     });
+
+// if the user click on the edit button, it will direct the user to a new page exclusively for modifying the review information
+
 
 export default router;

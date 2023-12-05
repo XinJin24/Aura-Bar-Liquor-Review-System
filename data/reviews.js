@@ -10,6 +10,7 @@ import {deleteOneReviewFromUser} from "./users.js";
  * @param {string} userId - TAn identifier that represents the user who wrote comments under the review.
  * @param {string} reviewText - The detailed review text.
  * @param {number} rating - The rating for that particular drink from range 1-5, provided by the user.
+ * @param {String} reviewPictureLocation - the location for storing review picture.
  */
 export const createReview = async (
     drinkId,
@@ -107,6 +108,7 @@ export const deleteReview = async (
     } else {
         throw `Error: some error happened when deleting reviewId: ${reviewId}`
     }
+    return {deletedReview: true};
 }
 
 export const getReviewInfoByReviewId = async (reviewId) => {

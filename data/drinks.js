@@ -1,6 +1,7 @@
 import validation from "../publicMethods.js";
 import {drinks, users} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
+import {getReviewInfoByReviewId} from "./reviews.js";
 
 /**
  * @param {ObjectId} _id - A globally unique identifier for the specific drink.
@@ -18,14 +19,12 @@ export const createDrink = async (
     name,
     category,
     recipe,
-    rating,
     drinkPictureLocation,
-    price,
+    price
 ) => {
     name = validation.validateDrinkName(name, "DrinkName");
     category = validation.validateDrinkCategory(category, "DrinkCategory");
     recipe = validation.validateDrinkRecipe(recipe);
-    rating = validation.validateRating(rating);
     drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
     price = validation.validatePrice(price, "Drink Price");
 
@@ -38,7 +37,7 @@ export const createDrink = async (
         name: name,
         category: category,
         recipe: recipe,
-        rating: rating,
+        rating: 0,
         reviews: [],
         drinkPictureLocation: drinkPictureLocation,
         price: price,
@@ -59,22 +58,15 @@ export const updateDrink = async (
     name,
     category,
     recipe,
-    rating,
-    reviews,
     drinkPictureLocation,
-    price,
-    reservedCounts,
-    available
+    price
 ) => {
     drinkId = validation.validateId(drinkId, "Drink Id");
     name = validation.validateDrinkName(name, "Drink Name");
     category = validation.validateDrinkCategory(category, "Drink Category");
     recipe = validation.validateDrinkRecipe(recipe);
-    rating = validation.validateRating(rating);
-    reviews = validation.validateIfArray(reviews, "reviews array");
     drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
     price = validation.validatePrice(price, "Drink Price");
-    available = validation.validateIfTrueOrFalse(available, "drink's availability");
 
     const drinkCollection = await drinks();
     const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId) });
@@ -87,12 +79,8 @@ export const updateDrink = async (
         name: name,
         category: category,
         recipe: recipe,
-        rating: rating,
-        reviews: reviews,
         drinkPictureLocation: drinkPictureLocation,
-        price: price,
-        reservedCounts: reservedCounts,
-        available: available
+        price: price
     };
     const updateDrink = await drinkCollection.updateOne(
         { _id: drink._id },
@@ -158,26 +146,48 @@ export const getDrinkInfoByDrinkId = async (
 
 export const getAllDrinks = async () => {
     const drinkCollection = await drinks();
-    const drinks = await drinkCollection.find({});
-    if (!drinks) {
-        throw `Error: no Drinks found`;
+    const allDrinks = await drinkCollection.find({}).toArray();
+
+    if (!allDrinks || allDrinks.length === 0) {
+        throw `Error: No drinks found`;
     }
-    return { drinks: drinks };
+
+    const sortedDrinks = allDrinks.sort((a, b) => b.rating - a.rating);
+
+    let drinksArray = [];
+
+    for (let j = 0; j < sortedDrinks.length; j++) {
+        const drinkId = sortedDrinks[j];
+        const drinkInfo = await getDrinkInfoByDrinkId(drinkId);
+        drinksArray.push(drinkInfo);
+    }
+    return { drinks: drinksArray };
 }
 
-
-export const getAllReviewsOnADrink = async (
-    drinkId
-) => {
-    drinkId = validation.validateId(drinkId,"drinkId");
+//sorted by timestamp
+export const getAllReviewsOnADrink = async (drinkId) => {
+    drinkId = validation.validateId(drinkId, "drinkId");
 
     const drinkCollection = await drinks();
-    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId)});
+    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId) });
     if (!drink) {
         throw `Error: drink with drinkId ${drinkId} not found`;
     }
-    return drink.reviews;
-}
+
+    const sortedReviews = drink.reviews.sort((a, b) => {
+        return new Date(b.timestamp) - new Date(a.timestamp);
+    });
+
+    let reviewsArray = [];
+
+    for (let j = 0; j < sortedReviews.length; j++) {
+        const reviewId = sortedReviews[j].toString();
+        const reviewInfo = await getReviewInfoByReviewId(reviewId);
+        reviewsArray.push(reviewInfo);
+    }
+    return reviewsArray;
+};
+
 
 export const increaseReservedCounts = async (
     drinkId
