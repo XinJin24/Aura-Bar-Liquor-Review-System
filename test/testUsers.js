@@ -10,34 +10,41 @@ import {
 
 } from "../data/users.js"
 import {getDrinkInfoByDrinkId, updateAllDrinkRating} from "../data/drinks.js";
+import {fileURLToPath} from "url";
+import {dirname, join} from "path";
 
 let user1 =null;
 let user2 = null;
 let user3 =null;
 
-try {
-    const drink1 = await createUser("xin", "jin","jin@qq.com","9293428295","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
-        "admin");
-    console.log(drink1)
-}catch (error){
-    console.log(error);
-}
+// try {
+//     const currentFilePath = fileURLToPath(import.meta.url);
+//     const currentDirPath = dirname(currentFilePath);
+//     const absolutePath = join(currentDirPath, "Inunasha.jpg");
+//
+//     console.log(absolutePath);
+//     const drink1 = await createUser("xin", "jin","jin@qq.com","9293428295","Abc123!@#",absolutePath,
+//         "admin");
+//     console.log(drink1)
+// }catch (error){
+//     console.log(error);
+// }
 
-try {
-    const drink1 = await createUser("xin", "jin","xin@qq.com","9293428295","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
-        "admin");
-    console.log(drink1)
-}catch (error){
-    console.log(error);
-}
-
-try {
-    const drink1 = await createUser("xin", "jin","jinxin@qq.com","9293428295","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
-        "admin");
-    console.log(drink1)
-}catch (error){
-    console.log(error);
-}
+// try {
+//     const drink1 = await createUser("xin", "jin","xin@qq.com","9293428295","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
+//         "admin");
+//     console.log(drink1)
+// }catch (error){
+//     console.log(error);
+// }
+//
+// try {
+//     const drink1 = await createUser("xin", "jin","jinxin@qq.com","9293428295","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
+//         "admin");
+//     console.log(drink1)
+// }catch (error){
+//     console.log(error);
+// }
 
 
 

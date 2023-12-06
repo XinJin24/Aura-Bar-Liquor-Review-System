@@ -2,6 +2,9 @@ import validation from "../publicMethods.js";
 import {drinks, users} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 import {getReviewInfoByReviewId} from "./reviews.js";
+import {access, unlink} from 'fs/promises';
+import {dirname, join} from "path";
+import {fileURLToPath} from "url";
 
 /**
  * @param {ObjectId} _id - A globally unique identifier for the specific drink.
@@ -27,7 +30,6 @@ export const createDrink = async (
     name = validation.validateDrinkName(name, "DrinkName");
     category = validation.validateDrinkCategory(category, "DrinkCategory");
     recipe = validation.validateDrinkRecipe(recipe);
-    drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
     price = validation.validatePrice(price, "Drink Price");
 
     const drinkCollection = await drinks();
@@ -35,6 +37,7 @@ export const createDrink = async (
     if (ifExist) {
         throw `Error: ${name} is already exist in the drinks library.`;
     }
+    drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
     const drink = {
         name: name,
         category: category,
@@ -67,16 +70,15 @@ export const updateDrink = async (
     name = validation.validateDrinkName(name, "Drink Name");
     category = validation.validateDrinkCategory(category, "Drink Category");
     recipe = validation.validateDrinkRecipe(recipe);
-    drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
     price = validation.validatePrice(price, "Drink Price");
-
     const drinkCollection = await drinks();
     const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId) });
 
     if (!drink) {
         throw `Error: drink with the drinkId: ${drink} not found`;
     }
-
+    const oldDrinkPictureLocation = drink.drinkPictureLocation;
+    drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
     const updatedDrink = {
         name: name,
         category: category,
@@ -90,6 +92,19 @@ export const updateDrink = async (
     );
     if (updateDrink.modifiedCount === 0) {
         throw `Error: Failed to update drink with drinkId: ${drink._id}, drink name: ${name}`;
+    }
+    //delete the old drink picture file
+    try {
+        if (oldDrinkPictureLocation!==null && oldDrinkPictureLocation!==undefined) {
+            const currentFilePath = fileURLToPath(import.meta.url);
+            const currentDirPath = dirname(currentFilePath);
+            const absolutePath = join(currentDirPath.replace('data', 'public'), oldDrinkPictureLocation);
+
+            await access(absolutePath);
+            await unlink(absolutePath);
+        }
+    } catch (error) {
+        throw `Error: Failed to delete old drink picture at ${oldDrinkPictureLocation}`;
     }
     return { updatedDrink: true };
 }

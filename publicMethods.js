@@ -1,4 +1,4 @@
-import {access, copyFile, mkdir, readFile} from 'fs/promises';
+import {access, copyFile, mkdir} from 'fs/promises';
 import {ObjectId} from "mongodb";
 import {dirname, join} from "path";
 import {fileURLToPath} from "url";
@@ -137,42 +137,31 @@ const exportedMethods = {
         return role;
     },
     async validateIfFileExist(filePath, valName) {
-        if (!filePath || typeof filePath !== 'string' || filePath.trim().length === 0) {
+        if (!filePath || typeof filePath !== 'string'||filePath.trim().length === 0) {
             return '';
         }
-        filePath = filePath.trim();
+        filePath=filePath.trim();
         try {
+            await access(filePath);
+
             const currentFilePath = fileURLToPath(import.meta.url);
             const currentDirPath = dirname(currentFilePath);
             const picturesDir = join(currentDirPath, 'public', 'pictures');
             await mkdir(picturesDir, { recursive: true });
 
-            // Generate a unique filename in the 'pictures' directory
             const fileName = `${Date.now()}_${filePath.split("\\").pop()}`;
             const newFilePath = join(picturesDir, fileName);
 
-            // Check if the file already exists in the destination directory
             try {
+                //file already exist
                 await access(newFilePath);
-
-                // File already exists, compare contents before returning its path
-                const existingFileContent = await readFile(newFilePath, 'utf-8');
-                const newFileContent = await readFile(filePath, 'utf-8');
-
-                if (existingFileContent === newFileContent) {
-                    // Contents match, return the path without copying
-                    return `pictures\\${fileName}`;
-                }
-
-                // Contents don't match, proceed with copying
+                return `pictures\\${fileName}`;
             } catch (err) {
-                // File doesn't exist, proceed with copying
+                //file not exist, copy
+                await copyFile(filePath, newFilePath);
+                await access(newFilePath);
+                return `pictures\\${fileName}`;
             }
-
-            // Copy the file to the 'pictures' directory
-            await copyFile(filePath, newFilePath);
-            await access(newFilePath);
-            return `pictures\\${fileName}`;
         } catch (err) {
             throw `Error: Some error happened when processing your photos`;
         }

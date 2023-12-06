@@ -30,7 +30,7 @@ export const createUser = async (
     email = validation.validateEmail(email, "email");
     phoneNumber = validation.validatePhoneNumber(phoneNumber);
     password = validation.validatePassword(password, "password");
-    profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
+
     role = validation.validateRole(role);
 
     const userCollection = await users();
@@ -38,6 +38,7 @@ export const createUser = async (
     if (ifExist) {
         throw `Error: ${email} is already registered, Please Login`;
     }
+    profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
     const user = {
         firstName: firstName,
         lastName: lastName,
