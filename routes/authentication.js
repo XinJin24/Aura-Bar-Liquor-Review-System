@@ -17,14 +17,18 @@ router
 
 router
     .route('/home').get(async (req, res) => {
+        let userId = null;
         let userFirstName = null;
         let userLstName = null;
         let userProfilePictureLocation = null;
+        let login = false;
         if(req.session.user){
-            const userId = req.session.user.userId;
-            const userFirstName = req.session.user.firstName;
-            const userLstName = req.session.user.lastName;
-            const userProfilePictureLocation = req.session.user.profilePictureLocation
+
+            login = true;
+             userFirstName = req.session.user.firstName;
+             userLstName = req.session.user.lastName;
+             userProfilePictureLocation = req.session.user.profilePictureLocation
+            console.log("logged in true"+ userProfilePictureLocation);
         }
     const allDrinks = await getAllDrinks();
     if(req.session.user && req.session.user.role === "admin"){
@@ -32,7 +36,8 @@ router
             drink.editable = true;
         }
     }
-    return res.render('home', {title: "Aura Liquor", drinks: allDrinks, firstName: userFirstName, lastName : userLstName, userProfilePictureLocation: userProfilePictureLocation});
+    return res.render('home', {title: "Aura Liquor", drinks: allDrinks, firstName: userFirstName,
+        lastName : userLstName, userProfilePictureLocation: userProfilePictureLocation, login: login});
 });
 
 
@@ -49,18 +54,19 @@ router
         let firstNameInput = xss(req.body.firstNameInput);//same as frontend
         let lastNameInput = xss(req.body.lastNameInput);
         let emailAddressInput = xss(req.body.emailAddressInput);
-        let stateInput = xss(req.body.stateInput);
+        let phoneNumberInput = xss(req.body.phoneNumberInput);
         let passwordInput = xss(req.body.passwordInput);
         let confirmPasswordInput = xss(req.body.confirmPasswordInput);
         let photoInput = xss(req.body.photoInput);
         let roleInput = xss(req.body.roleInput);
         try {
-            if (!firstNameInput || !lastNameInput || !emailAddressInput || !stateInput || !passwordInput || !confirmPasswordInput || !roleInput) {
+            if (!firstNameInput || !lastNameInput || !emailAddressInput || !phoneNumberInput || !passwordInput || !confirmPasswordInput || !roleInput) {
                 throw "Error: You must make sure that firstName, lastName, emailAddress,  password, confirmPassword, role are supplied"
             }
             lastNameInput = validation.validateName(lastNameInput, "lastname");
             firstNameInput = validation.validateName(firstNameInput, "firstName");
             emailAddressInput = validation.validateEmail(emailAddressInput);
+            phoneNumberInput = validation.validatePhoneNumber(phoneNumberInput);
             passwordInput = validation.validatePassword(passwordInput, "password");
             confirmPasswordInput = validation.validatePassword(confirmPasswordInput, "confirmPasswordInput");
             roleInput = validation.validateRole(roleInput);
@@ -81,7 +87,7 @@ router
             const user = await createUser(firstNameInput,
                 lastNameInput,
                 emailAddressInput,
-                stateInput,
+                phoneNumberInput,
                 passwordInput,
                 photoInput,
                 // profilePictureLocationInput,
@@ -119,7 +125,8 @@ router
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
-                state: user.state,
+                phoneNumber: user.phoneNumber,
+                profilePictureLocation: user.profilePictureLocation,
                 role: user.role
             };
             res.cookie('AuthState', req.session.sessionID);

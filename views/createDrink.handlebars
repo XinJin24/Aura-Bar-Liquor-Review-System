@@ -1,8 +1,7 @@
 <main>
     <h1>{{title}}</h1>
-    
+
     {{#if login}}
-    {{#if user.role === "admin"}}
     <form id="drink_form" action="/new" method="POST">
         <div>
             <label for="name">
@@ -50,7 +49,7 @@
             <button type="submit" id="submit" >Submit</button>              
         </div>
     </form>
-    {{#else}}
+    {{else}}
         <p>Please log in to add a drink</p>
         <p id="clienterror4" ></p>
     {{/if}}

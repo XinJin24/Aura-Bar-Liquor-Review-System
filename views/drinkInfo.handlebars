@@ -3,7 +3,6 @@
     <h1>{{title}}</h1>
     {{#if login}}
         {{#if user}}
-            {{#if user.role === "admin"}}
                 <form id="drinkid_form" action="/{{drinkInfo._id}}" method="POST">
                     <div>
                         <label for="name">
@@ -15,7 +14,7 @@
                         <label for="category">
                             Category:
                             <input type="text" id="category" name="category" value="{{category}}" required>
-                        </label>     
+                        </label>
                     </div>
                     <div>
                         <label for="recipe">
@@ -41,7 +40,7 @@
                             <input type="file" id="drinkPictureLocation" name="drinkPictureLocation" required>
                             <img id="previewImg" src="#">
                         </label>
-                    </div>        
+                    </div>
                     <div>
                         <ul class="errorInfo">
                             {{#if error}}
@@ -75,7 +74,7 @@
             <p>Please log in to view details about this drink.</p>
             <p id="clienterror5"></p>
         {{/if}}
-    {{else}}
+
         <p>Please log in to view details about this drink.</p>
         <p id="clienterror5"></p>
     {{/if}}

@@ -105,6 +105,9 @@ export const deleteDrink = async (
     if (!drink) {
         throw `Error: drink with drinkId ${drinkId} not found, cannot delete`;
     }
+    if(drink.available ===false){
+        return { deleteDrink: true };
+    }
     const updatedDrink ={
         available: false
     };
@@ -113,7 +116,7 @@ export const deleteDrink = async (
         { $set: updatedDrink }
     );
     if (updateDrink.modifiedCount === 0) {
-        throw `Error: Failed to delete drink with drinkId: ${drink._id}, drink name: ${name}`;
+        throw `Error: Failed to delete drink with drinkId: ${drink._id}, drink name: ${drink.name}`;
     }
     return { deleteDrink: true };
 }

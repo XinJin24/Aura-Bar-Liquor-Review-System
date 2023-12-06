@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt';
  * @param {string} firstName - First name of the user.
  * @param {string} lastName - Last name of the user.
  * @param {string} email - Email of the user.
- * @param {string} state - State of the user.
+ * @param {string} phoneNumber - phoneNumber of the user.
  * @param {number} password - The password when users log in.
  * @param {Array(ObjectId)} reviewIds - A unique identifier that guarantees the uniqueness of each review.
  * @param {String} profilePictureLocation - The location of the profile picture.
@@ -20,7 +20,7 @@ export const createUser = async (
     firstName,
     lastName,
     email,
-    state,
+    phoneNumber,
     password,
     profilePictureLocation,
     role
@@ -28,7 +28,7 @@ export const createUser = async (
     firstName = validation.validateName(firstName, "firstName");
     lastName = validation.validateName(lastName, "lastName");
     email = validation.validateEmail(email, "email");
-    state = validation.validateState(state);
+    phoneNumber = validation.validatePhoneNumber(phoneNumber);
     password = validation.validatePassword(password, "password");
     profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
     role = validation.validateRole(role);
@@ -42,7 +42,7 @@ export const createUser = async (
         firstName: firstName,
         lastName: lastName,
         email: email,
-        state: state,
+        phoneNumber: phoneNumber,
         password: await bcrypt.hash(password, 15),
         reviewIds: [],
         profilePictureLocation: profilePictureLocation,
@@ -80,7 +80,7 @@ export const loginUser = async (email, password) => {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            state: user.state,
+            phoneNumber: user.phoneNumber,
             reviewIds: user.reviewIds,
             profilePictureLocation: user.profilePictureLocation,
             drinkReserved: user.drinkReserved,
@@ -93,7 +93,7 @@ export const updateUser = async (
     firstName,
     lastName,
     email,
-    state,
+    phoneNumber,
     password,
     reviewIds,
     profilePictureLocation,
@@ -103,7 +103,7 @@ export const updateUser = async (
     firstName = validation.validateName(firstName, "firstName");
     lastName = validation.validateName(lastName, "lastName");
     email = validation.validateEmail(email, "email");
-    state = validation.validateState(state);
+    phoneNumber = validation.validatePhoneNumber(phoneNumber);
     password = validation.validatePassword(password, "password");
     reviewIds = validation.validateArrayOfIds(reviewIds);
     profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
@@ -120,7 +120,7 @@ export const updateUser = async (
         firstName: firstName,
         lastName: lastName,
         email: email,
-        state: state,
+        phoneNumber: phoneNumber,
         password: await bcrypt.hash(password, 15),
         reviewIds: reviewIds,
         profilePictureLocation: profilePictureLocation,
@@ -192,7 +192,7 @@ export const getUserInfoByUserId = async (
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        state: user.state,
+        phoneNumber: user.phoneNumber,
         reviewIds: user.reviewIds,
         profilePictureLocation: user.profilePictureLocation,
         drinkReserved: user.drinkReserved,
@@ -214,7 +214,7 @@ export const getUserInfoByEmail = async (
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        state: user.state,
+        phoneNumber: user.phoneNumber,
         reviewIds: user.reviewIds,
         profilePictureLocation: user.profilePictureLocation,
         drinkReserved: user.drinkReserved,

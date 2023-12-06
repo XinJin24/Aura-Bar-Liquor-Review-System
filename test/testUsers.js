@@ -16,7 +16,7 @@ let user2 = null;
 let user3 =null;
 
 try {
-    const drink1 = await createUser("xin", "jin","jin@qq.com","NY","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
+    const drink1 = await createUser("xin", "jin","jin@qq.com","9293428295","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
         "admin");
     console.log(drink1)
 }catch (error){
@@ -24,7 +24,7 @@ try {
 }
 
 try {
-    const drink1 = await createUser("xin", "jin","xin@qq.com","NY","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
+    const drink1 = await createUser("xin", "jin","xin@qq.com","9293428295","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
         "admin");
     console.log(drink1)
 }catch (error){
@@ -32,7 +32,7 @@ try {
 }
 
 try {
-    const drink1 = await createUser("xin", "jin","jinxin@qq.com","NY","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
+    const drink1 = await createUser("xin", "jin","jinxin@qq.com","9293428295","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
         "admin");
     console.log(drink1)
 }catch (error){
@@ -48,7 +48,7 @@ try {
 }
 console.log("-------------------------------------------------------------");
 try {
-    console.log(await updateUser("xin", "xin","jin@qq.com","NY","Abc123!@#",[],"C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
+    console.log(await updateUser("xin", "xin","jin@qq.com","9293335817","Abc123!@#",[],"C:\\Users\\jinxi\\OneDrive\\Pictures\\Inunasha.jpg",
         [],"admin"));
 }catch (error){
     console.log(error);

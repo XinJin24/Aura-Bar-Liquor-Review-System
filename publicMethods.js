@@ -1,8 +1,11 @@
-import { access } from 'fs/promises';
+import {access, copyFile, mkdir, readFile} from 'fs/promises';
 import {ObjectId} from "mongodb";
+import {dirname, join} from "path";
+import {fileURLToPath} from "url";
+import * as path from "path";
 
 const exportedMethods = {
-    validateId(id, valName){
+    validateId(id, valName) {
         if (!id) throw `Error: You must provide an ${valName}`;
         if (typeof id !== 'string') throw `Error: ${valName} must be a string`;
         id = id.trim();
@@ -31,7 +34,7 @@ const exportedMethods = {
         }
         return name;
     },
-    generateCurrentDate(){
+    generateCurrentDate() {
         const date = new Date();
         const year = date.getFullYear();
         const month = date.getMonth() + 1;
@@ -40,7 +43,7 @@ const exportedMethods = {
         const minutes = date.getMinutes();
         return `${month}/${day}/${year} ${hour}:${minutes}`;
     },
-    validateDateTime(inputDate){
+    validateDateTime(inputDate) {
         const currentDate = new Date();
 
         if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(inputDate)) {
@@ -92,30 +95,6 @@ const exportedMethods = {
         }
         return email;
     },
-    validateState(stateCode) {
-    if (!stateCode) {
-        throw "Error: State code is not supplied";
-    }
-
-    if (typeof stateCode !== "string" || stateCode.trim().length !== 2) {
-        throw "Error: State code should be a valid two-letter string";
-    }
-
-    const validStateCodes = [
-        "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-        "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-        "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-        "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-        "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
-    ];
-
-    const upperCaseStateCode = stateCode.trim().toUpperCase();
-
-    if (!validStateCodes.includes(upperCaseStateCode)) {
-        throw "Error: Invalid state code";
-    }
-    return upperCaseStateCode;
-},
     validatePassword(password, valName) {
         if (!password) throw `Error: ${valName} not supplied`;
         if (typeof password !== "string" || password.trim().length <= 0) {
@@ -158,23 +137,51 @@ const exportedMethods = {
         return role;
     },
     async validateIfFileExist(filePath, valName) {
-        if (typeof filePath !== "string") {
-            throw `Error: ${valName} must be a valid string(no empty spaces)!`;
-        } else if(filePath.trim().length === 0){
-            return "";
+        if (!filePath || typeof filePath !== 'string' || filePath.trim().length === 0) {
+            return '';
         }
+        filePath = filePath.trim();
         try {
-            await access(filePath);
-            return filePath;
+            const currentFilePath = fileURLToPath(import.meta.url);
+            const currentDirPath = dirname(currentFilePath);
+            const picturesDir = join(currentDirPath, 'public', 'pictures');
+            await mkdir(picturesDir, { recursive: true });
+
+            // Generate a unique filename in the 'pictures' directory
+            const fileName = `${Date.now()}_${filePath.split("\\").pop()}`;
+            const newFilePath = join(picturesDir, fileName);
+
+            // Check if the file already exists in the destination directory
+            try {
+                await access(newFilePath);
+
+                // File already exists, compare contents before returning its path
+                const existingFileContent = await readFile(newFilePath, 'utf-8');
+                const newFileContent = await readFile(filePath, 'utf-8');
+
+                if (existingFileContent === newFileContent) {
+                    // Contents match, return the path without copying
+                    return `pictures\\${fileName}`;
+                }
+
+                // Contents don't match, proceed with copying
+            } catch (err) {
+                // File doesn't exist, proceed with copying
+            }
+
+            // Copy the file to the 'pictures' directory
+            await copyFile(filePath, newFilePath);
+            await access(newFilePath);
+            return `pictures\\${fileName}`;
         } catch (err) {
-            throw `Error: File at path ${filePath} is inaccessible.`;
+            throw `Error: Some error happened when processing your photos`;
         }
     },
     validateArrayOfIds(Ids) {
         if (!Array.isArray(Ids)) {
             throw 'Error: reviewIds must be an array';
         }
-        if(Ids.length!==0){
+        if (Ids.length !== 0) {
             Ids.forEach((reviewId) => {
                 if (typeof reviewId !== 'string') {
                     throw 'Error: Each item in reviewIds must be a string';
@@ -187,28 +194,28 @@ const exportedMethods = {
         }
         return Ids;
     },
-    checkPhoto(photo){
-        if(!(photo instanceof Array)){
+    checkPhoto(photo) {
+        if (!(photo instanceof Array)) {
             throw "photo should be an array of strings";
         }
-        for(let i = 0; i < photo.length; i++){
-            if(typeof photo[i] !== "string"){
+        for (let i = 0; i < photo.length; i++) {
+            if (typeof photo[i] !== "string") {
                 throw "each element in photo should be a string";
             }
         }
         return photo;
     },
-    validateReviewText(description){
+    validateReviewText(description) {
         if (typeof description !== "string" || description.trim().length === 0) {
             throw `Error: description should be a valid string (no empty spaces)`;
         }
         description = description.trim();
-        if(description.length < 5 || description > 10000){
+        if (description.length < 5 || description > 10000) {
             throw `Error: description should have more than 5 chars and less than 10 thousand chars`;
         }
         return description;
     },
-    validateRating(rating){
+    validateRating(rating) {
         if (typeof rating !== "string" || rating.trim().length === 0) {
             throw `Error: rating should be a valid string with number 0 - 5(no empty spaces)`;
         }
@@ -257,12 +264,12 @@ const exportedMethods = {
 
         return category;
     },
-    validateDrinkRecipe(recipe){
+    validateDrinkRecipe(recipe) {
         if (typeof recipe !== "string" || recipe.trim().length === 0) {
             throw `Error: recipe should be a valid string (no empty spaces)`;
         }
         recipe = recipe.trim();
-        if(recipe.length < 5 || recipe > 10000){
+        if (recipe.length < 5 || recipe > 10000) {
             throw `Error: recipe should have more than 5 chars and less than 10 thousand chars`;
         }
         return recipe;
@@ -295,8 +302,21 @@ const exportedMethods = {
             throw `Error: ${valName} must be either true or false.`;
         }
         return val;
+    },
+    validatePhoneNumber(phoneNumber) {
+        if (!phoneNumber) {
+            throw "Error: Phone number not supplied";
+        }
+        if (typeof phoneNumber !== "string" || phoneNumber.trim().length === 0) {
+            throw "Error: Phone number should be a valid string (no empty spaces)";
+        }
+        phoneNumber = phoneNumber.trim();
+        const phoneRegex = /^(\+\d{1,2}\s?)?(\d{1,4}\s?)?[\d\s-]+$/;
+        if (!phoneRegex.test(phoneNumber)) {
+            throw "Error: Invalid phone number format";
+        }
+        return phoneNumber;
     }
-
 
 
 }

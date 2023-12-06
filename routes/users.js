@@ -13,6 +13,7 @@ import {
 import {getReviewInfoByReviewId} from "../data/reviews.js"
 import {getDrinkInfoByDrinkId} from "../data/drinks.js"
 import e from "express";
+import xss from "xss";
 
 
 router
@@ -58,7 +59,7 @@ router
     });
 
 // ask user to enter firstName, LastName, oldPassword, newPassword, confirmNewPassword,
-// state, newProfilePictureLocation,
+// phoneNumber, newProfilePictureLocation,
 router
     .route('/modify/:id')
     .get(async (req, res) => {
@@ -94,13 +95,13 @@ router
                     throw `Error: You don't have access to others' account: ${userId}`
                 }
 
-                let firstName = validation.validateName(req.params.firstName, "firstName");
-                let lastName = validation.validateName(req.params.lastName, "lastName");
-                let oldPassword = validation.validatePassword(req.params.oldpassword, "password");
-                let newPassword = validation.validatePassword(req.params.newPassword, "new Password");
-                let confirmNewPassword = validation.validatePassword(req.params.confirmNewPassword, "confirm New Password");
-                let state = validation.validateState(req.params.state);
-                let newProfilePictureLocation = await validation.validateIfFileExist(req.params.newProfilePictureLocation);
+                let firstName = validation.validateName(xss(req.body.firstName), "firstName");
+                let lastName = validation.validateName(xss(req.body.lastName), "lastName");
+                let oldPassword = validation.validatePassword(xss(req.body.oldPassword), "password");
+                let newPassword = validation.validatePassword(xss(req.body.newPassword), "new Password");
+                let confirmNewPassword = validation.validatePassword(xss(req.body.confirmNewPassword), "confirm New Password");
+                let phoneNumber = validation.validatePhoneNumber(xss(req.body.phoneNumber));
+                let newProfilePictureLocation = await validation.validateIfFileExist(xss(req.body.newProfilePictureLocation));
 
                 if (oldPassword === newPassword) {
                     throw "Error: New Password cannot be same as the previous password!";
@@ -113,7 +114,7 @@ router
                     firstName,
                     lastName,
                     user.email,
-                    state,
+                    phoneNumber,
                     newPassword,
                     user.reviewIds,
                     newProfilePictureLocation,

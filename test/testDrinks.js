@@ -3,7 +3,7 @@ import {
     deleteDrink,
     getAllDrinks,
     getAllReviewsOnADrink,
-    getDrinkInfoByDrinkId, updateAllDrinkRating,
+    updateAllDrinkRating,
     updateDrink
 } from "../data/drinks.js"
 
