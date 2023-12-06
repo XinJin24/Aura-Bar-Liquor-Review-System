@@ -1,0 +1,58 @@
+<main>
+    <h1>{{title}}</h1>
+    
+    {{#if login}}
+    {{#if user.role === "admin"}}
+    <form id="drink_form" action="/new" method="POST">
+        <div>
+            <label for="name">
+                Name:
+                <input type="text" id="name" name="name" value="{{name}}" required>
+            </label>
+        </div>
+        <div>
+            <label for="category">
+                Category:
+                <input type="text" id="category" name="category" value="{{category}}" required>
+            </label>     
+        </div>
+        <div>
+            <label for="recipe">
+                Recipe:
+                <input type="text" id="recipe" name="recipe" value="{{recipe}}" required>
+            </label>
+        </div>
+        <div>
+            <label for="rating">
+                Rating:
+                <input type="text" id="rating" name="rating" value="{{rating}}" required>
+            </label>
+        </div>
+        <div>
+            <label for="price">
+                Price:
+                <input type="text" id="price" name="price" value="{{price}}" required>
+            </label>
+        </div>
+        <div>
+            <label for="drinkPictureLocation">
+                Upload Image:
+                <input type="file" id="drinkPictureLocation" name="drinkPictureLocation" required>
+                <img id="previewImg" src="#">
+            </label>
+        </div>        
+        <div>
+            <ul class="errorInfo">
+                {{#if error}}
+                    <li>{{error}}</li>
+                {{/if}}
+            </ul>
+            <button type="submit" id="submit" >Submit</button>              
+        </div>
+    </form>
+    {{#else}}
+        <p>Please log in to add a drink</p>
+        <p id="clienterror4" ></p>
+    {{/if}}
+    <script src="/public/js/modifyDrinkInfo.js"></script>
+</main>

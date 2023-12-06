@@ -1,15 +1,20 @@
-<body>
-<title>{{title}}</title>
-<main>
-    <h1>{{title}}</h1>
-    <h2>{{searchMarvelTerm}}</h2>
-    <ol>
-        {{#each drink}}
-            <li>
-                <a id="searchResults" href="/marvelcharacter/{{id}}">{{this.name}}</a>
-            </li>
-        {{/each}}
-    </ol>
-    <a href="/" id="searchMoreLink">Search for Another Character</a>
-</main>
-</body>
+
+{{#if user}}
+<div class="col-md-12 text-right">
+    <a href="/logout" class="btn btn-primary">Logout</a>
+</div>
+{{else}}
+<div class="col-md-12 text-right">
+    <a href="/login" class="btn btn-primary">Login </a>
+    <a href="/register" class="btn btn-primary">Register</a>
+</div>
+{{/if}}
+
+<h1>Aura-Bar-Liquor-Review-System</h1>
+<p>
+    Start by highlighting the fact that there is a growing demand for information about bars and liquor products.
+    People often want to know about the quality of service, pricing, ambiance, and the variety of drinks available.
+    Our project can address this need by providing a platform for reviews and ratings.
+    The project also aims to enhance the user experience for those looking for liquor options.
+    By providing a user-friendly app, we're not only helping consumers find the best options but also saving their time and effort.
+</p>

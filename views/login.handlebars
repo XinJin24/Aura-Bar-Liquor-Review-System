@@ -1,31 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In</title>
-    <link rel='stylesheet' href='/public/css/main.css' />
-</head>
-<body>
+<main>
+    <h1>{{title}}</h1>
     <form id="login_form" action="/login" method="POST">
-        <label for="emailAddressInput">
-            EmailAddress:
-            <input type="email" id="emailAddressInput" name="emailAddressInput">
-        </label>  
-
-        <label for="passwordInput">
-            Password:
-            <input type="password" id="passwordInput" name="passwordInput">
-        </label>
-
-        <button type="submit" id="submit" >Submit</button>           
+        <div>
+            <label for="emailAddressInput">
+                EmailAddress:
+                <input type="email" id="emailAddressInput" name="emailAddressInput">
+            </label>
+        </div>
+        <div>
+            <label for="passwordInput">
+                Password:
+                <input type="password" id="passwordInput" name="passwordInput">
+            </label>
+        </div>      
+        <div>
+            <ul class="errorInfo">
+                {{#if message}}
+                    <li>{{message}}</li>
+                {{/if}}
+            </ul>
+            <button type="submit" id="submit" >Submit</button>  
+        </div>                   
     </form>
-    {{#if loginfail}}
-        <p>{{errormessage}}</p>
-    {{/if}}
-    <br>
     <div id="clientError1" ></div>
-    <a href="/register">Click here to register!</a>
+    <a href="/register">Click Here To Register!</a>
     <script src="/public/js/login.js"></script>
-</body>
-</html>
+</main>

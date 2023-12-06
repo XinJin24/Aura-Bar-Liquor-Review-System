@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-    <link rel='stylesheet' href='/public/css/main.css' />
-</head>
-<body>
+<main>
     <h1>{{title}}</h1>
     {{#if user}}
         <h2>Welcome, {{user.firstName}} {{user.lastName}}!</h2>
@@ -29,8 +21,7 @@
             {{/each}}
         </ul>
     {{else}}
-        <p>Please log in to view your profile.</p>
+        <a href="/login">Please Log In To View Your Profile</a>
     {{/if}}    
 
-</body>
-</html>
+</main>
