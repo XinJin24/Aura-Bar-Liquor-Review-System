@@ -1,4 +1,4 @@
-import {users} from "../config/mongoCollections.js";
+import {users, drinks} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 import validation from "../publicMethods.js";
 import bcrypt from 'bcrypt';
@@ -63,7 +63,7 @@ export const loginUser = async (email, password) => {
 
     const userCollection = await users();
     const user = await userCollection.findOne({
-        emailAddress: email
+        email: email
     });
     if (!user) {
         throw "Error: Either the email address or password is invalid";
@@ -107,7 +107,7 @@ export const updateUser = async (
     password = validation.validatePassword(password, "password");
     reviewIds = validation.validateArrayOfIds(reviewIds);
     profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
-    drinkReserved = drinkReserved.validation.validateArrayOfIds(drinkReserved);
+    drinkReserved = validation.validateArrayOfIds(drinkReserved);
     role = validation.validateRole(role);
 
     const userCollection = await users();
@@ -272,7 +272,7 @@ export const deleteOneReviewFromUser = async (
         { _id: new ObjectId(userId) },
         { $set: { reviewIds: reviewList } }
     );
-    if (!updateReviewIds) {
+    if (updateReviewIds.modifiedCount === 0) {
         throw `Error: Could not delete reviewId${reviewId} from user!`;
     }
     return true;
@@ -311,5 +311,16 @@ export const reserveDrink = async (
     if (updateResult.modifiedCount === 0) {
         throw `Error: Failed to reserve drink for user with ID ${userId}`;
     }
+
+    const newReservedCount = drink.reservedCounts + 1;
+    const updatedCounts = await drinkCollection.updateOne(
+        { _id: drink._id },
+        { $set: { reservedCounts: newReservedCount } }
+    );
+    if (updatedCounts.modifiedCount === 0) {
+        throw `Error: Failed to drink reserved count for user with drink ID ${drink._id}`;
+    }
+
+
     return {reservedDrink, userId};
 }

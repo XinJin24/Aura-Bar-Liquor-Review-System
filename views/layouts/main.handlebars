@@ -9,21 +9,22 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+<nav>
+    <ul>
+        <li><a href="/">Home Page</a></li>
+        <li><a href="/user">User Center</a></li>
+    </ul>
+    <form action="/search" method="GET">
+        <input type="text" name="query" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+</nav>
 {{{body}}}
 <header>
-    <nav>
-        <form action="/search" method="GET">
-            <input type="text" name="query" placeholder="Search...">
-            <button type="submit">Search</button>
-        </form>
-    </nav>
+
 
     <nav id="get-posts-navbar">
-        <ul>
-            <li><a href="/">Home Page</a></li>
-            <li><a href="/post">Posts</a></li>
-            <li><a href="/events">Events</a></li>
-        </ul>
+
     </nav>
 </header>
 </body>

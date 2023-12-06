@@ -49,22 +49,22 @@ app.use(session({
     resave: false
 }));
 
-const isLoggedIn = (req, res, next) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
-    next();
-};
-
-const protectedRoutes = ['/home','/login', '/drinks', '/reviews', '/users', '/logout', '/register'];
-app.use(protectedRoutes, isLoggedIn);
-
-const redirectLoggedIn = (req, res, next) => {
-    if (req.session.user) {
-        return res.redirect('/home');
-    }
-    next();
-};
+// const isLoggedIn = (req, res, next) => {
+//     if (!req.session.user) {
+//         return res.redirect('/login');
+//     }
+//     next();
+// };
+//
+// const protectedRoutes = ['/home','/login', '/drinks', '/reviews', '/users', '/logout', '/register'];
+// app.use(protectedRoutes, isLoggedIn);
+//
+// const redirectLoggedIn = (req, res, next) => {
+//     if (req.session.user) {
+//         return res.redirect('/home');
+//     }
+//     next();
+// };
 
 // app.use(['/login', '/register'], redirectLoggedIn);
 //
@@ -79,7 +79,7 @@ const redirectLoggedIn = (req, res, next) => {
 configRoutes(app);
 
 app.use('*', (req, res) => {
-    res.render('pageNotFound', { title: '404' });
+    res.render('Error', { title: '404' });
 });
 
 app.listen(3000, () => {

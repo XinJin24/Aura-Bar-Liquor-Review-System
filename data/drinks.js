@@ -15,6 +15,8 @@ import {getReviewInfoByReviewId} from "./reviews.js";
  * @param {number} reservedCounts - The number of users who have reserved the specific drink..
  * @param {boolean} available - The boolean that indicate the available of the drink.
  */
+
+//"whiskey", "vodka", "rum", "gin", "tequila", "brandy", "liqueur", "wine", "beer", "juice", "other"
 export const createDrink = async (
     name,
     category,
@@ -153,15 +155,7 @@ export const getAllDrinks = async () => {
     }
 
     const sortedDrinks = allDrinks.sort((a, b) => b.rating - a.rating);
-
-    let drinksArray = [];
-
-    for (let j = 0; j < sortedDrinks.length; j++) {
-        const drinkId = sortedDrinks[j];
-        const drinkInfo = await getDrinkInfoByDrinkId(drinkId);
-        drinksArray.push(drinkInfo);
-    }
-    return { drinks: drinksArray };
+    return sortedDrinks;
 }
 
 //sorted by timestamp
@@ -237,6 +231,46 @@ export const reserveDrink = async (userId, drinkId) => {
         throw `Error: Failed to reserve drink for user with ID ${userId}`;
     }
 
+    const increasedReservedCounts = await increaseReservedCounts(drinkId);
+    if(!increasedReservedCounts.increaseReservedCounts === true){
+        throw "Error: failed to increased Reserved Counts"
+    }
     return { reservedDrink, userId };
 };
 
+export const updateAllDrinkRating = async () => {
+
+    try{
+        const allDrinks = await getAllDrinks();
+
+        for (const drink of allDrinks) {
+            const reviews = await getAllReviewsOnADrink(drink._id.toString());
+            if(reviews.length === 0 || reviews === undefined){
+                continue;
+            }
+            const reviewCount = reviews.length;
+            let totalRating = 0;
+            for (const review of reviews) {
+                const oneReview = await getReviewInfoByReviewId(review);
+                totalRating += oneReview.rating;
+            }
+            const rating = (totalRating / reviewCount).toFixed(2);
+
+
+            const updatedDrinkRating = {
+                rating: rating,
+            };
+            const drinkCollection = await drinks();
+            const updateDrink = await drinkCollection.updateOne(
+                { _id: drink._id },
+                { $set: updatedDrinkRating }
+            );
+            if (updateDrink.modifiedCount === 0) {
+                throw `Error: Failed to update all drinks' ratings `;
+            }
+        }
+    }catch (error){
+            throw "Error: Some problem occurred when updating all drinks review."
+    }
+    return { updatedAllDrinkRating: true };
+};

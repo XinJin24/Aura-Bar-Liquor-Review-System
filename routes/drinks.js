@@ -3,6 +3,7 @@ import Router from "express";
 const router = Router();
 import validation from "../publicMethods.js";
 import {createDrink, deleteDrink, getAllReviewsOnADrink, getDrinkInfoByDrinkId, updateDrink} from "../data/drinks.js";
+import xss from "xss";
 
 
 //drink detail page and shows all reviews, if the review is made by the user, it will show the edit button
@@ -40,16 +41,14 @@ router
             let name = null;
             let category = null;
             let recipe = null;
-            let rating = null;
             let drinkPictureLocation = null;
             let price = null;
             try {
-                name = validation.validateName(req.body.name, "Drink Name");
-                category = validation.validateDrinkCategory(req.body.category);
-                recipe = validation.validateDrinkRecipe(req.body.recipe);
-                rating = validation.validateRating(req.body.rating);
-                drinkPictureLocation = validation.validateIfFileExist(req.body.drinkPictureLocation);
-                price = validation.validatePrice(req.body.price);
+                name = validation.validateName(xss(req.body.name), "Drink Name");
+                category = validation.validateDrinkCategory(xss(req.body.category));
+                recipe = validation.validateDrinkRecipe(xss(req.body.recipe));
+                drinkPictureLocation = validation.validateIfFileExist(xss(req.body.drinkPictureLocation));
+                price = validation.validatePrice(xss(req.body.price));
             } catch (error) {
                 return res.status(400).render("createDrink", {
                     error: error,
@@ -62,10 +61,10 @@ router
                 const newDrink = await createDrink(name, category, recipe, drinkPictureLocation, price);
                 res.status(200).redirect("/drinks/" + newDrink._id.toString());
             } catch (error) {
-                return res.render("addPost", {
-                    error: error,
-                    login: true,
-                    title: "Add A Drink"
+                console.error(error);
+                return res.status(500).render('error', {
+                    title: "Error",
+                    message: "Internal Server Error"
                 });
             }
 
@@ -134,11 +133,11 @@ router
             let price = null;
             try{
                 drinkId = validation.validateId(req.params._id, "drinkId");
-                name = validation.validateName(req.body.name, "Drink Name");
-                category = validation.validateDrinkCategory(req.body.category, "Drink Category")
-                recipe = validation.validateDrinkRecipe(req.body.recipe);
-                drinkPictureLocation = validation.validateIfFileExist(req.body.drinkPictureLocation);
-                price = validation.validatePrice(req.body.price);
+                name = validation.validateName(xss(req.body.name), "Drink Name");
+                category = validation.validateDrinkCategory(xss(req.body.category), "Drink Category")
+                recipe = validation.validateDrinkRecipe(xss(req.body.recipe));
+                drinkPictureLocation = validation.validateIfFileExist(xss(req.body.drinkPictureLocation));
+                price = validation.validatePrice(xss(req.body.price));
             }catch (error){
                 return res.status(400).render("updateDrinkInfo", {
                     error: error,

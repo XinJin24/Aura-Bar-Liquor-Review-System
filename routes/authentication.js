@@ -4,6 +4,7 @@ const router = Router();
 import validation from "../publicMethods.js";
 import {createUser, loginUser} from "../data/users.js";
 import {getAllDrinks} from "../data/drinks.js";
+import xss from "xss";
 
 router
     .route('/').get(async (req, res) => {
@@ -16,11 +17,15 @@ router
 
 router
     .route('/home').get(async (req, res) => {
-    const userId = req.session.user.userId;
-    const userFirstName = req.session.user.firstName;
-    const userLstName = req.session.user.lastName;
-    const userProfilePictureLocation = req.session.user.profilePictureLocation
-
+        let userFirstName = null;
+        let userLstName = null;
+        let userProfilePictureLocation = null;
+        if(req.session.user){
+            const userId = req.session.user.userId;
+            const userFirstName = req.session.user.firstName;
+            const userLstName = req.session.user.lastName;
+            const userProfilePictureLocation = req.session.user.profilePictureLocation
+        }
     const allDrinks = await getAllDrinks();
     if(req.session.user && req.session.user.role === "admin"){
         for(let drink of allDrinks){
@@ -41,14 +46,14 @@ router
         }
     })
     .post(async (req, res) => {
-        let firstNameInput = req.body.firstNameInput;//same as frontend
-        let lastNameInput = req.body.lastNameInput;
-        let emailAddressInput = req.body.emailAddressInput;
-        let stateInput = req.body.stateInput;
-        let passwordInput = req.body.passwordInput;
-        let confirmPasswordInput = req.body.confirmPasswordInput;
-        let photoInput = req.body.photoInput;
-        let roleInput = req.body.roleInput;
+        let firstNameInput = xss(req.body.firstNameInput);//same as frontend
+        let lastNameInput = xss(req.body.lastNameInput);
+        let emailAddressInput = xss(req.body.emailAddressInput);
+        let stateInput = xss(req.body.stateInput);
+        let passwordInput = xss(req.body.passwordInput);
+        let confirmPasswordInput = xss(req.body.confirmPasswordInput);
+        let photoInput = xss(req.body.photoInput);
+        let roleInput = xss(req.body.roleInput);
         try {
             if (!firstNameInput || !lastNameInput || !emailAddressInput || !stateInput || !passwordInput || !confirmPasswordInput || !roleInput) {
                 throw "Error: You must make sure that firstName, lastName, emailAddress,  password, confirmPassword, role are supplied"
@@ -103,8 +108,8 @@ router
     })
     .post(async (req, res) => {
         //code here for POST
-        let emailAddressInput = req.body.emailAddressInput;
-        let passwordInput = req.body.passwordInput;
+        let emailAddressInput = xss(req.body.emailAddressInput);
+        let passwordInput = xss(req.body.passwordInput);
         try {
             emailAddressInput = validation.validateEmail(emailAddressInput);
             passwordInput = validation.validatePassword(passwordInput);

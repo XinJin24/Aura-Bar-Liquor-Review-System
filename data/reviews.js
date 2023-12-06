@@ -2,6 +2,7 @@ import validation from "../publicMethods.js";
 import {reviews} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 import {deleteOneReviewFromUser} from "./users.js";
+import {updateAllDrinkRating} from "./drinks.js";
 
 /**
  * @param {ObjectId} _id - A unique identifier that guarantees the uniqueness of each review.
@@ -38,6 +39,12 @@ export const createReview = async (
     const insertReview = await reviewCollection.insertOne(review);
     if (!insertReview.acknowledged || !insertReview.insertedId) {
         throw `Error: couldn't add review`;
+    }
+
+    const updateDrinkRating = await updateAllDrinkRating();
+
+    if (updateDrinkRating.updatedAllDrinkRating !==true) {
+        throw "Error: Some issue happened when updating all drinks' rating"
     }
     return {insertedReview: true};
 }
@@ -82,6 +89,12 @@ export const updateReview = async (
         throw `Error: Failed to update review with reviewId ${reviewId}`;
     }
 
+    const updateDrinkRating = await updateAllDrinkRating();
+
+    if (updateDrinkRating.updatedAllDrinkRating !==true) {
+        throw "Error: Some issue happened when updating all drinks' rating"
+    }
+
     return {updatedReview: true};
 
 }
@@ -103,10 +116,13 @@ export const deleteReview = async (
         throw `Error: could not delete review with reviewId: ${reviewId}`;
     }
     const deleteReviewFromUser = await deleteOneReviewFromUser(reviewId, userId);
-    if (deleteReviewFromUser === true) {
-        return `The review ${reviewId} has been deleted in reviews collections and user collections!`;
-    } else {
+    if (deleteReviewFromUser !== true) {
         throw `Error: some error happened when deleting reviewId: ${reviewId}`
+    }
+    const updateDrinkRating = await updateAllDrinkRating();
+
+    if (updateDrinkRating.updatedAllDrinkRating !==true) {
+        throw "Error: Some issue happened when updating all drinks' rating"
     }
     return {deletedReview: true};
 }

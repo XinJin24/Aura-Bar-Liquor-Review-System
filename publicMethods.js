@@ -174,16 +174,17 @@ const exportedMethods = {
         if (!Array.isArray(Ids)) {
             throw 'Error: reviewIds must be an array';
         }
+        if(Ids.length!==0){
+            Ids.forEach((reviewId) => {
+                if (typeof reviewId !== 'string') {
+                    throw 'Error: Each item in reviewIds must be a string';
+                }
 
-        Ids.forEach((reviewId) => {
-            if (typeof reviewId !== 'string') {
-                throw 'Error: Each item in reviewIds must be a string';
-            }
-
-            if (reviewId.trim() !== '' && !ObjectId.isValid(reviewId)) {
-                throw `Error: ${reviewId} is not a valid ObjectId`;
-            }
-        });
+                if (reviewId.trim() !== '' && !ObjectId.isValid(reviewId)) {
+                    throw `Error: ${reviewId} is not a valid ObjectId`;
+                }
+            });
+        }
         return Ids;
     },
     checkPhoto(photo){
@@ -230,13 +231,14 @@ const exportedMethods = {
         }
 
         name = name.trim();
-        const nameRegex = /^[a-zA-Z]+$/;
+        const nameRegex = /^[a-zA-Z\s]+$/;
         if (!nameRegex.test(name)) {
-            throw `Error: ${valName} must only contain character a-z and should not contain numbers`;
+            throw `Error: ${valName} must only contain characters (a-z, A-Z) and spaces, and should not contain numbers`;
         }
         if (name.length < 2 || name.length > 100) {
-            throw `Error: ${valName} length must be at least 2 characters long with a max of 25 characters`
+            throw `Error: ${valName} length must be at least 2 characters long with a max of 100 characters`;
         }
+
         return name;
     },
     validateDrinkCategory(category, valName) {

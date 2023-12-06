@@ -12,7 +12,7 @@ router
         if(req.session.user){
             let reviewId = null;
             try {
-                const reviewId = validation.validateId(req.params.id, "reviewId");
+                reviewId = validation.validateId(req.params.id, "reviewId");
             }catch (error){
                 return res.status(400).render("modifyReview", {
                     error: error,
@@ -38,8 +38,7 @@ router
             try{
                 const review = await getReviewInfoByReviewId(reviewId);
                 const drinkInfo = await getDrinkInfoByDrinkId(review.drinkId.toString());
-
-                return res.render("modifyReview", {title: "Modify Review", reviewText: review.reviewText, rating: review.rating});
+                return res.render("modifyReview", {title: "Modify Review", drinkName: drinkInfo.name, drinkPictureLocation: drinkInfo.drinkPictureLocation,reviewText: review.reviewText, rating: review.rating});
             }catch (error){
                 return res.status(400).render("error", {
                     errorMsg: error,
@@ -68,9 +67,9 @@ router
             let reviewPictureLocation = null;
             try {
                 reviewId = validation.validateId(req.params.id, "reviewId");
-                reviewText = validation.validateReviewText(reviewText);
-                rating = validation.validateRating(rating);
-                reviewPictureLocation = validation.validateIfFileExist(reviewPictureLocation);
+                reviewText = validation.validateReviewText(req.body.reviewText);
+                rating = validation.validateRating(req.body.rating);
+                reviewPictureLocation = validation.validateIfFileExist(req.body.reviewPictureLocation);
             }catch (error){
                 return res.status(400).render("modifyReview", {
                     error: error,
@@ -169,5 +168,4 @@ router
             }
         }
     });
-
 export default router;
