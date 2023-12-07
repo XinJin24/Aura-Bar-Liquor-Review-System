@@ -18,9 +18,10 @@
         {{#each drinks}}
             <li>
                 <h2>{{name}}</h2>
+                <img src="{{drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
                 <p>Category: {{category}}</p>
                 <p>Rating: {{rating}}</p>
-                <img src="{{drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
+                <p>Price: {{price}}</p>
 
             </li>
         {{/each}}

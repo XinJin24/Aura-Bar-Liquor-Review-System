@@ -10,13 +10,18 @@ li {
     border: 1px solid #ccc;
     margin: 10px;
     padding: 15px;
-    width: 250px; /* Set a fixed width for each drink item */
-    max-height: 300px; /* Set a maximum height for the images */
+    width: 300px;
+    height: auto;
+    overflow: hidden;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 
 .drink-picture {
     width: 100%;
     height: auto;
     object-fit: cover;
-    max-height: 100%; /* Ensure images don't exceed the maximum height */
+    max-height: 100%;
+    flex-grow: 1;
 }
