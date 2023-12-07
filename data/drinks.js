@@ -95,11 +95,10 @@ export const updateDrink = async (
     }
     //delete the old drink picture file
     try {
-        if (oldDrinkPictureLocation!==null && oldDrinkPictureLocation!==undefined) {
+        if (oldDrinkPictureLocation!=='') {
             const currentFilePath = fileURLToPath(import.meta.url);
             const currentDirPath = dirname(currentFilePath);
             const absolutePath = join(currentDirPath.replace('data', 'public'), oldDrinkPictureLocation);
-
             await access(absolutePath);
             await unlink(absolutePath);
         }

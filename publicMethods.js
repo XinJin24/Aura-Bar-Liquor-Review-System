@@ -227,9 +227,9 @@ const exportedMethods = {
         }
 
         name = name.trim();
-        const nameRegex = /^[a-zA-Z\s]+$/;
+        const nameRegex = /^[a-zA-Z0-9\sáéíóúüñäëïöü']+$/;
         if (!nameRegex.test(name)) {
-            throw `Error: ${valName} must only contain characters (a-z, A-Z) and spaces, and should not contain numbers`;
+            throw `Error: ${valName} must only contain alphanumeric characters (a-z, A-Z, 0-9), spaces, and special characters including ' and should not contain other special characters`;
         }
         if (name.length < 2 || name.length > 100) {
             throw `Error: ${valName} length must be at least 2 characters long with a max of 100 characters`;
@@ -245,7 +245,7 @@ const exportedMethods = {
             throw `Error: ${valName} should be a valid string (no empty spaces)`;
         }
         category = category.trim().toLowerCase();
-        const validCategories = ["whiskey", "vodka", "rum", "gin", "tequila", "brandy", "liqueur", "wine", "beer", "juice", "other"];
+        const validCategories = ["whiskey", "vodka", "rum", "gin", "tequila", "brandy", "liqueur", "wine", "beer", "juice", "champagne","bourbon","mix"];
 
         if (!validCategories.includes(category)) {
             throw `Error: ${valName} is not a valid category in this bar. Valid categories are: ${validCategories.join(", ")}`;
