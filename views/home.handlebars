@@ -13,6 +13,39 @@
 
 <h1>{{title}}</h1>
 
+<form id="nameForm" method="post">
+            <label for="name">Drink Name:</label>
+            <input name="name" id="name"></input>
+            <button type="submit" class="btn btn-primary">Filter By Drink Name</button>
+
+</form>
+
+<form id="categoryForm" method="post">
+            <label for="category">Drink Category:</label>
+            <input name="category" id="category"></input>
+            <button type="submit" class="btn btn-primary">Filter By Drink Category</button>
+
+</form>
+<form id="sortingForm" method="post">
+        <label for="sorting">Select Order</label>
+        <select name= "sorting" id="sorting">
+            <option value="-">--</option>
+            <option value="ascending">ascending</option>
+            <option value="descending">descending</option>
+        </select>
+        <button type="submit" class="btn btn-primary">sort</button>
+
+</form>
+ <ol>
+            {{#each sortTerm}}
+            <li>
+                <a href="/games/{{_id}}">{{name}}       Release date: {{releaseDate}} Genre: {{genre}} Rating: {{rating}} Platform: {{platform}} Recommended Age: {{ageRating}}</a>
+            </li>
+            {{/each}}
+
+</ol>
+
+
 {{#if drinks.length}}
     <ul>
         {{#each drinks}}
