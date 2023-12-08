@@ -1,32 +1,18 @@
-{{#if login}}
-    <div class="col-md-12 text-right">
-        <img src="{{userProfilePictureLocation}}" alt="Profile Picture" class="profile-picture" />
-        <span>{{firstName}} {{lastName}}</span>
-        <a href="/logout" class="btn btn-primary">Logout</a>
-    </div>
-{{else}}
-    <div class="col-md-12 text-right">
-        <a href="/login" class="btn btn-primary">Login </a>
-        <a href="/register" class="btn btn-primary">Register</a>
-    </div>
-{{/if}}
+<div>
+    <form id="nameForm" method="post">
+        <label for="name">Drink Name:</label>
+        <input name="name" id="name"></input>
+        <button type="submit" class="btn btn-primary">Filter By Drink Name</button>
 
-<h1>{{title}}</h1>
+    </form>
 
-<form id="nameForm" method="post">
-            <label for="name">Drink Name:</label>
-            <input name="name" id="name"></input>
-            <button type="submit" class="btn btn-primary">Filter By Drink Name</button>
+    <form id="categoryForm" method="post">
+        <label for="category">Drink Category:</label>
+        <input name="category" id="category"></input>
+        <button type="submit" class="btn btn-primary">Filter By Drink Category</button>
 
-</form>
-
-<form id="categoryForm" method="post">
-            <label for="category">Drink Category:</label>
-            <input name="category" id="category"></input>
-            <button type="submit" class="btn btn-primary">Filter By Drink Category</button>
-
-</form>
-<form id="sortingForm" method="post">
+    </form>
+    <form id="sortingForm" method="post">
         <label for="sorting">Select Order</label>
         <select name= "sorting" id="sorting">
             <option value="-">--</option>
@@ -34,38 +20,67 @@
             <option value="descending">descending</option>
         </select>
         <button type="submit" class="btn btn-primary">sort</button>
+    </form>
 
-</form>
- <ol>
-            {{#each sortTerm}}
-            <li>
-                <a href="">{{name}} Category: {{category}} Rating: {{rating}} </a>
-            </li>
+    {{#if login}}
+        <div class="col-md-12 text-right">
+            <img src="{{userProfilePictureLocation}}" alt="Profile Picture" class="profile-picture" />
+            <span>{{firstName}} {{lastName}}</span>
+            <a href="/logout" class="btn btn-primary">Logout</a>
+        </div>
+    {{else}}
+        <div class="col-md-12 text-right">
+            <a href="/login" class="btn btn-primary">Login </a>
+            <a href="/register" class="btn btn-primary">Register</a>
+        </div>
+    {{/if}}
+
+    {{#if login}}
+        <button id="messageBtn" class="btn btn-secondary">Send Message</button>
+    {{/if}}
+
+    <h1>{{title}}</h1>
+
+    {{#if drinks.length}}
+        <ul>
+            {{#each drinks}}
+                <li>
+                    <h2>{{name}}</h2>
+                    <img src="{{drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
+                    <p>Category: {{category}}</p>
+                    <p>Rating: {{rating}}</p>
+                    <p>Price: {{price}}</p>
+                    <button class="btn btn-primary" onclick="redirectToPage('{{id}}')">View Details</button>
+                </li>
             {{/each}}
+        </ul>
+    {{else}}
+        <p>No drinks available</p>
+    {{/if}}
 
-</ol>
+    <div id="messageModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="messageForm">
+                <textarea name="message" placeholder="Type your message here..."></textarea>
+                <input type="submit" value="Send Message">
+            </form>
+        </div>
+    </div>
 
 
-{{#if drinks.length}}
-    <ul>
-        {{#each drinks}}
-            <li>
-                <h2>{{name}}</h2>
-                <p>Category: {{category}}</p>
-                <p>Rating: {{rating}}</p>
-                <img src="{{drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
 
-            </li>
-        {{/each}}
-    </ul>
-{{else}}
-    <p>No drinks available</p>
-{{/if}}
-
-<p>
-    Start by highlighting the fact that there is a growing demand for information about bars and liquor products.
-    People often want to know about the quality of service, pricing, ambiance, and the variety of drinks available.
-    Our project can address this need by providing a platform for reviews and ratings.
-    The project also aims to enhance the user experience for those looking for liquor options.
-    By providing a user-friendly app, we're not only helping consumers find the best options but also saving their time and effort.
-</p>
+    <p>
+        Start by highlighting the fact that there is a growing demand for information about bars and liquor products.
+        People often want to know about the quality of service, pricing, ambiance, and the variety of drinks available.
+        Our project can address this need by providing a platform for reviews and ratings.
+        The project also aims to enhance the user experience for those looking for liquor options.
+        By providing a user-friendly app, we're not only helping consumers find the best options but also saving their time and effort.
+    </p>
+    <script>
+        function redirectToPage(drinkId) {
+            window.location.href = '/' + drinkId;
+        }
+    </script>
+    <script src="../public/js/home.js"></script>
+</div>

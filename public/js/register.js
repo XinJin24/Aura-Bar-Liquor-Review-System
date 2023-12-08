@@ -33,31 +33,32 @@ let checkEmail = (strVal) =>{
     strVal = strVal.toLowerCase();
 }
 
-let checkPassword = (strVal)=>{
-    if(!strVal){
-        throw `password is not provided`;
+let validatePassword = (password) =>{
+    if (!password) throw `Error: password not supplied`;
+    if (typeof password !== "string" || password.trim().length <= 0) {
+        throw `Error: password must be a valid string(no empty spaces)!`;
     }
-    strVal = strVal.trim();
-    if(typeof strVal !== "string" || strVal.length === 0){
-        throw `password is not strings or is empty strings`;
+    password = password.trim();
+    if (password.length < 8) {
+        throw `Error: password must be at least 8 characters`;
     }
-    if(strVal.length < 8){
-        throw `password should be a minimum of 8 characters long`;
+    if (/\s/.test(password)) throw `Error: password must not contain spaces`;
+    //There needs to be at least one uppercase character
+    if (!/[A-Z]/.test(password)) {
+        throw `Error: password must contain at least one uppercase character`;
     }
-    if(!/A-Z/.test(strVal)){
-        throw `password needs to be at least one uppercase character`;
+    if (!/[a-z]/.test(password)) {
+        throw `Error: password must contain at least one lowercase character`;
     }
-    if(!/\d/.test(strVal)){
-        throw `password needs to be at least one number `;
+    //at least one number
+    if (!/\d/.test(password)) {
+        throw `Error: password must contain at least one number`;
     }
-    if(!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(strVal)){
-        throw `password needs to be at least one special character`;
+    //at least one special character
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        throw `Error: password must contain at least one special character`;
     }
-    for(let i = 0; i < strVal.length; i++){
-        if(strVal.charAt(i) == ''){
-            throw `password shouldn't have spaces`;
-        }
-    }
+    return password;
 }
 
 let checkConfirm = (code1,code2) =>{
@@ -79,81 +80,107 @@ let checkRole = (strVal) =>{
     }
 }
 
-let checkIfFileExists = (fileInput) => {
-    if (fileInput.files.length === 0) {
-        throw "No file selected";
+// let checkPhoto = (photo) =>{
+//     if (!(photo instanceof Array)) {
+//         throw "photo should be an array of strings";
+//     }
+//     for (let i = 0; i < photo.length; i++) {
+//         if (typeof photo[i] !== "string") {
+//             throw "each element in photo should be a string";
+//         }
+//     }
+//     return photo;
+// }
+
+let validatePhoneNumber = (phoneNumber) =>{
+    if (!phoneNumber) {
+        throw "Error: Phone number not supplied";
     }
-    let file = fileInput.files[0];
-    if (file.size > 1024 * 1024) {
-        throw "File size exceeds the limit (1MB)";
+    if (typeof phoneNumber !== "string" || phoneNumber.trim().length === 0) {
+        throw "Error: Phone number should be a valid string (no empty spaces)";
     }
-};
+    phoneNumber = phoneNumber.trim();
+    const phoneRegex = /^(\+\d{1,2}\s?)?(\d{1,4}\s?)?[\d\s-]+$/;
+    if (!phoneRegex.test(phoneNumber)) {
+        throw "Error: Invalid phone number format";
+    }
+    return phoneNumber;
+}
 
 let clientError2 = document.getElementById("clientError2");
 clientError2.style.display = 'none';
-let valid2 = false;
+// let valid2 = false;
 
-registration_form.addEventListener('submit', async (event) =>{
-    if(!valid2){
-        event.preventDefault();
-        try{
-            if(document.getElementById(firstNameInput2)){
-                checkName(document.getElementById(firstNameInput).value);
-            }
-            if(document.getElementById(lastNameInput2)){
-                checkName(document.getElementById(lastNameInput).value);
-            }
-            if(document.getElementById(emailAddressInput2)){
-                checkEmail(document.getElementById(emailAddressInput).value);
-            }
-            if(document.getElementById(passwordInput2)){
-                checkPassword(document.getElementById(passwordInput).value);
-            }
-            if(document.getElementById(confirmPasswordInput)){
-                checkConfirm(document.getElementById(passwordInput2).value, document.getElementById(confirmPasswordInput2).value);
-            }
-            if(document.getElementById(photoInput)){
-                let fileInput = document.getElementById(photoInput);
-                if(fileInput.files.length > 0){
-                    try{
-                        await checkIfFileExist(fileInput.files[0]);
-                    }catch(e){
-                        console.error(e);
-                        throw e;
-                    }                
+if(registration_form){
+    registration_form.addEventListener('submit', (event)=>{
+        console.log('Form submitted');
+        // if(!valid2){
+            event.preventDefault();
+            console.log('Form not valid');
+            try{
+                if(document.getElementById('firstNameInput')){
+                    checkName(document.getElementById('firstNameInput').value);
                 }
-            }
-            if(document.getElementById(roleInput)){
-                checkRole(document.getElementById(roleInput).value);
-            }
-            valid2 = true;
-            registration_form.submit();
-            valid2 = false;
+                if(document.getElementById('lastNameInput')){
+                    checkName(document.getElementById('lastNameInput').value);
+                }
+                if(document.getElementById('emailAddressInput')){
+                    checkEmail(document.getElementById('emailAddressInput').value);
+                }
+                if(document.getElementById('phoneNumberInput')){
+                    validatePhoneNumber(document.getElementById('phoneNumberInput').value);
+                }
+                if(document.getElementById('passwordInput')){
+                    validatePassword(document.getElementById('passwordInput').value);
+                }
+                if(document.getElementById('confirmPasswordInput')){
+                    checkConfirm(document.getElementById('passwordInput').value, document.getElementById('confirmPasswordInput').value);
+                }
+                // if(document.getElementById('photoInput')){
+                //     let fileInput = document.getElementById('photoInput');
+                //     checkPhoto(fileInput);
+                // }
+                if(document.getElementById('roleInput')){
+                    checkRole(document.getElementById('roleInput').value);
+                }
+                // valid2 = true;
+                // registration_form.submit();
+                // registration_form.submit();
 
-        }catch(e){
-            const errorInfo = `<p>${e}</p>`;
-            clientError2.innerHTML = errorInfo;
-            clientError2.style.display = 'block';
-        }
-    }
-});
+                // registration_form.dispatchEvent(new Event('submit'));
+                // valid2 = false;
+                console.log('Form should be submit');
+            }catch(e){
+                const errorInfo = `<p>${e}</p>`;
+                clientError2.innerHTML = errorInfo;
+                clientError2.style.display = 'block';
+            }
+        // }
+    });
+}
+
+// document.addEventListener('DOMContentLoaded', function () {
+//     let imageInput = document.getElementById('photoInput');
+//     let imagePreview = document.getElementById('previewImg');
+//
+//     imageInput.addEventListener('change', function () {
+//         if (this.files && this.files[0]) {
+//             let reader = new FileReader();
+//             reader.onload = function (e) {
+//                 imagePreview.src = e.target.result;
+//             };
+//             reader.readAsDataURL(this.files[0]);
+//         }
+//     });
+// });
+
 
 let photoInput = document.getElementById('photoInput');
 let previewImg = document.getElementById('previewImg');
 
-// photoInput.addEventListener('change', function(){
-//     if(this.files && this.files[0]){
-//         let reader = new FileReader();
-//         reader.onload = function(e){
-//             previewImg.src = e.target.result;//Assign the data URL to the src attribute of img
-//         }
-//         reader.readAsDataURL(this.files[0]);
-//     }
-// });
-
 photoInput.addEventListener('change', function () {
     try {
-        checkIfFileExists(this);
+        // checkIfFileExists(this);
         if (this.files && this.files[0]) {
             let reader = new FileReader();
             reader.onload = function (e) {

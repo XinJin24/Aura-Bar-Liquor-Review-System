@@ -2,6 +2,9 @@ import {users, drinks} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 import validation from "../publicMethods.js";
 import bcrypt from 'bcrypt';
+import {fileURLToPath} from "url";
+import {dirname, join} from "path";
+import {access, unlink} from "fs/promises";
 
 /**
  * @param {ObjectId} _id - A globally unique identifier to represent the user.
@@ -107,7 +110,6 @@ export const updateUser = async (
     phoneNumber = validation.validatePhoneNumber(phoneNumber);
     password = validation.validatePassword(password, "password");
     reviewIds = validation.validateArrayOfIds(reviewIds);
-    profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
     drinkReserved = validation.validateArrayOfIds(drinkReserved);
     role = validation.validateRole(role);
 
@@ -117,6 +119,8 @@ export const updateUser = async (
     if (!user) {
         throw `Error: User with email ${email} not found`;
     }
+    const oldProfilePictureLocation = user.profilePictureLocation;
+    profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
     const updatedUser = {
         firstName: firstName,
         lastName: lastName,
@@ -128,6 +132,7 @@ export const updateUser = async (
         drinkReserved: drinkReserved,
         role: role,
     };
+
     const updateUser = await userCollection.updateOne(
         { _id: user._id },
         { $set: updatedUser }
@@ -135,7 +140,17 @@ export const updateUser = async (
     if (updateUser.modifiedCount === 0) {
         throw `Error: Failed to update user with email ${email}`;
     }
-
+    try {
+        if (oldProfilePictureLocation!=='') {
+            const currentFilePath = fileURLToPath(import.meta.url);
+            const currentDirPath = dirname(currentFilePath);
+            const absolutePath = join(currentDirPath.replace('data', 'public'), oldProfilePictureLocation);
+            await access(absolutePath);
+            await unlink(absolutePath);
+        }
+    } catch (error) {
+        throw `Error: Failed to delete old drink picture at ${oldProfilePictureLocation}`;
+    }
     return { updatedUser: true };
 }
 
