@@ -38,13 +38,13 @@ let user3 =null;
 //     console.log(error);
 // }
 //
-// try {
-//     const drink1 = await createUser("xin", "jin","jinxin@qq.com","9293428295","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
-//         "admin");
-//     console.log(drink1)
-// }catch (error){
-//     console.log(error);
-// }
+try {
+    const drink1 = await createUser("xin", "jin","jinxin@qq.com","9293428295","Abc123!@#","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\userProfilePictures\\636m209480uxu55xaw4cxj.jpg",
+        "admin");
+    console.log(drink1)
+}catch (error){
+    console.log(error);
+}
 
 
 

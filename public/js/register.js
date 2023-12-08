@@ -1,5 +1,5 @@
 
-import { access } from 'fs/promises';
+// import { access } from 'fs/promises';
 
 let registration_form = document.getElementById("registration_form");
 
@@ -79,25 +79,21 @@ let checkRole = (strVal) =>{
     }
 }
 
-let checkIfFileExist = async (filePath, valName) => {
-    if (typeof filePath !== "string") {
-        throw `Error: ${valName} must be a valid string(no empty spaces)!`;
-    } else if(filePath.trim().length === 0){
-        return "";
+let checkIfFileExists = (fileInput) => {
+    if (fileInput.files.length === 0) {
+        throw "No file selected";
     }
-    try {
-        await access(filePath);
-        return filePath;
-    } catch (err) {
-        throw `Error: File at path ${filePath} is inaccessible.`;
+    let file = fileInput.files[0];
+    if (file.size > 1024 * 1024) {
+        throw "File size exceeds the limit (1MB)";
     }
-}
+};
 
 let clientError2 = document.getElementById("clientError2");
 clientError2.style.display = 'none';
 let valid2 = false;
 
-registration_form.addEventListener = ('submit', async (event) =>{
+registration_form.addEventListener('submit', async (event) =>{
     if(!valid2){
         event.preventDefault();
         try{
@@ -135,7 +131,7 @@ registration_form.addEventListener = ('submit', async (event) =>{
             valid2 = false;
 
         }catch(e){
-            const errorInfo = <p>${e}</p>;
+            const errorInfo = `<p>${e}</p>`;
             clientError2.innerHTML = errorInfo;
             clientError2.style.display = 'block';
         }
@@ -145,12 +141,31 @@ registration_form.addEventListener = ('submit', async (event) =>{
 let photoInput = document.getElementById('photoInput');
 let previewImg = document.getElementById('previewImg');
 
-photoInput.addEventListener('change', function(){
-    if(this.files && this.files[0]){
-        let reader = new FileReader();
-        reader.onload = function(e){
-            previewImg.src = e.target.result;//Assign the data URL to the src attribute of img
+// photoInput.addEventListener('change', function(){
+//     if(this.files && this.files[0]){
+//         let reader = new FileReader();
+//         reader.onload = function(e){
+//             previewImg.src = e.target.result;//Assign the data URL to the src attribute of img
+//         }
+//         reader.readAsDataURL(this.files[0]);
+//     }
+// });
+
+photoInput.addEventListener('change', function () {
+    try {
+        checkIfFileExists(this);
+        if (this.files && this.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
         }
-        reader.readAsDataURL(this.files[0]);
+        clientError2.style.display = 'none';
+    } catch (error) {
+        console.error(error);
+        clientError2.innerHTML = `<p>${error}</p>`;
+        clientError2.style.display = 'block';
+
     }
 });
