@@ -40,24 +40,24 @@ const drinkPicturePath8 = join(currentDirPath, "drinkPhoto/drink8.jpg");
 const drinkPicturePath9 = join(currentDirPath, "drinkPhoto/drink9.jpg");
 const drinkPicturePath10 = join(currentDirPath, "drinkPhoto/drink10.jpg");
 
-try {
-
-
-    console.log(absolutePath);
-    const drink1 = await createUser("xin", "jin","jin@qq.com","9293428295","Abc123!@#",absolutePath,
-        "admin");
-    console.log(drink1)
-}catch (error){
-    console.log(error);
-}
-
-
+// try {
+//
+//
+//     console.log(absolutePath);
+//     const drink1 = await createUser("xin", "jin","jin@qq.com","9293428295","Abc123!@#",absolutePath,
+//         "admin");
+//     console.log(drink1)
+// }catch (error){
+//     console.log(error);
+// }
+//
+//
 
 try {
     const currentFilePath = fileURLToPath(import.meta.url);
     const currentDirPath = dirname(currentFilePath);
     const absolutePath = join(currentDirPath, "Inunasha.jpg");
-    console.log(await updateUser("xin", "xin","jin@qq.com","9293335817","Abc123!@#",[],"",
+    console.log(await updateUser("xin", "xin","jin@qq.com","9293335817","Abc123!@#",[],"C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\test\\profilePhotos\\user1.avif",
         [],"admin"));
 }catch (error){
     console.log(error);

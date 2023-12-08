@@ -5,7 +5,9 @@ import validation from "../publicMethods.js";
 import {createUser, loginUser} from "../data/users.js";
 import {getAllDrinks} from "../data/drinks.js";
 import xss from "xss";
+import nodemailer from 'nodemailer';
 
+const adminEmail ="jinxin8295@gmail.com"
 router
     .route('/').get(async (req, res) => {
     if (req.session.user) {
@@ -152,6 +154,52 @@ router.route("/logout").get(async (req, res) => {
     } else {
         res.status(400);
         return res.redirect("/login");
+    }
+});
+
+
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'yourEmail@gmail.com',
+        pass: 'yourPassword'
+    }
+});
+
+const sendConfirmationEmail = async (email, message) => {
+    const mailOptions = {
+        from: email,
+        to: adminEmail,
+        subject: message,
+        text: `We received your message: ${message}`
+    };
+
+    try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent: ' + info.response);
+    } catch (error) {
+        console.error('Error sending email:', error);
+    }
+};
+router.route("/sendMessage").post(async (req, res) => {
+    if (req.session.user) {
+        const message = req.body.message;
+        const userEmail = req.session.user.email; // Assuming the user's email is stored in session
+
+        try {
+            await sendConfirmationEmail(userEmail, message);
+            res.status(200).send('Message sent successfully');
+        } catch (error) {
+            res.status(500).send('Error sending message');
+        }
+    } else {
+        return res.status(401).render("error", {
+            errorMsg: "Please Login to send a message",
+            login: false,
+            title: "Error",
+            redirect:"/login"
+        });
     }
 });
 
