@@ -291,3 +291,45 @@ export const updateAllDrinkRating = async () => {
     }
     return { updatedAllDrinkRating: true };
 };
+
+export let getDrinkInfoByName = async(drinkName) =>{
+    
+    drinkName= validation.validateName(drinkName,"drinkName");
+
+    const drinkCollection = await drinks();
+    const drinkList = await drinkCollection.find({ name: drinkName}).toArray();//只输一半名字可能会是个list
+
+    if (!drinkList) {
+        throw `Error: drink with drinkName ${drinkName} not found`;
+    }
+
+    return drinkList;
+}
+
+export let getDrinkInfoByCategory = async (category) => {
+
+    category =  validation.validateDrinkCategory(category, "category");
+    const drinkCollection = await drinks();
+    const drinkList = await drinkCollection.find({ category: category}).toArray();
+
+    if (!drinkList) {
+        throw `Error: drink with category ${category} not found`;
+    }
+    return drinkList;
+}
+
+export let getDrinkInfoByRating = async (rating) => {
+    
+    rating = validation.validateRating(rating);
+
+    let s = 0;
+    if (rating == 'ascending'){
+        s = 1;
+    }
+    if (rating == 'descending'){
+        s = -1;
+    }
+    const drinkCollection = await drinks();
+    let drinkList = await drinkCollection.find({}).sort({ rating: s }).toArray();
+    return drinkList;
+}
