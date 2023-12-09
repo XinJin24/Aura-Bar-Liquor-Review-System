@@ -1138,7 +1138,7 @@ try {
 
     const users = await getAllUsers();
     const drinks = await getAllDrinks();
-    const reviews = await getAllReviews();
+
 
     for(const user of users){
         userIds.push(user._id.toString());
@@ -1158,6 +1158,7 @@ try {
         await createReview(randomDrinkId, randomUserId, randomReviewText, randomRating, randomReviewPicture);
     }
 
+    const reviews = await getAllReviews();
     for(const review of reviews){
         const reviewId = review._id.toString();
         const drinkId = review.drinkId.toString();
