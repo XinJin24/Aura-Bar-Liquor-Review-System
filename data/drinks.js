@@ -299,6 +299,20 @@ export const updateAllDrinkRating = async () => {
     return { updatedAllDrinkRating: true };
 };
 
+export const addReviewIdToADrink = async (
+    reviewId, drinkId
+) => {
+    const drinkCollection = await drinks();
+    const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
+
+    const UpdatedReviewId = [...drink.reviews, reviewId];
+    const updateResult = await drinkCollection.updateOne(
+        { _id: drink._id },
+        { $set: { reviews: UpdatedReviewId } }
+    );
+    return drink;
+};
+
 export let getDrinkInfoByName = async(drinkName) =>{
     
     drinkName= validation.validateName(drinkName,"drinkName");

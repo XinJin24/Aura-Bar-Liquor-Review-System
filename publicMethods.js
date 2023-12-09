@@ -2,7 +2,7 @@ import {access, copyFile, mkdir} from 'fs/promises';
 import {ObjectId} from "mongodb";
 import {dirname, join} from "path";
 import {fileURLToPath} from "url";
-import * as path from "path";
+import {copyPictureAndReturnPath} from "./data/users.js";
 
 const exportedMethods = {
     validateId(id, valName) {
@@ -136,34 +136,35 @@ const exportedMethods = {
         }
         return role;
     },
-    async validateIfFileExist(filePath, valName) {
-        if (!filePath || typeof filePath !== 'string'||filePath.trim().length === 0) {
-            return '';
-        }
-        filePath=filePath.trim();
-        try {
-            await access(filePath);
-
-            const currentFilePath = fileURLToPath(import.meta.url);
-            const currentDirPath = dirname(currentFilePath);
-            const picturesDir = join(currentDirPath, 'public', 'pictures');
-            await mkdir(picturesDir, { recursive: true });
-
-            const fileName = `${Date.now()}_${filePath.split("\\").pop()}`;
-            const newFilePath = join(picturesDir, fileName);
-
+    async validateIfFileExist(file, valName) {
+        if(!file)return "";
+        if(typeof file === 'string'){
             try {
-                //file already exist
-                await access(newFilePath);
-                return `..\\pictures\\${fileName}`;
+                await access(file);
+
+                const currentFilePath = fileURLToPath(import.meta.url);
+                const currentDirPath = dirname(currentFilePath);
+                const picturesDir = join(currentDirPath, 'public', 'pictures');
+                await mkdir(picturesDir, { recursive: true });
+
+                const fileName = `${Date.now()}_${file.split("\\").pop()}`;
+                const newFilePath = join(picturesDir, fileName);
+
+                try {
+                    //file already exist
+                    await access(newFilePath);
+                    return `..\\pictures\\${fileName}`;
+                } catch (err) {
+                    //file not exist, copy
+                    await copyFile(file, newFilePath);
+                    await access(newFilePath);
+                    return `..\\pictures\\${fileName}`;
+                }
             } catch (err) {
-                //file not exist, copy
-                await copyFile(filePath, newFilePath);
-                await access(newFilePath);
-                return `..\\pictures\\${fileName}`;
+                throw `Error: Some error happened when processing your photos`;
             }
-        } catch (err) {
-            throw `Error: Some error happened when processing your photos`;
+        }else{
+            await copyPictureAndReturnPath(file, valName);
         }
     },
     validateArrayOfIds(Ids) {

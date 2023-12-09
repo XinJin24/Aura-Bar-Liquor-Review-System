@@ -1,48 +1,48 @@
 <div class="container">
     <h1 class="title">{{title}}</h1>
 
-    <form id="registration_form" action="/register" method="POST">
+    <form id="registration_form" action="/register" method="POST" enctype="multipart/form-data">
         <div>
             <label for="firstNameInput">
                 First Name:
-                <input type="text" id="firstNameInput" name="firstNameInput">
+                <input type="text" id="firstNameInput" name="firstNameInput" value="xinxin">
             </label>
         </div>
         <div>
             <label for="lastNameInput">
                 Last Name:
-                <input type="text" id="lastNameInput" name="lastNameInput">
+                <input type="text" id="lastNameInput" name="lastNameInput" value="xinxin">
             </label>
         </div>
         <div>
             <label for="emailAddressInput">
                 Email Address:
-                <input type="text" id="emailAddressInput" name="emailAddressInput">
+                <input type="text" id="emailAddressInput" name="emailAddressInput" value="xinxin@qq.com">
             </label>
         </div>
         <div>
             <label for="phoneNumberInput">
                 Phone Number:
-                <input type="text" id="phoneNumberInput" name="phoneNumberInput">
+                <input type="text" id="phoneNumberInput" name="phoneNumberInput" value="9293331223">
             </label>
         </div>
         <div>
             <label for="passwordInput">
                 Password:
-                <input type="password" id="passwordInput" name="passwordInput">
+                <input type="password" id="passwordInput" name="passwordInput" value="Abc123!@#">
             </label>
         </div>
         <div>
             <label for="confirmPasswordInput">
                 Confirm Password:
-                <input type="password" id="confirmPasswordInput" name="confirmPasswordInput">
+                <input type="password" id="confirmPasswordInput" name="confirmPasswordInput" value="Abc123!@#">
             </label>
         </div>
         <div>
             <label for="photoInput">
                 Upload Image:
-                <input type="file" id="photoInput" name="photoInput">
-                <img id="previewImg" src="#"  alt="">
+                <input type="file" id="photoInput" name="photoInput" accept="image/*">
+                <img id="previewImg" src="#" >
             </label>
         </div>
         <div>

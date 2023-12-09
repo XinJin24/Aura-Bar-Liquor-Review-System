@@ -5,6 +5,9 @@ import bcrypt from 'bcrypt';
 import {fileURLToPath} from "url";
 import {dirname, join} from "path";
 import {access, unlink} from "fs/promises";
+import fs from 'fs/promises';
+import path from 'path';
+
 
 /**
  * @param {ObjectId} _id - A globally unique identifier to represent the user.
@@ -42,7 +45,12 @@ export const createUser = async (
     if (ifExist) {
         throw `Error: ${email} is already registered, Please Login`;
     }
-    profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
+    if(typeof profilePictureLocation === 'string'){
+        profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
+    }
+    else{
+        profilePictureLocation = await copyPictureAndReturnPath(profilePictureLocation);
+    }
     const user = {
         firstName: firstName,
         lastName: lastName,
@@ -341,3 +349,35 @@ export const reserveDrink = async (
 
     return {reservedDrink, userId};
 }
+
+export const copyPictureAndReturnPath = async (file) => {
+    try {
+        const data = await fs.readFile(file.path);
+        const extName = file.mimetype.split('/')[1];
+        const imgName = `${file.filename}.${extName}`;
+        const newPath = path.resolve(`./public/pictures/${imgName}`);
+        await fs.writeFile(newPath, data);
+        await fs.unlink(file.path);
+        return newPath;
+    } catch (err) {
+        throw  `Error: error when processing file: ${err.message}`;
+    }
+};
+export const getAllUsers = async () => {
+    const userCollection = await users();
+    const user = await userCollection.find({}).toArray();
+    return user;
+};
+
+export const addReviewIdToAUser = async (
+    reviewId, userId
+) => {
+    const userCollection = await users();
+    const user = await userCollection.findOne({_id: new ObjectId(userId)});
+    const UpdatedReviewId = [...user.reviewIds, reviewId];
+    const updateResult = await userCollection.updateOne(
+        { _id: user._id },
+        { $set: { reviewIds: UpdatedReviewId } }
+    );
+    return user;
+};

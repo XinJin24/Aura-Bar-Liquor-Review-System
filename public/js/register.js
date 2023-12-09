@@ -314,3 +314,41 @@ $('#registration_form').submit((event)=>{
 //
 //     }
 // });
+document.addEventListener('DOMContentLoaded', function () {
+    let imageInput = document.getElementById('photoInput');
+    let imagePreview = document.getElementById('previewImg');
+
+    imageInput.addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+});
+
+
+let photoInput = document.getElementById('photoInput');
+let previewImg = document.getElementById('previewImg');
+
+photoInput.addEventListener('change', function () {
+    try {
+        // checkIfFileExists(this);
+        if (this.files && this.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+        clientError2.style.display = 'none';
+    } catch (error) {
+        console.error(error);
+        clientError2.innerHTML = `<p>${error}</p>`;
+        clientError2.style.display = 'block';
+
+    }
+});
+
