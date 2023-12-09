@@ -14,8 +14,16 @@ import {getReviewInfoByReviewId} from "../data/reviews.js"
 import {getDrinkInfoByDrinkId} from "../data/drinks.js"
 import e from "express";
 import xss from "xss";
+import multer from "multer";
 
-
+const upload = multer({
+    dest: "../public/uploads/",
+    limits: { fileSize: 10485760 },
+    onError: function (err, next) {
+        console.log("error", err);
+        next(err);
+    },
+});
 router
     .route('/profile/:id')
     .get(async (req, res) => {
@@ -86,7 +94,7 @@ router
             //return render error page
         }
     })
-    .post(async (req, res) => {
+    .post(upload.single("photoInput"),async (req, res) => {
         if (req.session.user) {
             try {
                 const userId = validation.validateId(req.params.id, "ID");

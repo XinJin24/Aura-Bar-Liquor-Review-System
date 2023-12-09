@@ -6,7 +6,16 @@ import {createUser, loginUser} from "../data/users.js";
 import {getAllDrinks,getDrinkInfoByName,getDrinkInfoByCategory,getDrinkInfoByRating} from "../data/drinks.js";
 import xss from "xss";
 import AWS from 'aws-sdk';
+import multer from "multer";
 const businessPhone ="+19293335817";
+const upload = multer({
+    dest: "../public/uploads/",
+    limits: { fileSize: 10485760 },
+    onError: function (err, next) {
+        console.log("error", err);
+        next(err);
+    },
+});
 AWS.config.update({
     accessKeyId: "AKIAQAGUPWCDLUD5Y7PQ",
     secretAccessKey: "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",
@@ -104,17 +113,14 @@ router
             return res.render('register', {title: "Register"});
         }
     })
-    .post(async (req, res) => {
+    .post(upload.single("photoInput"),async (req, res) => {
         let firstNameInput = xss(req.body.firstNameInput);//same as frontend
         let lastNameInput = xss(req.body.lastNameInput);
         let emailAddressInput = xss(req.body.emailAddressInput);
         let phoneNumberInput = xss(req.body.phoneNumberInput);
         let passwordInput = xss(req.body.passwordInput);
         let confirmPasswordInput = xss(req.body.confirmPasswordInput);
-        let photoInput = xss(req.body.photoInput);
         let roleInput = xss(req.body.roleInput);
-
-        console.log(firstNameInput, lastNameInput, emailAddressInput, phoneNumberInput, passwordInput, confirmPasswordInput, photoInput,roleInput);
         
         try {
             if (!firstNameInput || !lastNameInput || !emailAddressInput || !phoneNumberInput || !passwordInput || !confirmPasswordInput || !roleInput) {
@@ -128,32 +134,23 @@ router
             confirmPasswordInput = validation.validatePassword(confirmPasswordInput, "confirmPasswordInput");
             roleInput = validation.validateRole(roleInput);
 
-            const defaultProfilePictureLocation = "";
-            photoInput = photoInput ? photoInput : defaultProfilePictureLocation;
 
             if (passwordInput !== confirmPasswordInput) {
                 throw "Error: Passwords do not match";
             }
         } catch (error) {
             return res.status(400).render('error', {
-                title: "InputError", message: error
+                title: "InputError", errorMsg: error
             });
         }
-        console.log(firstNameInput,
-            lastNameInput,
-            emailAddressInput,
-            phoneNumberInput,
-            passwordInput,
-            photoInput,
-            // profilePictureLocationInput,
-            roleInput);
+        console.log(req.file);
         try {
             const user = await createUser(firstNameInput,
                 lastNameInput,
                 emailAddressInput,
                 phoneNumberInput,
                 passwordInput,
-                photoInput,
+                req.file,
                 // profilePictureLocationInput,
                 roleInput);
             if (user.insertedUser) {
@@ -161,8 +158,8 @@ router
             }
         } catch (error) {
             return res.status(500).render('error', {
-                title: error,
-                message: "Error: Internal Server Error"
+                title: "error",
+                errorMsg: error
             });
         }
     });

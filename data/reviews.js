@@ -1,5 +1,5 @@
 import validation from "../publicMethods.js";
-import {reviews} from "../config/mongoCollections.js";
+import {drinks, reviews} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 import {deleteOneReviewFromUser} from "./users.js";
 import {updateAllDrinkRating} from "./drinks.js";
@@ -147,3 +147,13 @@ export const getReviewInfoByReviewId = async (reviewId) => {
     return reviewInfo;
 
 };
+
+export const getAllReviews = async () => {
+    const reviewsCollection = await reviews();
+    const allReviews = await reviewsCollection.find({}).toArray();
+
+    if (!allReviews || allReviews.length === 0) {
+        throw `Error: No review found`;
+    }
+    return allReviews;
+}

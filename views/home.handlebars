@@ -50,7 +50,7 @@
                     <p>Category: {{category}}</p>
                     <p>Rating: {{rating}}</p>
                     <p>Price: {{price}}</p>
-                    <button class="btn btn-primary" onclick="redirectToPage('{{id}}')">View Details</button>
+                    <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Details</button>
                 </li>
             {{/each}}
         </ul>
@@ -79,7 +79,7 @@
     </p>
     <script>
         function redirectToPage(drinkId) {
-            window.location.href = '/' + drinkId;
+            window.location.href = 'drink/' + drinkId;
         }
     </script>
     <script src="../public/js/home.js"></script>
