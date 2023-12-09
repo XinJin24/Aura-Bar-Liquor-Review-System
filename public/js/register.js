@@ -1,9 +1,4 @@
 
-// import { access } from 'fs/promises';
-
-let registration_form = document.getElementById("registration_form");
-
-
 let checkName = (strVal) =>{
     if(!strVal){
     }
@@ -16,6 +11,7 @@ let checkName = (strVal) =>{
     }
     if (!isNaN(strVal))
       throw `${strVal} is not a valid value for name as it only contains digits`;
+    return strVal;
 }
 
 let checkEmail = (strVal) =>{
@@ -31,9 +27,10 @@ let checkEmail = (strVal) =>{
         throw `email is not a valid email address`;
     }
     strVal = strVal.toLowerCase();
+    return strVal;
 }
 
-let validatePassword = (password) =>{
+let checkPassword = (password) =>{
     if (!password) throw `Error: password not supplied`;
     if (typeof password !== "string" || password.trim().length <= 0) {
         throw `Error: password must be a valid string(no empty spaces)!`;
@@ -62,7 +59,7 @@ let validatePassword = (password) =>{
 }
 
 let checkConfirm = (code1,code2) =>{
-    if(code1!=code2)
+    if(code1!==code2)
         throw "the confirmpassword does not match the password";
 }
 
@@ -78,21 +75,10 @@ let checkRole = (strVal) =>{
     if(strVal !== "admin" && strVal !== "user"){
         throw `role the ONLY two valid values are "admin" or "user"`;
     }
+    return strVal;
 }
 
-// let checkPhoto = (photo) =>{
-//     if (!(photo instanceof Array)) {
-//         throw "photo should be an array of strings";
-//     }
-//     for (let i = 0; i < photo.length; i++) {
-//         if (typeof photo[i] !== "string") {
-//             throw "each element in photo should be a string";
-//         }
-//     }
-//     return photo;
-// }
-
-let validatePhoneNumber = (phoneNumber) =>{
+let checkPhoneNumber = (phoneNumber) =>{
     if (!phoneNumber) {
         throw "Error: Phone number not supplied";
     }
@@ -107,93 +93,191 @@ let validatePhoneNumber = (phoneNumber) =>{
     return phoneNumber;
 }
 
-let clientError2 = document.getElementById("clientError2");
-clientError2.style.display = 'none';
+// let clientError2 = document.getElementById("clientError2");
+// clientError2.style.display = 'none';
 // let valid2 = false;
-const firstName = document.getElementById('firstNameInput').value;
+
+let firstNameInput = document.getElementById('firstNameInput');
+let lastNameInput = document.getElementById('lastNameInput');
+let emailAddressInput = document.getElementById('emailAddressInput');
+let phoneNumberInput = document.getElementById('phoneNumberInput');
+let passwordInput = document.getElementById('passwordInput');
+let confirmPasswordInput = document.getElementById('confirmPasswordInput');
+let roleInput = document.getElementById('roleInput');
+let error = document.getElementById('error')
+let registration_form = document.getElementById('registration-form');
+
+
+
 if(registration_form){
     registration_form.addEventListener('submit', (event)=>{
-        clientError2.classList.add('hidden-div');
-        // if(!valid2){
-        //     event.preventDefault();
-        console.log(firstName);
-        console.log(document.getElementById('lastNameInput'));
-            try{
-                if(firstName){
-                    checkName(firstName);
-                    console.log("-------");
-                }
-                if(document.getElementById('lastNameInput')){
-                    checkName(document.getElementById('lastNameInput').value);
-                }
-                if(document.getElementById('emailAddressInput')){
-                    checkEmail(document.getElementById('emailAddressInput').value);
-                }
-                if(document.getElementById('phoneNumberInput')){
-                    validatePhoneNumber(document.getElementById('phoneNumberInput').value);
-                }
-                if(document.getElementById('passwordInput')){
-                    validatePassword(document.getElementById('passwordInput').value);
-                }
-                if(document.getElementById('confirmPasswordInput')){
-                    checkConfirm(document.getElementById('confirmPasswordInput').value, document.getElementById('confirmPasswordInput').value);
-                }
-                // if(document.getElementById('photoInput')){
-                //     let fileInput = document.getElementById('photoInput');
-                //     checkPhoto(fileInput);
-                // }
-                if(document.getElementById('roleInput')){
-                    checkRole(document.getElementById('roleInput').value);
-                }
-                // valid2 = true;
-                registration_form.submit();
+        // event.preventDefault();
+        error.innerHTML = "";
+        error.classList.add('hidden-div');
+        let firstName = firstNameInput.value;
+        let lastName = lastNameInput.value;
+        let emailAddress = emailAddressInput.value;
+        let phoneNumberInput = phoneNumberInput.value;
+        let password = passwordInput.value;
+        let confirmPassword = confirmPasswordInput.value;
+        let role = roleInput.value;
 
-                // registration_form.dispatchEvent(new Event('submit'));
-                // valid2 = false;
-                console.log('Form should be submit');
-            }catch(e){
-                clientError2.classList.remove('hidden-div');
-                const errorInfo = `<p>${e}</p>`;
-                clientError2.innerHTML = errorInfo;
-                clientError2.style.display = 'block';
-            }
+        try {
+            firstName = checkName(firstName);
+        } catch (e) {
+            console.log(e);
+            error.classList.remove('hidden-div');
+            const msg = document.createElement('p');
+            msg.innerHTML = e;
+            error.appendChild(msg);
+        }
+
+        try {
+            lastName = checkName(lastName);
+        } catch (e) {
+            console.log(e);
+            error.classList.remove('hidden-div');
+            const msg = document.createElement('p');
+            msg.innerHTML = e;
+            error.appendChild(msg);
+        }
+
+        try {
+            emailAddress = checkEmail(emailAddress);
+        } catch (e) {
+            console.log(e);
+            error.classList.remove('hidden-div');
+            const msg = document.createElement('p');
+            msg.innerHTML = e;
+            error.appendChild(msg);
+        }
+
+        try {
+            phoneNumberInput = checkPhoneNumber(phoneNumberInput);
+        } catch (e) {
+            console.log(e);
+            error.classList.remove('hidden-div');
+            const msg = document.createElement('p');
+            msg.innerHTML = e;
+            error.appendChild(msg);
+        }
+
+        try {
+            password = checkPassword(password);
+        } catch (e) {
+            console.log(e);
+            error.classList.remove('hidden-div');
+            const msg = document.createElement('p');
+            msg.innerHTML = e;
+            error.appendChild(msg);
+        }
+
+
+        try {
+            confirmPassword = checkPassword(confirmPassword);
+        } catch (e) {
+            console.log(e);
+            error.classList.remove('hidden-div');
+            const msg = document.createElement('p');
+            msg.innerHTML = e;
+            error.appendChild(msg);
+        }
+
+        try {
+            checkConfirm(password, confirmPassword);
+        } catch (e) {
+            console.log(e);
+            error.classList.remove('hidden-div');
+            const msg = document.createElement('p');
+            msg.innerHTML = e;
+            error.appendChild(msg);
+        }
+
+        try {
+            role = checkRole(role);
+        } catch (e) {
+            console.log(e);
+            error.classList.remove('hidden-div');
+            const msg = document.createElement('p');
+            msg.innerHTML = e;
+            error.appendChild(msg);
+        }
+        if (error.children.length === 0) {
+            registration_form.submit()
+        } else {
+            return;
+        }
     });
 }
 
-// document.addEventListener('DOMContentLoaded', function () {
-//     let imageInput = document.getElementById('photoInput');
-//     let imagePreview = document.getElementById('previewImg');
-//
-//     imageInput.addEventListener('change', function () {
-//         if (this.files && this.files[0]) {
-//             let reader = new FileReader();
-//             reader.onload = function (e) {
-//                 imagePreview.src = e.target.result;
-//             };
-//             reader.readAsDataURL(this.files[0]);
-//         }
-//     });
-// });
+
+const checkFile = (file, errorArr) => {
+
+    if (!file) {
+        errorArr.push("No image input");
+        return;
+    }
+    if (file.size >= 16777216) {
+        errorArr.push("Image Size should smaller than 16mb ");
+        return;
+    }
+    if (file.type !== "image/jpeg" && file.type !== "image/png") {
+        errorArr.push("Image type should be jpeg or png ");
+        return;
+    }
+    return;
+}
 
 
 let photoInput = document.getElementById('photoInput');
-let previewImg = document.getElementById('previewImg');
+let formReady = true;
 
-photoInput.addEventListener('change', function () {
-    try {
-        // checkIfFileExists(this);
-        if (this.files && this.files[0]) {
-            let reader = new FileReader();
-            reader.onload = function (e) {
-                previewImg.src = e.target.result;
-            };
-            reader.readAsDataURL(this.files[0]);
-        }
-        clientError2.style.display = 'none';
-    } catch (error) {
-        console.error(error);
-        clientError2.innerHTML = `<p>${error}</p>`;
-        clientError2.style.display = 'block';
+document.getElementById('photoInput').addEventListener('change', function (event) {
+    const errorMsg = [];
+    document.getElementById('fileError').innerHTML = '';
 
+    const fileInput = event.target;
+    const file = fileInput.files[0];
+
+    if (!file) {
+        formReady = true;
+        document.getElementById('previewImg').src = ''; // Clear the preview image
+        return;
+    }
+
+    console.log(file);
+    checkFile(file, errorMsg);
+
+    if (errorMsg.length > 0) {
+        formReady = false;
+        errorMsg.forEach(msg => {
+            const li = document.createElement('li');
+            li.textContent = msg;
+            li.style.color = 'red';
+            document.getElementById('fileError').appendChild(li);
+        });
+    } else {
+        formReady = true;
     }
 });
+
+
+
+// photoInput.addEventListener('change', function () {
+//     try {
+//         // checkIfFileExists(this);
+//         if (this.files && this.files[0]) {
+//             let reader = new FileReader();
+//             reader.onload = function (e) {
+//                 previewImg.src = e.target.result;
+//             };
+//             reader.readAsDataURL(this.files[0]);
+//         }
+//         clientError2.style.display = 'none';
+//     } catch (error) {
+//         console.error(error);
+//         clientError2.innerHTML = `<p>${error}</p>`;
+//         clientError2.style.display = 'block';
+//
+//     }
+// });

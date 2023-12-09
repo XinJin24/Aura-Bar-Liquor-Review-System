@@ -1,18 +1,3 @@
-let login_form = document.getElementById("login_form");
-
-let checkName = (strVal) =>{
-    if(!strVal){
-    }
-    if(typeof strVal !== "string"){
-        throw `name should be a string`;
-    }
-    strVal = strVal.trim();
-    if(strVal.length < 2 || strVal.length > 25){
-        throw `name should be at least 2 characters long with a max of 25 characters`;
-    }
-    if (!isNaN(strVal))
-      throw `${strVal} is not a valid value for name as it only contains digits`;
-}
 
 let checkEmail = (strVal) =>{
     if(!strVal){
@@ -27,6 +12,7 @@ let checkEmail = (strVal) =>{
         throw `email is not a valid email address`;
     }
     strVal = strVal.toLowerCase();
+    return strVal;
 }
 
 let checkPassword = (strVal)=>{
@@ -50,53 +36,74 @@ let checkPassword = (strVal)=>{
         throw `password needs to be at least one special character`;
     }
     for(let i = 0; i < strVal.length; i++){
-        if(strVal.charAt(i) == ''){
+        if(strVal.charAt(i) === ''){
             throw `password shouldn't have spaces`;
         }
     }
+    return strVal;
 }
 
-let checkConfirm = (code1,code2) =>{
-    if(code1!=code2)
-        throw "the confirmpassword does not match the password";
-}
+// let clientError1 = document.getElementById("clientError1");
+// clientError1.style.display = 'none';
+// let valid1 = false;
 
-let checkRole = (strVal) =>{
-    if(!strVal){
-        throw `role is not provided`;
-    }
-    strVal = strVal.trim();
-    if(typeof strVal !== "string" || strVal.length === 0){
-        throw `role is not strings or is empty strings`;
-    }
-    strVal = strVal.toLowerCase();
-    if(strVal !== "admin" && strVal !== "user"){
-        throw `role the ONLY two valid values are "admin" or "user"`;
-    }
-}
+let login_form = document.getElementById("login_form");
+let emailAddressInput = document.getElementById(emailAddressInput);
+let passwordInput = document.getElementById(passwordInput);
+let error = document.getElementById('error')
 
-let clientError1 = document.getElementById("clientError1");
-clientError1.style.display = 'none';
-let valid1 = false;
-
-login_form.addEventListener = ('submit', (event) =>{
-    //stop default behaviour of the form submission
-    if(!valid1){
+if(login_form){
+    login_form.addEventListener = ('submit', (event) =>{
         event.preventDefault();
-        try{
-            if(document.getElementById(emailAddressInput)){
-                checkEmail(document.getElementById(emailAddressInput).value);
-            }
-            if(document.getElementById(passwordInput)){
-                checkPassword(document.getElementById(passwordInput).value);
-            }
-            valid1 = true;
-            login_form.submit();
-            valid1 = false;
-        }catch(e){
-            const errorInfo = `<p>${e}</p>`;
-            clientError1.innerHTML = errorInfo;
-            clientError1.style.display = 'block';
+        error.innerHTML = "";
+        error.classList.add('hidden-div');
+        let emailAddressInput = emailAddressInput.value;
+        let passwordInput = passwordInput.value;
+        try {
+            emailAddress = checkEmail(emailAddress);
+        } catch (e) {
+            console.log(e);
+            error.classList.remove('hidden-div');
+            const msg = document.createElement('p');
+            msg.innerHTML = e;
+            error.appendChild(msg);
         }
-    }
-});
+
+        try {
+            password = checkPassword(password);
+        } catch (e) {
+            console.log(e);
+            error.classList.remove('hidden-div');
+            const msg = document.createElement('p');
+            msg.innerHTML = e;
+            error.appendChild(msg);
+        }
+
+        if (error.children.length === 0) {
+            login_form.submit()
+        } else {
+            return;
+        }
+    });
+}
+// login_form.addEventListener = ('submit', (event) =>{
+//     //stop default behaviour of the form submission
+//     if(!valid1){
+//         event.preventDefault();
+//         try{
+//             if(emailAddressInput){
+//                 checkEmail(emailAddressInput.value);
+//             }
+//             if(passwordInput){
+//                 checkPassword(passwordInput.value);
+//             }
+//             valid1 = true;
+//             login_form.submit();
+//             valid1 = false;
+//         }catch(e){
+//             const errorInfo = `<p>${e}</p>`;
+//             clientError1.innerHTML = errorInfo;
+//             clientError1.style.display = 'block';
+//         }
+//     }
+// });
