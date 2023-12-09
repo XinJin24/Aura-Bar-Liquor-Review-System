@@ -32,6 +32,7 @@ export const createUser = async (
     role
 ) => {
     firstName = validation.validateName(firstName, "firstName");
+    // console.log(firstName);
     lastName = validation.validateName(lastName, "lastName");
     email = validation.validateEmail(email, "email");
     phoneNumber = validation.validatePhoneNumber(phoneNumber);
