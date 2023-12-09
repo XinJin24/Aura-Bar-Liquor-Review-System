@@ -1,5 +1,5 @@
-<main>
-    <h1>{{title}}</h1>
+<div class="container">
+    <h1 class="title">{{title}}</h1>
     <form id="login_form" action="/login" method="POST">
         <div>
             <label for="emailAddressInput">
@@ -14,15 +14,10 @@
             </label>
         </div>      
         <div>
-            <ul class="errorInfo">
-                {{#if message}}
-                    <li>{{message}}</li>
-                {{/if}}
-            </ul>
-            <button type="submit" id="submit" >Submit</button>  
-        </div>                   
+            <button type="submit" id="btnSubmit" >Submit</button>
+        </div>
     </form>
-    <div id="clientError1" ></div>
+    <div id="error" class="hidden-div">error message</div>
     <a href="/register">Click Here To Register!</a>
-    <script src="/public/js/login.js"></script>
-</main>
+    <script src="../public/js/login.js"></script>
+</div>

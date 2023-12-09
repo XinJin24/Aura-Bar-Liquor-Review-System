@@ -81,26 +81,26 @@ let checkState = (stateCode) =>{
     return upperCaseStateCode;
 }
 
-let checkIfFileExist = async (filePath, valName) => {
-    if (typeof filePath !== "string") {
-        throw `Error: ${valName} must be a valid string(no empty spaces)!`;
-    } else if(filePath.trim().length === 0){
-        return "";
-    }
-    try {
-        await access(filePath);
-        return filePath;
-    } catch (err) {
-        throw `Error: File at path ${filePath} is inaccessible.`;
-    }
-}
+// let checkIfFileExist = async (filePath, valName) => {
+//     if (typeof filePath !== "string") {
+//         throw `Error: ${valName} must be a valid string(no empty spaces)!`;
+//     } else if(filePath.trim().length === 0){
+//         return "";
+//     }
+//     try {
+//         await access(filePath);
+//         return filePath;
+//     } catch (err) {
+//         throw `Error: File at path ${filePath} is inaccessible.`;
+//     }
+// }
 
 let clientError3 = document.getElementById("clientError3");
 clientError3.style.display = 'none';
-let valid3 = false;
+// let valid3 = false;
 
-modify_form.addEventListener('submit', async (event) =>{
-    if(!valid3){
+modify_form.addEventListener('submit',  (event) =>{
+    // if(!valid3){
         event.preventDefault();
         try{
             if(document.getElementById("firstName")){
@@ -122,21 +122,24 @@ modify_form.addEventListener('submit', async (event) =>{
             }
             if(document.getElementById("state")){
                 checkState(document.getElementById("state").value);
-            }            
-            if(document.getElementById("newProfilePictureLocation")){
-                let fileInput = document.getElementById("newProfilePictureLocation");
-                if(fileInput.files.length > 0){
-                    try{
-                        await checkIfFileExist(fileInput.files[0]);
-                    }catch(e){
-                        console.error(e);
-                        throw e;
-                    }                
-                }
-            }            
-            valid3 = true;
-            modify_form.submit();
-            valid3 = false;
+            }else{
+                event.preventDefault();
+                console.log('Form not valid')
+            }
+            // if(document.getElementById("newProfilePictureLocation")){
+            //     let fileInput = document.getElementById("newProfilePictureLocation");
+            //     if(fileInput.files.length > 0){
+            //         try{
+            //            checkIfFileExist(fileInput.files[0]);
+            //         }catch(e){
+            //             console.error(e);
+            //             throw e;
+            //         }
+            //     }
+            // }
+            // valid3 = true;
+            // modify_form.submit();
+            // valid3 = false;
 
         }catch(e){
             const errorInfo = document.createElement('p');
@@ -145,20 +148,39 @@ modify_form.addEventListener('submit', async (event) =>{
             clientError3.appendChild(errorInfo);
             clientError3.style.display = 'block';
         }
-    }
+    // }
 });
 
 let newProfilePictureLocation = document.getElementById("newProfilePictureLocation");
 let previewImg = document.getElementById("previewImg");
 
-newProfilePictureLocation.addEventListener('change', function(event){
-    if(this.files && this.files[0]){
-        previewImg.src = URL.createObjectURL(event.target.files[0]);
+photoInput.addEventListener('change', function () {
+    try {
+        // checkIfFileExists(this);
+        if (this.files && this.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                previewImg.src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+        clientError2.style.display = 'none';
+    } catch (error) {
+        console.error(error);
+        clientError2.innerHTML = `<p>${error}</p>`;
+        clientError2.style.display = 'block';
+
+    }
+});
+
+// newProfilePictureLocation.addEventListener('change', function(event){
+//     if(this.files && this.files[0]){
+//         previewImg.src = URL.createObjectURL(event.target.files[0]);
         // let reader = new FileReader();
         // reader.onload = function(e){
         //     previewImg.src = e.target.result;//Assign the data URL to the src attribute of img
         // }
         // reader.readAsDataURL(this.files[0]);
-    }
-});
+//     }
+// });
 

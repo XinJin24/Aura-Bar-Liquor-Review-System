@@ -1,5 +1,5 @@
-<main>
-    <h1>{{title}}</h1>
+<div class="container">
+    <h1 class="title">{{title}}</h1>
 
     <form id="registration_form" action="/register" method="POST" enctype="multipart/form-data">
         <div>
@@ -49,24 +49,23 @@
             <label for="roleInput">
                 Role:
                 <select id="roleInput" name="roleInput">
-                <option value="admin">Admin</option>
-                <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
                 </select>
-        </label>
+            </label>
         </div>
         <div>
-            <ul class="errorInfo">
-                {{#if message}}
-                    <li>{{message}}</li>
-                {{/if}}
-            </ul>
-            <button type="submit" id="submit" >Submit</button>  
+            <button type="submit" id="submitBtn" >Submit</button>
         </div>
     </form>
-    <p id="clientError2" class="hidden-div"></p>
+    <div id="error" class="hidden-div">error message</div>
     <a href="/login">Log in if you already have an account</a>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous"></script>
     <script src="../public/js/register.js"></script>
-</main>
+</div>
 
 
 
