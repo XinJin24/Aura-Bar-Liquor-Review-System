@@ -94,7 +94,7 @@ login_form.addEventListener = ('submit', (event) =>{
             login_form.submit();
             valid1 = false;
         }catch(e){
-            const errorInfo = <p>${e}</p>;
+            const errorInfo = `<p>${e}</p>`;
             clientError1.innerHTML = errorInfo;
             clientError1.style.display = 'block';
         }

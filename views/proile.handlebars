@@ -2,9 +2,12 @@
     <h1>{{title}}</h1>
     {{#if user}}
         <h2>Welcome, {{user.firstName}} {{user.lastName}}!</h2>
-        <p Email:>{{user.email}}</p>
-        <p State:>{{user.state}}</p>
-        <p Role:>{{user.role}}</p>
+        <label>Email:</label>
+        <p>{{user.email}}</p>
+        <label>State:</label>
+        <p>{{user.state}}</p>
+        <label>Role:</label>
+        <p>{{user.role}}</p>
         {{!-- display reserved drinks --}}
         <h3>Reserved Drinks:</h3>
             <ul>

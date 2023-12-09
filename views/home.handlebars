@@ -50,6 +50,7 @@
                     <p>Category: {{category}}</p>
                     <p>Rating: {{rating}}</p>
                     <p>Price: {{price}}</p>
+                    <button class="btn btn-primary" onclick="redirectToPage('{{id}}')">View Details</button>
                 </li>
             {{/each}}
         </ul>
@@ -76,5 +77,10 @@
         The project also aims to enhance the user experience for those looking for liquor options.
         By providing a user-friendly app, we're not only helping consumers find the best options but also saving their time and effort.
     </p>
+    <script>
+        function redirectToPage(drinkId) {
+            window.location.href = '/' + drinkId;
+        }
+    </script>
     <script src="../public/js/home.js"></script>
 </div>
