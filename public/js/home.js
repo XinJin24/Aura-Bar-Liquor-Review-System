@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("hey");
     const modal = document.getElementById("messageModal");
     const btn = document.getElementById("messageBtn");
     const span = document.getElementsByClassName("close")[0];
@@ -20,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (messageForm) {
         messageForm.onsubmit = function(e) {
             e.preventDefault();
-            console.log("hey");
             const message = this.message.value;
 
             $.ajax({

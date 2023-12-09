@@ -5,9 +5,13 @@ import validation from "../publicMethods.js";
 import {createUser, loginUser} from "../data/users.js";
 import {getAllDrinks,getDrinkInfoByName,getDrinkInfoByCategory,getDrinkInfoByRating} from "../data/drinks.js";
 import xss from "xss";
-import nodemailer from 'nodemailer';
-
-const adminEmail ="jinxin8295@gmail.com"
+import AWS from 'aws-sdk';
+const businessPhone ="+19293335817";
+AWS.config.update({
+    accessKeyId: "AKIAQAGUPWCDLUD5Y7PQ",
+    secretAccessKey: "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",
+    region: 'us-east-1'
+});
 router
     .route('/').get(async (req, res) => {
     if (req.session.user) {
@@ -25,7 +29,6 @@ router
         let userProfilePictureLocation = null;
         let login = false;
         if(req.session.user){
-
             login = true;
              userFirstName = req.session.user.firstName;
              userLstName = req.session.user.lastName;
@@ -89,7 +92,6 @@ router
             console.error(error);
             return res.status(500).render('error', {title: "Error", message: "Validation Error: getDrinkInfoByName"})
         }
-
 })
 
 
@@ -210,36 +212,37 @@ router.route("/logout").get(async (req, res) => {
 
 
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'yourEmail@gmail.com',
-        pass: 'yourPassword'
-    }
-});
-
-const sendConfirmationEmail = async (email, message) => {
-    const mailOptions = {
-        from: email,
-        to: adminEmail,
-        subject: message,
-        text: `We received your message: ${message}`
+const sns = new AWS.SNS();
+const sendSMS = async (phoneNumber, message) => {
+    const params = {
+        Message: message,
+        PhoneNumber: phoneNumber,
     };
-
     try {
-        const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + info.response);
+        const info = await sns.publish(params).promise();
+        console.log('SMS sent: ', info);
     } catch (error) {
-        console.error('Error sending email:', error);
+        console.error('Error sending SMS:', error);
     }
 };
+
 router.route("/sendMessage").post(async (req, res) => {
     if (req.session.user) {
-        const message = req.body.message;
-        const userEmail = req.session.user.email; // Assuming the user's email is stored in session
-
+        let message = null;
+        let userPhoneNumber = null;
+        try{
+             message = validation.validateCallForServiceMessage(xss(req.body.message));
+             userPhoneNumber = req.session.user.phoneNumber;
+        }catch (error){
+            return res.status(400).render('error', {
+                title: "Inputs Error",
+                message: error
+            });
+        }
         try {
-            await sendConfirmationEmail(userEmail, message);
+            await sendSMS(businessPhone,message);
+            await sendSMS(userPhoneNumber, "Message From: Aura Bar: your message was " +
+                "successfully sent to the Customer Service Team. We will service you soon. ");
             res.status(200).send('Message sent successfully');
         } catch (error) {
             res.status(500).send('Error sending message');
@@ -249,9 +252,10 @@ router.route("/sendMessage").post(async (req, res) => {
             errorMsg: "Please Login to send a message",
             login: false,
             title: "Error",
-            redirect:"/login"
+            redirect: "/login"
         });
     }
 });
+
 
 export default router;

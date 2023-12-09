@@ -155,12 +155,12 @@ const exportedMethods = {
             try {
                 //file already exist
                 await access(newFilePath);
-                return `pictures\\${fileName}`;
+                return `..\\pictures\\${fileName}`;
             } catch (err) {
                 //file not exist, copy
                 await copyFile(filePath, newFilePath);
                 await access(newFilePath);
-                return `pictures\\${fileName}`;
+                return `..\\pictures\\${fileName}`;
             }
         } catch (err) {
             throw `Error: Some error happened when processing your photos`;
@@ -305,6 +305,15 @@ const exportedMethods = {
             throw "Error: Invalid phone number format";
         }
         return phoneNumber;
+    },validateCallForServiceMessage(message) {
+        if (typeof message !== "string" || message.trim().length === 0) {
+            throw `Error: message should be a valid string (no empty spaces)`;
+        }
+        message = message.trim();
+        if (message.length < 2 || message > 200) {
+            throw `Error: message should have more than 2 chars and less than 10 thousand chars`;
+        }
+        return message;
     }
 
 

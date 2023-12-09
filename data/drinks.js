@@ -1,5 +1,5 @@
 import validation from "../publicMethods.js";
-import {drinks, users} from "../config/mongoCollections.js";
+import {drinks, reviews, users} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 import {getReviewInfoByReviewId} from "./reviews.js";
 import {access, unlink} from 'fs/promises';
@@ -193,12 +193,19 @@ export const getAllReviewsOnADrink = async (drinkId) => {
 
     for (let j = 0; j < sortedReviews.length; j++) {
         const reviewId = sortedReviews[j].toString();
-        const reviewInfo = await getReviewInfoByReviewId(reviewId);
-        reviewsArray.push(reviewInfo);
+        const reviewCollection = await reviews();
+        const userCollection = await users();
+        const review = await reviewCollection.findOne({_id: new ObjectId(reviewId)});
+        const user = await userCollection.findOne({_id: new ObjectId(review.userId)});
+        const singleReview ={};
+        singleReview.userProfilePictureLocation = user.userProfilePictureLocation;
+        singleReview.owner = user.firstName +" " + user.lastName;
+        singleReview.reviewText = review.reviewText;
+        singleReview.timestamp = review.timestamp;
+        reviewsArray.push(singleReview);
     }
     return reviewsArray;
 };
-
 
 export const increaseReservedCounts = async (
     drinkId
@@ -323,10 +330,10 @@ export let getDrinkInfoByRating = async (rating) => {
     rating = validation.validateRating(rating);
 
     let s = 0;
-    if (rating == 'ascending'){
+    if (rating === 'ascending'){
         s = 1;
     }
-    if (rating == 'descending'){
+    if (rating === 'descending'){
         s = -1;
     }
     const drinkCollection = await drinks();

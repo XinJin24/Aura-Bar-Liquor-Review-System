@@ -100,11 +100,13 @@ router
             try {
                 const drinkInfo = await getDrinkInfoByDrinkId(drinkId);
                 const reviews = await getAllReviewsOnADrink(drinkId);
-
+                const isAdmin = req.session.user.role === "admin";
                 return res.status(200).render('drinkInfo', {
                     title: "Drink Detail",
                     drinkInfo: drinkInfo,
-                    reviews: reviews
+                    reviews: reviews,
+                    login:true,
+                    isAdmin: isAdmin
                 });
             } catch (error) {
                 console.error(error);
