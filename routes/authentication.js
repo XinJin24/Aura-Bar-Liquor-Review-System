@@ -113,6 +113,8 @@ router
         let confirmPasswordInput = xss(req.body.confirmPasswordInput);
         let photoInput = xss(req.body.photoInput);
         let roleInput = xss(req.body.roleInput);
+
+        console.log(firstNameInput, lastNameInput, emailAddressInput, phoneNumberInput, passwordInput, confirmPasswordInput, photoInput,roleInput);
         
         try {
             if (!firstNameInput || !lastNameInput || !emailAddressInput || !phoneNumberInput || !passwordInput || !confirmPasswordInput || !roleInput) {
@@ -137,7 +139,14 @@ router
                 title: "InputError", message: error
             });
         }
-
+        console.log(firstNameInput,
+            lastNameInput,
+            emailAddressInput,
+            phoneNumberInput,
+            passwordInput,
+            photoInput,
+            // profilePictureLocationInput,
+            roleInput);
         try {
             const user = await createUser(firstNameInput,
                 lastNameInput,
@@ -149,12 +158,10 @@ router
                 roleInput);
             if (user.insertedUser) {
                 return res.redirect('/login');
-            } else {
-                throw "Error: Internal Server Error"
             }
         } catch (error) {
             return res.status(500).render('error', {
-                title: "Internal Server Error",
+                title: error,
                 message: "Error: Internal Server Error"
             });
         }

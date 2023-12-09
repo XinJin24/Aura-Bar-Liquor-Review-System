@@ -110,16 +110,18 @@ let validatePhoneNumber = (phoneNumber) =>{
 let clientError2 = document.getElementById("clientError2");
 clientError2.style.display = 'none';
 // let valid2 = false;
-
+const firstName = document.getElementById('firstNameInput').value;
 if(registration_form){
     registration_form.addEventListener('submit', (event)=>{
-        console.log('Form submitted');
+        clientError2.classList.add('hidden-div');
         // if(!valid2){
-            event.preventDefault();
-            console.log('Form not valid');
+        //     event.preventDefault();
+        console.log(firstName);
+        console.log(document.getElementById('lastNameInput'));
             try{
-                if(document.getElementById('firstNameInput')){
-                    checkName(document.getElementById('firstNameInput').value);
+                if(firstName){
+                    checkName(firstName);
+                    console.log("-------");
                 }
                 if(document.getElementById('lastNameInput')){
                     checkName(document.getElementById('lastNameInput').value);
@@ -134,7 +136,7 @@ if(registration_form){
                     validatePassword(document.getElementById('passwordInput').value);
                 }
                 if(document.getElementById('confirmPasswordInput')){
-                    checkConfirm(document.getElementById('passwordInput').value, document.getElementById('confirmPasswordInput').value);
+                    checkConfirm(document.getElementById('confirmPasswordInput').value, document.getElementById('confirmPasswordInput').value);
                 }
                 // if(document.getElementById('photoInput')){
                 //     let fileInput = document.getElementById('photoInput');
@@ -144,18 +146,17 @@ if(registration_form){
                     checkRole(document.getElementById('roleInput').value);
                 }
                 // valid2 = true;
-                // registration_form.submit();
-                // registration_form.submit();
+                registration_form.submit();
 
                 // registration_form.dispatchEvent(new Event('submit'));
                 // valid2 = false;
                 console.log('Form should be submit');
             }catch(e){
+                clientError2.classList.remove('hidden-div');
                 const errorInfo = `<p>${e}</p>`;
                 clientError2.innerHTML = errorInfo;
                 clientError2.style.display = 'block';
             }
-        // }
     });
 }
 
