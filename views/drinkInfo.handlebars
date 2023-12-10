@@ -2,6 +2,49 @@
     <h1>{{title}}</h1>
 
     {{#if login}}
+        <div>
+            <h2>Drink Details</h2>
+            <p>Name: {{drinkInfo.name}}</p>
+            <p>Category: {{drinkInfo.category}}</p>
+            <p>Recipe: {{drinkInfo.recipe}}</p>
+            <p>Rating: {{drinkInfo.rating}}</p>
+            <p>Price: {{drinkInfo.price}}</p>
+            <!-- 一键reserve的button在这里-->
+            <button class="btn btn-success" onclick="reserveDrink('{{_id}}')">Reserve</button>
+            <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
+        </div>
+
+        <div>
+            <h2>Reviews</h2>
+            <ul>
+                {{#each reviews}}
+                    <li>{{userProfilePictureLocation}}</li>
+                    <li>{{owner}}</li>
+                    <li>{{reviewText}}</li>
+                    <li>{{timestamp}}</li>
+                {{/each}}
+            </ul>
+
+        </div>
+        <div>
+            <h2>Add a Review</h2>
+            <form id="addReview" action="/drink/{{drinkInfo._id}}" method="POST">
+                <div>
+                    <label for="reviewText">Review:
+                        <textarea id="reviewText" name="reviewText" required></textarea>
+                    </label>
+                </div>
+                <div>
+                    <label for="rating">Rating (1-5):
+                        <input type="number" id="rating" name="rating" required min="1" max="5">
+                    </label>
+                </div>
+                <div>
+                    <button type="submit" id="postReview">Post Review</button>
+                </div>
+            </form>
+            <div id="error" class="hidden-div">error message</div>
+        </div>
         {{#if isAdmin}}
             <form id="drinkEdit_form" action="/{{drinkInfo._id}}" method="POST">
                 <div>
@@ -49,28 +92,12 @@
                 <button type="submit" id="delete">Delete</button>
             </form>
         {{else}}
-        <div>
-            <h2>Drink Details</h2>
-            <p>Name: {{drinkInfo.name}}</p>
-            <p>Category: {{drinkInfo.category}}</p>
-            <p>Recipe: {{drinkInfo.recipe}}</p>
-            <p>Rating: {{drinkInfo.rating}}</p>
-            <p>Price: {{drinkInfo.price}}</p>
-            <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
-        </div>
+            <div id="error"></div>
+
         {{/if}}
 
-        <section>
-            <h2>Reviews</h2>
-            <ul>
-                {{#each reviews}}
-                    <li>{{userProfilePictureLocation}}</li>
-                    <li>{{owner}}</li>
-                    <li>{{reviewText}}</li>
-                    <li>{{timestamp}}</li>
-                {{/each}}
-            </ul>
-        </section>
+
+
 
     {{else}}
         <p>Please log in to view details about this drink.</p>
