@@ -108,19 +108,13 @@ export const updateUser = async (
     email,
     phoneNumber,
     password,
-    reviewIds,
     profilePictureLocation,
-    drinkReserved,
-    role
 ) => {
     firstName = validation.validateName(firstName, "firstName");
     lastName = validation.validateName(lastName, "lastName");
     email = validation.validateEmail(email, "email");
     phoneNumber = validation.validatePhoneNumber(phoneNumber);
     password = validation.validatePassword(password, "password");
-    reviewIds = validation.validateArrayOfIds(reviewIds);
-    drinkReserved = validation.validateArrayOfIds(drinkReserved);
-    role = validation.validateRole(role);
 
     const userCollection = await users();
     const user = await userCollection.findOne({ email: email });
@@ -136,10 +130,7 @@ export const updateUser = async (
         email: email,
         phoneNumber: phoneNumber,
         password: await bcrypt.hash(password, 15),
-        reviewIds: reviewIds,
-        profilePictureLocation: profilePictureLocation,
-        drinkReserved: drinkReserved,
-        role: role,
+        profilePictureLocation: profilePictureLocation
     };
 
     const updateUser = await userCollection.updateOne(
@@ -167,11 +158,10 @@ export const getAllReviewsByUserId = async (
     userId
 ) => {
     userId = validation.validateId(userId,"userId");
-
     const userCollection = await users();
     const user = await
         userCollection
-        .find({ _id: new ObjectId(userId) });
+        .findOne({ _id: new ObjectId(userId) });
 
     if (!user) {
         throw `Error: User with ID ${userId} not found, Cannot get his/her reviews`;
@@ -257,9 +247,7 @@ export const getUserIdByEmail = async (
     if (!user) {
         throw `Error: User with email ${email} not found`;
     }
-    return {
-        id: user._id.toString()
-    };
+    return user._id.toString();
 }
 
 export const getUserPasswordById = async (

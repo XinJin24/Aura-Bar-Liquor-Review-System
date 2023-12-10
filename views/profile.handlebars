@@ -4,8 +4,8 @@
         <h2>Welcome, {{user.firstName}} {{user.lastName}}!</h2>
         <label>Email:</label>
         <p>{{user.email}}</p>
-        <label>State:</label>
-        <p>{{user.state}}</p>
+        <label>Phone Number:</label>
+        <p>{{user.phoneNumber}}</p>
         <label>Role:</label>
         <p>{{user.role}}</p>
         {{!-- display reserved drinks --}}
@@ -20,7 +20,10 @@
         <h3>Reviews:</h3>
         <ul>
             {{#each reviews as |review|}}
-                <li>{{review}}</li>
+                <li>{{drinkName}}</li>
+                <img src="{{drinkPicture}}" alt="drink Picture" class="drink-picture" />
+                <li>{{reviewText}}</li>
+                <li>{{timestamp}}</li>
             {{/each}}
         </ul>
     {{else}}

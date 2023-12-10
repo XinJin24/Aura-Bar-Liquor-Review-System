@@ -39,6 +39,7 @@ router
         let login = false;
         if(req.session.user){
             login = true;
+            userId = req.session.user.userId;
              userFirstName = req.session.user.firstName;
              userLstName = req.session.user.lastName;
              userProfilePictureLocation = req.session.user.profilePictureLocation
@@ -50,7 +51,7 @@ router
             drink.editable = true;
         }
     }
-    return res.render('home', {title: "Aura Liquor", drinks: allDrinks, firstName: userFirstName,
+    return res.render('home', {title: "Aura Liquor", drinks: allDrinks, firstName: userFirstName,userId:userId,
         lastName : userLstName, userProfilePictureLocation: userProfilePictureLocation, login: login});
 })
     .post(async (req,res) =>{
@@ -143,7 +144,6 @@ router
                 title: "InputError", errorMsg: error
             });
         }
-        console.log(req.file);
         try {
             const user = await createUser(firstNameInput,
                 lastNameInput,
@@ -181,6 +181,7 @@ router
             const user =
                 await loginUser(emailAddressInput, passwordInput);
             req.session.user = {
+                userId : user.userId,
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,

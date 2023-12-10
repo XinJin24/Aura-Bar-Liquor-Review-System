@@ -164,7 +164,7 @@ const exportedMethods = {
                 throw `Error: Some error happened when processing your photos`;
             }
         }else{
-            await copyPictureAndReturnPath(file, valName);
+             await copyPictureAndReturnPath(file, valName);
         }
     },
     validateArrayOfIds(Ids) {

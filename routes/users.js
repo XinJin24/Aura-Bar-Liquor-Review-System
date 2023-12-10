@@ -4,17 +4,18 @@ const router = Router();
 import validation from "../publicMethods.js";
 import {
     createUser,
+
     getAllDrinkReservedByUserId,
     getAllReviewsByUserId,
     getUserIdByEmail,
-    getUserInfoByUserId,
-    loginUser, updateUser
+    getUserInfoByUserId, getUserPasswordById,
+    updateUser
 } from "../data/users.js";
 import {getReviewInfoByReviewId} from "../data/reviews.js"
 import {getDrinkInfoByDrinkId} from "../data/drinks.js"
-import e from "express";
 import xss from "xss";
 import multer from "multer";
+import bcrypt from "bcrypt";
 
 const upload = multer({
     dest: "../public/uploads/",
@@ -24,28 +25,40 @@ const upload = multer({
         next(err);
     },
 });
+
+
+//user/6574a7ed5bc5e4a2b3d983db
 router
-    .route('/profile/:id')
+    .route('/:id')
     .get(async (req, res) => {
         //if login
         if (req.session.user) {
             try {
                 const userId = validation.validateId(req.params.id, "ID");
-                const userIdFromDB = await getUserIdByEmail(req.session.user.email);
+                let userIdFromDB = await getUserIdByEmail(req.session.user.email);
                 if (userIdFromDB !== userId) {
                     throw `Error: You don't have access to ${userId}`
                 }
                 let drinkReserved = await getAllDrinkReservedByUserId(userId);
                 let reviews = await getAllReviewsByUserId(userId);
-
+                // console.log(drinkReserved);
                 //store drink and review into a array and display them to frontend
                 let drinkReservedArray = [];
                 let reviewsArray = [];
                 for (let i = 0; i < drinkReserved.length; i++) {
-                    drinkReservedArray.push(getDrinkInfoByDrinkId(drinkReserved[i].toString()));
+                    drinkReservedArray.push(await getDrinkInfoByDrinkId(drinkReserved[i].toString()));
                 }
                 for (let j = 0; j < reviews.length; j++) {
-                    reviewsArray.push(getReviewInfoByReviewId(reviews[j].toString()));
+                    const review = await getReviewInfoByReviewId(reviews[j].toString());
+                    const drink = await getDrinkInfoByDrinkId(review.drinkId.toString());
+                    const reviewsDisplayOnUserProfile={
+                        reviewId: review._id,
+                        reviewText : review.reviewText,
+                        timestamp: review.timeStamp,
+                        drinkName: drink.name,
+                        drinkPicture: drink.drinkPictureLocation
+                    }
+                    reviewsArray.push(reviewsDisplayOnUserProfile);
                 }
                 //render drink, review, user info to user home page
                 return res.render('profile',
@@ -57,13 +70,64 @@ router
                     });
             } catch (error) {
                 //render error page that shows internal error
+                res.status(404).render('error', {
+                    errorMsg: error,
+                    login: true
+                })
             }
         } else {
             return res.render('register', {title: "Register"});
         }
     })
-    .post(async (req, res) => {
+    .post(upload.single("photoInput"), async (req, res) => {
+        if(req.session.user) {
+            try{
+                let firstName = validation.validateName(xss(req.body.firstName), "First Name");
+                let lastName = validation.validateName(xss(req.body.lastName), "Last Name");
+                let email = validation.validateEmail(xss(req.body.email));
+                let phoneNumber = validation.validatePhoneNumber(xss(req.body.phoneNumber));
+                let oldPassword = validation.validatePassword(xss(req.body.oldPassword), "oldPassword");
+                let newPassword = validation.validatePassword(xss(req.body.newPassword), "newPassword");
+                let confirmNewPassword = validation.validatePassword(xss(req.body.confirmNewPassword), "confirmNewPassword");
+                const userId = req.session.user.userId;
+                const realPassWord = (await getUserPasswordById(userId)).password;
+                const checkOldPassword = await bcrypt.compare(
+                    oldPassword,
+                    realPassWord
+                );
+                if (!checkOldPassword) {
+                    throw "Error: the old password is incorrect";
+                }
 
+                if (newPassword !== confirmNewPassword) {
+                    throw "Error: new Passwords do not match";
+                }
+
+                try{
+                    const user = await updateUser(
+                        firstName,
+                        lastName,
+                        email,
+                        phoneNumber,
+                        newPassword,
+                        req.file,);
+                    if(user.updatedUser !== true){
+                        throw "Error: some problems when updating your user info";
+                    }
+                }catch (error){
+                    return res.status(500).render('error', {
+                        title: "Internal Server Error",
+                        errorMsg: error
+                    });
+                }
+            }catch (error){
+                return res.status(400).render("modifyUserInfo", {
+                    error: error,
+                    login: true,
+                    title: "Update User Info"
+                });
+            }
+        }
     });
 
 // ask user to enter firstName, LastName, oldPassword, newPassword, confirmNewPassword,
