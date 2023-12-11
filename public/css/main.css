@@ -1,7 +1,7 @@
 .hidden-div {
     display: none;
 }
-ul {
+.displaydrinks {
     list-style: none;
     padding: 0;
     display: flex;
@@ -9,7 +9,7 @@ ul {
     justify-content: space-around;
 }
 
-li {
+.alldrinks {
     border: 1px solid #ccc;
     margin: 10px;
     padding: 15px;
@@ -61,5 +61,11 @@ li {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+#previewImg {
+    max-width: 200px;
+    max-height: 200px;
+    margin-top: 10px;
 }
 
