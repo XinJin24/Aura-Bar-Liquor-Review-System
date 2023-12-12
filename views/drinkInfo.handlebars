@@ -9,7 +9,6 @@
             <p>Recipe: {{drinkInfo.recipe}}</p>
             <p>Rating: {{drinkInfo.rating}}</p>
             <p>Price: {{drinkInfo.price}}</p>
-            <!-- 一键reserve的button在这里-->
             <button class="btn btn-success" onclick="reserveDrink('{{_id}}')">Reserve</button>
             <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
         </div>
@@ -18,7 +17,7 @@
             <h2>Reviews</h2>
             <ul>
                 {{#each reviews}}
-                    <li>{{userProfilePictureLocation}}</li>
+                    <img src="{{userProfilePictureLocation}}" alt="" class="" />
                     <li>{{owner}}</li>
                     <li>{{reviewText}}</li>
                     <li>{{timestamp}}</li>
@@ -95,10 +94,6 @@
             <div id="error"></div>
 
         {{/if}}
-
-
-
-
     {{else}}
         <p>Please log in to view details about this drink.</p>
     {{/if}}

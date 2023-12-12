@@ -17,13 +17,16 @@ router
         if (req.session.user && req.session.user.role === "admin") {
             return res.render("createDrink", {
                 title: "Add A Drink",
-                login: true
+                isAdmin: true,
+                login: true,
+                userId: req.session.user.userId
             });
             //if not admin
         } else if (req.session.user && req.session.user.role !== "admin") {
             res.status(403).render("error", {
                 errorMsg: "Sorry, You are not admin, hence you cannot add a drink...",
                 login: true,
+                isAdmin:false,
                 title: "Authorization Error"
             });
         } else {
@@ -31,6 +34,7 @@ router
             return res.status(401).render("error", {
                 errorMsg: "Please Login to add a drink.",
                 login: false,
+                isAdmin:false,
                 title: "Error"
             });
         }
@@ -100,6 +104,7 @@ router
             try {
                 const drinkInfo = await getDrinkInfoByDrinkId(drinkId);
                 const reviews = await getAllReviewsOnADrink(drinkId);
+
                 const isAdmin = req.session.user.role === "admin";
                 return res.status(200).render('drinkInfo', {
                     title: "Drink Detail",

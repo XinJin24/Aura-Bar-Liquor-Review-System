@@ -6,19 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
     <link rel="stylesheet" href="/public/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
+<header>
+    <nav>
+        <ul>
+            {{#if login}}
+                <li><a href="/user/{{userId}}">Home Page</a></li>
+                <li><a href="/logout">Logout</a></li>
+                {{#if isAdmin}}
+                    <li><a href="/drink/new">Add A Drink</a></li>
+                {{/if}}
+            {{else}}
                 <li><a href="/register">Registration</a></li>
                 <li><a href="/login">Log In</a></li>
-                <li><a href="/home">Home Page</a></li>
-            </ul>
-        </nav>
-    </header>
-    {{{body}}}
-<!--<script src="/public/js/register.js"></script>-->
+            {{/if}}
+        </ul>
+    </nav>
+</header>
+{{{body}}}
 </body>
 </html>
 

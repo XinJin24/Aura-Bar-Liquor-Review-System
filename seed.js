@@ -873,264 +873,264 @@ const reviewPictures = [
 
 //"whiskey", "vodka", "rum", "gin", "tequila", "brandy", "liqueur", "wine", "beer", "juice", "other"
 try {
-    // drink1 = await createDrink("Old Fashioned", "whiskey","- 2 oz bourbon or rye whiskey\n" +
-    //     "- 2 dashes Angostura bitters\n" +
-    //     "- 1 sugar cube or 1 tsp sugar\n" +
-    //     "- Orange twist garnish",drinkPicturePath1,10);
-    //
-    // drink2 = await createDrink("Margarita", "tequila","- 2 oz silver tequila\n" +
-    //     "- 1 oz Cointreau\n" +
-    //     "- 1 oz lime juice\n" +
-    //     "- Salt for the rim",drinkPicturePath2,12);
-    //
-    // drink3 = await createDrink("Cosmopolitan", "vodka", "- 1.5 oz citrus vodka\n" +
-    //     "- 1 oz Cointreau\n" +
-    //     "- .5 oz lime juice\n" +
-    //     "- .25 oz cranberry juice", drinkPicturePath3, 15);
-    //
-    // drink4 = await createDrink("Negroni", "gin","- 1 oz gin\n" +
-    //     "- 1 oz Campari\n" +
-    //     "- 1 oz sweet vermouth",drinkPicturePath4,19);
-    //
-    // drink5 = await createDrink("Moscow Mule", "vodka ","- 2 oz vodka\n" +
-    //     "- 4 to 6 oz ginger beer\n" +
-    //     "- .5 oz lime juice",drinkPicturePath5,10);
-    //
-    // drink6 = await createDrink("Martini", "vodka", "- 3 oz gin or vodka\n" +
-    //     "- .5 oz dry vermouth\n" +
-    //     "- Lemon peel or olive", drinkPicturePath6, 22);
-    //
-    // drink7 = await createDrink("Mojito", "rum", "- 3 mint leaves\n" +
-    //     "- 2 oz white rum\n" +
-    //     "- .75 oz lime juice\n" +
-    //     "- .5 oz simple syrup", drinkPicturePath7, 18);
-    //
-    // drink8 = await createDrink("Whiskey Sour", "whiskey", "- 2 oz whiskey\n" +
-    //     "- 1 oz lemon juice\n" +
-    //     "- 1 tsp sugar\n" +
-    //     "- 1 egg white (optional)", drinkPicturePath8, 14);
-    //
-    // drink9 = await createDrink("French 75", "gin", "- 2 oz gin\n" +
-    //     "- 2 dashes simple syrup\n" +
-    //     "- .5 oz lemon juice\n" +
-    //     "- Champagne", drinkPicturePath9, 20);
-    //
-    // drink10 = await createDrink("Manhattan", "whiskey", "- 2 oz rye whiskey\n" +
-    //     "- 1 oz sweet vermouth\n" +
-    //     "- 2 dashes Angostura bitters", drinkPicturePath10, 24);
-    //
-    // // New drinks
-    // drink11 = await createDrink("Spritz", "mix", "- Equal parts Aperol\n" +
-    //     "- Equal parts Cinzano Prosecco\n" +
-    //     "- Splash of Soda", drinkPicturePath11, 16);
-    //
-    // drink12 = await createDrink("Gimlet", "mix", "- 2 oz gin or vodka\n" +
-    //     "- .75 oz simple syrup\n" +
-    //     "- .75 oz lime juice", drinkPicturePath12, 14);
-    //
-    // drink13 = await createDrink("Sazerac", "whiskey", "- 2 oz rye whiskey\n" +
-    //     "- .5 oz simple syrup\n" +
-    //     "- 2 dashes Peychaud's bitters\n" +
-    //     "- Absinthe", drinkPicturePath13, 21);
-    //
-    // drink14 = await createDrink("Pimm's Cup", "mix", "- 50 ml (about 1.75 oz) Pimm's No.1\n" +
-    //     "- 150 ml (about 5 oz) lemonade\n" +
-    //     "- Mint, orange, strawberries\n" +
-    //     "- Cucumber to garnish", drinkPicturePath14, 18);
-    //
-    // drink15 = await createDrink("Aviation", "gin", "- 2 oz gin\n" +
-    //     "- .5 oz maraschino liqueur\n" +
-    //     "- .75 oz lemon juice\n" +
-    //     "- .25 oz creme de violette", drinkPicturePath15, 20);
-    //
-    // drink16 = await createDrink("Vesper", "mix", "- 3 oz gin\n" +
-    //     "- 1 oz vodka\n" +
-    //     "- .5 oz Lillet blanc", drinkPicturePath16, 25);
-    //
-    // drink17 = await createDrink("Tom Collins", "gin", "- 2 oz Old Tom gin\n" +
-    //     "- 1 oz lemon juice\n" +
-    //     "- .5 oz simple syrup\n" +
-    //     "- Club soda to top", drinkPicturePath17, 16);
-    //
-    // drink18 = await createDrink("Mimosa", "champagne", "- 2.5 oz champagne\n" +
-    //     "- 2.5 oz orange juice", drinkPicturePath18, 12);
-    //
-    // drink19 = await createDrink("Paloma", "tequila", "- 2 oz tequila\n" +
-    //     "- .5 oz lime juice\n" +
-    //     "- Grapefruit soda to top", drinkPicturePath19, 14);
-    //
-    // drink20 = await createDrink("Last Word", "mix", "- .75 oz gin\n" +
-    //     "- .75 oz maraschino liqueur\n" +
-    //     "- .75 oz green chartreuse\n" +
-    //     "- .75 oz lime juice", drinkPicturePath20, 22);
-    //
-    // drink21 = await createDrink("Sidecar", "brandy", "- 2 oz VS or VSOP Cognac\n" +
-    //     "- 1 oz Cointreau\n" +
-    //     "- .75 oz lemon juice", drinkPicturePath21, 18);
-    //
-    // drink22 = await createDrink("Mint Julep", "bourbon", "- 2 oz bourbon\n" +
-    //     "- 8-10 mint leaves\n" +
-    //     "- .25 oz simple syrup", drinkPicturePath22, 15);
-    //
-    // drink23 = await createDrink("Daiquiri", "rum", "- 2 oz light rum\n" +
-    //     "- 1 oz simple syrup\n" +
-    //     "- 1 oz lime juice", drinkPicturePath23, 14);
-    //
-    // drink24 = await createDrink("Dark 'n Stormy", "rum", "- 1.5 oz Gosling's Black Seal Rum\n" +
-    //     "- Ginger beer to top", drinkPicturePath24, 16);
-    //
-    // drink25 = await createDrink("Martinez", "gin", "- 1.5 oz Old Tom gin\n" +
-    //     "- 1.5 oz sweet vermouth\n" +
-    //     "- .25 oz Luxardo maraschino liqueur\n" +
-    //     "- 2 dashes Angostura or orange bitters", drinkPicturePath25, 20);
-    //
-    // drink26 = await createDrink("Boulevardier", "mix", "- 1 oz Campari\n" +
-    //     "- 1 oz sweet red vermouth\n" +
-    //     "- 1 oz to 1.5 oz bourbon (rye whiskey is often used instead in modern-day versions)", drinkPicturePath26, 19);
-    //
-    // drink27 = await createDrink("Gin and Tonic", "gin", "- 2 oz gin\n" +
-    //     "- 4 to 6 oz tonic water", drinkPicturePath27, 12);
-    //
-    // drink28 = await createDrink("Penicillin", "whiskey", "- 2 oz blended Scotch\n" +
-    //     "- .75 oz freshly squeezed lemon juice\n" +
-    //     "- .75 oz honey-ginger syrup\n" +
-    //     "- .25 oz Islay single malt Scotch", drinkPicturePath28, 23);
-    //
-    // drink29 = await createDrink("Champagne Cocktail", "champagne", "- 1 sugar cube\n" +
-    //     "- 3 dashes Angostura bitters\n" +
-    //     "- Top with champagne", drinkPicturePath29, 17);
-    //
-    // drink30 = await createDrink("Long Island Iced Tea", "mix", "- .5 oz gin\n" +
-    //     "- .5 oz white rum\n" +
-    //     "- .5 oz blanco tequila\n" +
-    //     "- .5 oz vodka\n" +
-    //     "- .5 oz triple sec\n" +
-    //     "- 1.25 oz homemade sour mix, or .75 oz freshly squeezed lemon juice and .5 oz simple syrup\n" +
-    //     "Coca Cola, to taste", drinkPicturePath30, 21);
-    //
-    // // New drinks
-    // drink31 = await createDrink("Greyhound", "mix", "- 2 oz vodka or gin\n" +
-    //     "- 4 oz grapefruit juice", drinkPicturePath31, 14);
-    //
-    // drink32 = await createDrink("Kir Royale", "mix", "- .5 oz creme de cassis\n" +
-    //     "- Champagne, to top (or another sparkling wine)", drinkPicturePath32, 18);
-    //
-    // drink33 = await createDrink("Bloody Mary", "vodka", "- 2.5 oz vodka\n" +
-    //     "- .75 cup tomato juice\n" +
-    //     "- 2 tbsp lemon juice\n" +
-    //     "- 2 tsp Worcestershire sauce\n" +
-    //     "- 2 dashes hot sauce (optional)\n" +
-    //     "- .25 tsp prepared horseradish\n" +
-    //     "- 1 pinch celery salt\n" +
-    //     "- 1 pinch black pepper", drinkPicturePath33, 16);
-    //
-    // drink34 = await createDrink("Mai Tai", "rum", "- Lime wedge, for rimming\n" +
-    //     "- .5 tbsp chili powder\n" +
-    //     "- 1 oz dark rum\n" +
-    //     "- 1 oz white rum\n" +
-    //     "- 1 oz freshly squeezed orange juice\n" +
-    //     "- Juice of 1 lime\n" +
-    //     "- 1 oz orange Curaçao\n" +
-    //     "- .5 oz orgeat syrup\n" +
-    //     "- 1 tbsp grenadine", drinkPicturePath34, 22);
-    //
-    // drink35 = await createDrink("Bellini", "mix", "- 1.5 oz fresh white peach puree\n" +
-    //     "- Prosecco, to top", drinkPicturePath35, 16);
-    //
-    // drink36 = await createDrink("Sex on the Beach", "mix", "- 1.5 oz vodka\n" +
-    //     "- .5 oz peach schnapps\n" +
-    //     "- 2 oz orange juice\n" +
-    //     "- 2 oz cranberry juice", drinkPicturePath36, 20);
-    //
-    // drink37 = await createDrink("White Russian", "mix", "- 1.5 oz vodka\n" +
-    //     "- .75 oz Kahlua\n" +
-    //     "- .75 oz heavy cream", drinkPicturePath37, 18);
-    //
-    // drink38 = await createDrink("Piña Colada", "rum", "- 2.5 oz rum\n" +
-    //     "- 3 oz pineapple juice\n" +
-    //     "- 1 oz coconut cream (usually Coco Lopez)", drinkPicturePath38, 15);
-    //
-    // drink39 = await createDrink("Bee's Knees", "gin", "- 2 oz gin\n" +
-    //     "- .75 oz freshly squeezed lemon juice\n" +
-    //     "- .5 oz honey syrup", drinkPicturePath39, 17);
-    //
-    // drink40 = await createDrink("Sangria", "mix", "- 1 (750-ml) bottle red wine\n" +
-    //     "- 1 cup orange juice\n" +
-    //     "- .5 cup brandy\n" +
-    //     "- .25 cup granulated sugar\n" +
-    //     "- 1 orange, sliced\n" +
-    //     "- 1 apple, sliced\n" +
-    //     "- 1 cup blueberries\n" +
-    //     "- 1 cup sliced strawberries\n" +
-    //     "- 1 (12-oz) can seltzer", drinkPicturePath40, 25);
-    //
-    // drink41 = await createDrink("Espresso Martini", "mix", "- 2 oz vodka\n" +
-    //     "- 1 oz coffee liquor\n" +
-    //     "- 1 oz espresso (or cold brew coffee concentrate)\n" +
-    //     "- .5 oz simple syrup", drinkPicturePath41, 21);
-    //
-    // drink42 = await createDrink("Death in the Afternoon", "mix", "- 1.5 oz absinthe\n" +
-    //     "- About 4.5 oz chilled Champagne", drinkPicturePath42, 24);
-    //
-    // drink43 = await createDrink("Screwdriver", "vodka", "- 1 to 2 oz vodka\n" +
-    //     "- Freshly squeezed orange juice, to top*", drinkPicturePath43, 14);
-    //
-    //
-    //
-    // user1 = await createUser("Mike", "River", "mike.river1@example.com", "9293335817", "Abc123!@#", profilePicture1, "admin");
-    // user2 = await createUser("John", "Doe", "john.doe2@example.com", "9293335817", "Abc123!@#", profilePicture2, "user");
-    // user3 = await createUser("Jane", "Smith", "jane.smith3@example.com", "9293335817", "Abc123!@#", profilePicture3, "admin");
-    // user4 = await createUser("Alice", "Taylor", "alice.taylor4@example.com", "9293335817", "Abc123!@#", profilePicture4, "user");
-    // user5 = await createUser("Bob", "Brown", "bob.brown5@example.com", "9293335817", "Abc123!@#", profilePicture5, "admin");
-    // user6 = await createUser("Emma", "Wilson", "emma.wilson6@example.com", "9293335817", "Abc123!@#", profilePicture6, "user");
-    // user7 = await createUser("Ethan", "Miller", "ethan.miller7@example.com", "9293335817", "Abc123!@#", profilePicture7, "admin");
-    // user8 = await createUser("Sophia", "Davis", "sophia.davis8@example.com", "9293335817", "Abc123!@#", profilePicture8, "user");
-    // user9 = await createUser("Noah", "Garcia", "noah.garcia9@example.com", "9293335817", "Abc123!@#", profilePicture9, "admin");
-    // user10 = await createUser("Liam", "Martinez", "liam.martinez10@example.com", "9293335817", "Abc123!@#", profilePicture10, "user");
-    //
-    // user11 = await createUser("Olivia", "Hernandez", "olivia.hernandez11@example.com", "9293335817", "Abc123!@#", profilePicture11, "admin");
-    // user12 = await createUser("William", "Moore", "william.moore12@example.com", "9293335817", "Abc123!@#", profilePicture12, "user");
-    // user13 = await createUser("Ava", "Jackson", "ava.jackson13@example.com", "9293335817", "Abc123!@#", profilePicture13, "admin");
-    // user14 = await createUser("Isabella", "Martin", "isabella.martin14@example.com", "9293335817", "Abc123!@#", profilePicture14, "user");
-    // user15 = await createUser("Mason", "Lee", "mason.lee15@example.com", "9293335817", "Abc123!@#", profilePicture15, "admin");
-    // user16 = await createUser("Sophie", "Perez", "sophie.perez16@example.com", "9293335817", "Abc123!@#", profilePicture16, "user");
-    // user17 = await createUser("Logan", "Thompson", "logan.thompson17@example.com", "9293335817", "Abc123!@#", profilePicture17, "admin");
-    // user18 = await createUser("Lucas", "White", "lucas.white18@example.com", "9293335817", "Abc123!@#", profilePicture18, "user");
-    // user19 = await createUser("Amelia", "Harris", "amelia.harris19@example.com", "9293335817", "Abc123!@#", profilePicture19, "admin");
-    // user20 = await createUser("Elijah", "Sanchez", "elijah.sanchez20@example.com", "9293335817", "Abc123!@#", profilePicture20, "user");
-    //
-    // user21 = await createUser("Charlotte", "Clark", "charlotte.clark21@example.com", "9293335817", "Abc123!@#", profilePicture21, "admin");
-    // user22 = await createUser("James", "Ramirez", "james.ramirez22@example.com", "9293335817", "Abc123!@#", profilePicture22, "user");
-    // user23 = await createUser("Harper", "Lewis", "harper.lewis23@example.com", "9293335817", "Abc123!@#", profilePicture23, "admin");
-    // user24 = await createUser("Benjamin", "Robinson", "benjamin.robinson24@example.com", "9293335817", "Abc123!@#", profilePicture24, "user");
-    // user25 = await createUser("Emily", "Walker", "emily.walker25@example.com", "9293335817", "Abc123!@#", profilePicture25, "admin");
-    // user26 = await createUser("Michael", "Young", "michael.young26@example.com", "9293335817", "Abc123!@#", profilePicture26, "user");
-    // user27 = await createUser("Evelyn", "Allen", "evelyn.allen27@example.com", "9293335817", "Abc123!@#", profilePicture27, "admin");
-    // user28 = await createUser("Alexander", "King", "alexander.king28@example.com", "9293335817", "Abc123!@#", profilePicture28, "user");
-    // user29 = await createUser("Mia", "Wright", "mia.wright29@example.com", "9293335817", "Abc123!@#", profilePicture29, "admin");
-    // user30 = await createUser("Matthew", "Scott", "matthew.scott30@example.com", "9293335817", "Abc123!@#", profilePicture30, "user");
-    //
-    // user31 = await createUser("Elizabeth", "Torres", "elizabeth.torres31@example.com", "9293335817", "Abc123!@#", profilePicture31, "admin");
-    // user32 = await createUser("Aiden", "Nguyen", "aiden.nguyen32@example.com", "9293335817", "Abc123!@#", profilePicture32, "user");
-    // user33 = await createUser("Abigail", "Hill", "abigail.hill33@example.com", "9293335817", "Abc123!@#", profilePicture33, "admin");
-    // user34 = await createUser("Samuel", "Flores", "samuel.flores34@example.com", "9293335817", "Abc123!@#", profilePicture34, "user");
-    // user35 = await createUser("Madison", "Green", "madison.green35@example.com", "9293335817", "Abc123!@#", profilePicture35, "admin");
-    // user36 = await createUser("Joseph", "Adams", "joseph.adams36@example.com", "9293335817", "Abc123!@#", profilePicture36, "user");
-    // user37 = await createUser("Scarlett", "Nelson", "scarlett.nelson37@example.com", "9293335817", "Abc123!@#", profilePicture37, "admin");
-    // user38 = await createUser("Carter", "Baker", "carter.baker38@example.com", "9293335817", "Abc123!@#", profilePicture38, "user");
-    // user39 = await createUser("Victoria", "Gonzalez", "victoria.gonzalez39@example.com", "9293335817", "Abc123!@#", profilePicture39, "admin");
-    // user40 = await createUser("Jayden", "Carter", "jayden.carter40@example.com", "9293335817", "Abc123!@#", profilePicture40, "user");
-    //
-    // user41 = await createUser("Gabriel", "Phillips", "gabriel.phillips41@example.com", "9293335817", "Abc123!@#", profilePicture41, "admin");
-    // user42 = await createUser("Zoey", "Evans", "zoey.evans42@example.com", "9293335817", "Abc123!@#", profilePicture42, "user");
-    // user43 = await createUser("Luke", "Turner", "luke.turner43@example.com", "9293335817", "Abc123!@#", profilePicture43, "admin");
-    // user44 = await createUser("Grace", "Parker", "grace.parker44@example.com", "9293335817", "Abc123!@#", profilePicture44, "user");
-    // user45 = await createUser("Jack", "Collins", "jack.collins45@example.com", "9293335817", "Abc123!@#", profilePicture45, "admin");
-    // user46 = await createUser("Layla", "Edwards", "layla.edwards46@example.com", "9293335817", "Abc123!@#", profilePicture46, "user");
-    // user47 = await createUser("Ryan", "Stewart", "ryan.stewart47@example.com", "9293335817", "Abc123!@#", profilePicture47, "admin");
-    // user48 = await createUser("Chloe", "Sanchez", "chloe.sanchez48@example.com", "9293335817", "Abc123!@#", profilePicture48, "user");
-    // user49 = await createUser("Henry", "Morris", "henry.morris49@example.com", "9293335817", "Abc123!@#", profilePicture49, "user");
-    // user50 = await createUser("Addison", "Nguyen", "addison.nguyen50@example.com", "9293335817", "Abc123!@#", profilePicture50, "user");
+    drink1 = await createDrink("Old Fashioned", "whiskey","- 2 oz bourbon or rye whiskey\n" +
+        "- 2 dashes Angostura bitters\n" +
+        "- 1 sugar cube or 1 tsp sugar\n" +
+        "- Orange twist garnish",drinkPicturePath1,10);
+
+    drink2 = await createDrink("Margarita", "tequila","- 2 oz silver tequila\n" +
+        "- 1 oz Cointreau\n" +
+        "- 1 oz lime juice\n" +
+        "- Salt for the rim",drinkPicturePath2,12);
+
+    drink3 = await createDrink("Cosmopolitan", "vodka", "- 1.5 oz citrus vodka\n" +
+        "- 1 oz Cointreau\n" +
+        "- .5 oz lime juice\n" +
+        "- .25 oz cranberry juice", drinkPicturePath3, 15);
+
+    drink4 = await createDrink("Negroni", "gin","- 1 oz gin\n" +
+        "- 1 oz Campari\n" +
+        "- 1 oz sweet vermouth",drinkPicturePath4,19);
+
+    drink5 = await createDrink("Moscow Mule", "vodka ","- 2 oz vodka\n" +
+        "- 4 to 6 oz ginger beer\n" +
+        "- .5 oz lime juice",drinkPicturePath5,10);
+
+    drink6 = await createDrink("Martini", "vodka", "- 3 oz gin or vodka\n" +
+        "- .5 oz dry vermouth\n" +
+        "- Lemon peel or olive", drinkPicturePath6, 22);
+
+    drink7 = await createDrink("Mojito", "rum", "- 3 mint leaves\n" +
+        "- 2 oz white rum\n" +
+        "- .75 oz lime juice\n" +
+        "- .5 oz simple syrup", drinkPicturePath7, 18);
+
+    drink8 = await createDrink("Whiskey Sour", "whiskey", "- 2 oz whiskey\n" +
+        "- 1 oz lemon juice\n" +
+        "- 1 tsp sugar\n" +
+        "- 1 egg white (optional)", drinkPicturePath8, 14);
+
+    drink9 = await createDrink("French 75", "gin", "- 2 oz gin\n" +
+        "- 2 dashes simple syrup\n" +
+        "- .5 oz lemon juice\n" +
+        "- Champagne", drinkPicturePath9, 20);
+
+    drink10 = await createDrink("Manhattan", "whiskey", "- 2 oz rye whiskey\n" +
+        "- 1 oz sweet vermouth\n" +
+        "- 2 dashes Angostura bitters", drinkPicturePath10, 24);
+
+    // New drinks
+    drink11 = await createDrink("Spritz", "mix", "- Equal parts Aperol\n" +
+        "- Equal parts Cinzano Prosecco\n" +
+        "- Splash of Soda", drinkPicturePath11, 16);
+
+    drink12 = await createDrink("Gimlet", "mix", "- 2 oz gin or vodka\n" +
+        "- .75 oz simple syrup\n" +
+        "- .75 oz lime juice", drinkPicturePath12, 14);
+
+    drink13 = await createDrink("Sazerac", "whiskey", "- 2 oz rye whiskey\n" +
+        "- .5 oz simple syrup\n" +
+        "- 2 dashes Peychaud's bitters\n" +
+        "- Absinthe", drinkPicturePath13, 21);
+
+    drink14 = await createDrink("Pimm's Cup", "mix", "- 50 ml (about 1.75 oz) Pimm's No.1\n" +
+        "- 150 ml (about 5 oz) lemonade\n" +
+        "- Mint, orange, strawberries\n" +
+        "- Cucumber to garnish", drinkPicturePath14, 18);
+
+    drink15 = await createDrink("Aviation", "gin", "- 2 oz gin\n" +
+        "- .5 oz maraschino liqueur\n" +
+        "- .75 oz lemon juice\n" +
+        "- .25 oz creme de violette", drinkPicturePath15, 20);
+
+    drink16 = await createDrink("Vesper", "mix", "- 3 oz gin\n" +
+        "- 1 oz vodka\n" +
+        "- .5 oz Lillet blanc", drinkPicturePath16, 25);
+
+    drink17 = await createDrink("Tom Collins", "gin", "- 2 oz Old Tom gin\n" +
+        "- 1 oz lemon juice\n" +
+        "- .5 oz simple syrup\n" +
+        "- Club soda to top", drinkPicturePath17, 16);
+
+    drink18 = await createDrink("Mimosa", "champagne", "- 2.5 oz champagne\n" +
+        "- 2.5 oz orange juice", drinkPicturePath18, 12);
+
+    drink19 = await createDrink("Paloma", "tequila", "- 2 oz tequila\n" +
+        "- .5 oz lime juice\n" +
+        "- Grapefruit soda to top", drinkPicturePath19, 14);
+
+    drink20 = await createDrink("Last Word", "mix", "- .75 oz gin\n" +
+        "- .75 oz maraschino liqueur\n" +
+        "- .75 oz green chartreuse\n" +
+        "- .75 oz lime juice", drinkPicturePath20, 22);
+
+    drink21 = await createDrink("Sidecar", "brandy", "- 2 oz VS or VSOP Cognac\n" +
+        "- 1 oz Cointreau\n" +
+        "- .75 oz lemon juice", drinkPicturePath21, 18);
+
+    drink22 = await createDrink("Mint Julep", "bourbon", "- 2 oz bourbon\n" +
+        "- 8-10 mint leaves\n" +
+        "- .25 oz simple syrup", drinkPicturePath22, 15);
+
+    drink23 = await createDrink("Daiquiri", "rum", "- 2 oz light rum\n" +
+        "- 1 oz simple syrup\n" +
+        "- 1 oz lime juice", drinkPicturePath23, 14);
+
+    drink24 = await createDrink("Dark 'n Stormy", "rum", "- 1.5 oz Gosling's Black Seal Rum\n" +
+        "- Ginger beer to top", drinkPicturePath24, 16);
+
+    drink25 = await createDrink("Martinez", "gin", "- 1.5 oz Old Tom gin\n" +
+        "- 1.5 oz sweet vermouth\n" +
+        "- .25 oz Luxardo maraschino liqueur\n" +
+        "- 2 dashes Angostura or orange bitters", drinkPicturePath25, 20);
+
+    drink26 = await createDrink("Boulevardier", "mix", "- 1 oz Campari\n" +
+        "- 1 oz sweet red vermouth\n" +
+        "- 1 oz to 1.5 oz bourbon (rye whiskey is often used instead in modern-day versions)", drinkPicturePath26, 19);
+
+    drink27 = await createDrink("Gin and Tonic", "gin", "- 2 oz gin\n" +
+        "- 4 to 6 oz tonic water", drinkPicturePath27, 12);
+
+    drink28 = await createDrink("Penicillin", "whiskey", "- 2 oz blended Scotch\n" +
+        "- .75 oz freshly squeezed lemon juice\n" +
+        "- .75 oz honey-ginger syrup\n" +
+        "- .25 oz Islay single malt Scotch", drinkPicturePath28, 23);
+
+    drink29 = await createDrink("Champagne Cocktail", "champagne", "- 1 sugar cube\n" +
+        "- 3 dashes Angostura bitters\n" +
+        "- Top with champagne", drinkPicturePath29, 17);
+
+    drink30 = await createDrink("Long Island Iced Tea", "mix", "- .5 oz gin\n" +
+        "- .5 oz white rum\n" +
+        "- .5 oz blanco tequila\n" +
+        "- .5 oz vodka\n" +
+        "- .5 oz triple sec\n" +
+        "- 1.25 oz homemade sour mix, or .75 oz freshly squeezed lemon juice and .5 oz simple syrup\n" +
+        "Coca Cola, to taste", drinkPicturePath30, 21);
+
+    // New drinks
+    drink31 = await createDrink("Greyhound", "mix", "- 2 oz vodka or gin\n" +
+        "- 4 oz grapefruit juice", drinkPicturePath31, 14);
+
+    drink32 = await createDrink("Kir Royale", "mix", "- .5 oz creme de cassis\n" +
+        "- Champagne, to top (or another sparkling wine)", drinkPicturePath32, 18);
+
+    drink33 = await createDrink("Bloody Mary", "vodka", "- 2.5 oz vodka\n" +
+        "- .75 cup tomato juice\n" +
+        "- 2 tbsp lemon juice\n" +
+        "- 2 tsp Worcestershire sauce\n" +
+        "- 2 dashes hot sauce (optional)\n" +
+        "- .25 tsp prepared horseradish\n" +
+        "- 1 pinch celery salt\n" +
+        "- 1 pinch black pepper", drinkPicturePath33, 16);
+
+    drink34 = await createDrink("Mai Tai", "rum", "- Lime wedge, for rimming\n" +
+        "- .5 tbsp chili powder\n" +
+        "- 1 oz dark rum\n" +
+        "- 1 oz white rum\n" +
+        "- 1 oz freshly squeezed orange juice\n" +
+        "- Juice of 1 lime\n" +
+        "- 1 oz orange Curaçao\n" +
+        "- .5 oz orgeat syrup\n" +
+        "- 1 tbsp grenadine", drinkPicturePath34, 22);
+
+    drink35 = await createDrink("Bellini", "mix", "- 1.5 oz fresh white peach puree\n" +
+        "- Prosecco, to top", drinkPicturePath35, 16);
+
+    drink36 = await createDrink("Sex on the Beach", "mix", "- 1.5 oz vodka\n" +
+        "- .5 oz peach schnapps\n" +
+        "- 2 oz orange juice\n" +
+        "- 2 oz cranberry juice", drinkPicturePath36, 20);
+
+    drink37 = await createDrink("White Russian", "mix", "- 1.5 oz vodka\n" +
+        "- .75 oz Kahlua\n" +
+        "- .75 oz heavy cream", drinkPicturePath37, 18);
+
+    drink38 = await createDrink("Piña Colada", "rum", "- 2.5 oz rum\n" +
+        "- 3 oz pineapple juice\n" +
+        "- 1 oz coconut cream (usually Coco Lopez)", drinkPicturePath38, 15);
+
+    drink39 = await createDrink("Bee's Knees", "gin", "- 2 oz gin\n" +
+        "- .75 oz freshly squeezed lemon juice\n" +
+        "- .5 oz honey syrup", drinkPicturePath39, 17);
+
+    drink40 = await createDrink("Sangria", "mix", "- 1 (750-ml) bottle red wine\n" +
+        "- 1 cup orange juice\n" +
+        "- .5 cup brandy\n" +
+        "- .25 cup granulated sugar\n" +
+        "- 1 orange, sliced\n" +
+        "- 1 apple, sliced\n" +
+        "- 1 cup blueberries\n" +
+        "- 1 cup sliced strawberries\n" +
+        "- 1 (12-oz) can seltzer", drinkPicturePath40, 25);
+
+    drink41 = await createDrink("Espresso Martini", "mix", "- 2 oz vodka\n" +
+        "- 1 oz coffee liquor\n" +
+        "- 1 oz espresso (or cold brew coffee concentrate)\n" +
+        "- .5 oz simple syrup", drinkPicturePath41, 21);
+
+    drink42 = await createDrink("Death in the Afternoon", "mix", "- 1.5 oz absinthe\n" +
+        "- About 4.5 oz chilled Champagne", drinkPicturePath42, 24);
+
+    drink43 = await createDrink("Screwdriver", "vodka", "- 1 to 2 oz vodka\n" +
+        "- Freshly squeezed orange juice, to top*", drinkPicturePath43, 14);
+
+
+
+    user1 = await createUser("Mike", "River", "mike.river1@example.com", "9293335817", "Abc123!@#", profilePicture1, "admin");
+    user2 = await createUser("John", "Doe", "john.doe2@example.com", "9293335817", "Abc123!@#", profilePicture2, "user");
+    user3 = await createUser("Jane", "Smith", "jane.smith3@example.com", "9293335817", "Abc123!@#", profilePicture3, "admin");
+    user4 = await createUser("Alice", "Taylor", "alice.taylor4@example.com", "9293335817", "Abc123!@#", profilePicture4, "user");
+    user5 = await createUser("Bob", "Brown", "bob.brown5@example.com", "9293335817", "Abc123!@#", profilePicture5, "admin");
+    user6 = await createUser("Emma", "Wilson", "emma.wilson6@example.com", "9293335817", "Abc123!@#", profilePicture6, "user");
+    user7 = await createUser("Ethan", "Miller", "ethan.miller7@example.com", "9293335817", "Abc123!@#", profilePicture7, "admin");
+    user8 = await createUser("Sophia", "Davis", "sophia.davis8@example.com", "9293335817", "Abc123!@#", profilePicture8, "user");
+    user9 = await createUser("Noah", "Garcia", "noah.garcia9@example.com", "9293335817", "Abc123!@#", profilePicture9, "admin");
+    user10 = await createUser("Liam", "Martinez", "liam.martinez10@example.com", "9293335817", "Abc123!@#", profilePicture10, "user");
+
+    user11 = await createUser("Olivia", "Hernandez", "olivia.hernandez11@example.com", "9293335817", "Abc123!@#", profilePicture11, "admin");
+    user12 = await createUser("William", "Moore", "william.moore12@example.com", "9293335817", "Abc123!@#", profilePicture12, "user");
+    user13 = await createUser("Ava", "Jackson", "ava.jackson13@example.com", "9293335817", "Abc123!@#", profilePicture13, "admin");
+    user14 = await createUser("Isabella", "Martin", "isabella.martin14@example.com", "9293335817", "Abc123!@#", profilePicture14, "user");
+    user15 = await createUser("Mason", "Lee", "mason.lee15@example.com", "9293335817", "Abc123!@#", profilePicture15, "admin");
+    user16 = await createUser("Sophie", "Perez", "sophie.perez16@example.com", "9293335817", "Abc123!@#", profilePicture16, "user");
+    user17 = await createUser("Logan", "Thompson", "logan.thompson17@example.com", "9293335817", "Abc123!@#", profilePicture17, "admin");
+    user18 = await createUser("Lucas", "White", "lucas.white18@example.com", "9293335817", "Abc123!@#", profilePicture18, "user");
+    user19 = await createUser("Amelia", "Harris", "amelia.harris19@example.com", "9293335817", "Abc123!@#", profilePicture19, "admin");
+    user20 = await createUser("Elijah", "Sanchez", "elijah.sanchez20@example.com", "9293335817", "Abc123!@#", profilePicture20, "user");
+
+    user21 = await createUser("Charlotte", "Clark", "charlotte.clark21@example.com", "9293335817", "Abc123!@#", profilePicture21, "admin");
+    user22 = await createUser("James", "Ramirez", "james.ramirez22@example.com", "9293335817", "Abc123!@#", profilePicture22, "user");
+    user23 = await createUser("Harper", "Lewis", "harper.lewis23@example.com", "9293335817", "Abc123!@#", profilePicture23, "admin");
+    user24 = await createUser("Benjamin", "Robinson", "benjamin.robinson24@example.com", "9293335817", "Abc123!@#", profilePicture24, "user");
+    user25 = await createUser("Emily", "Walker", "emily.walker25@example.com", "9293335817", "Abc123!@#", profilePicture25, "admin");
+    user26 = await createUser("Michael", "Young", "michael.young26@example.com", "9293335817", "Abc123!@#", profilePicture26, "user");
+    user27 = await createUser("Evelyn", "Allen", "evelyn.allen27@example.com", "9293335817", "Abc123!@#", profilePicture27, "admin");
+    user28 = await createUser("Alexander", "King", "alexander.king28@example.com", "9293335817", "Abc123!@#", profilePicture28, "user");
+    user29 = await createUser("Mia", "Wright", "mia.wright29@example.com", "9293335817", "Abc123!@#", profilePicture29, "admin");
+    user30 = await createUser("Matthew", "Scott", "matthew.scott30@example.com", "9293335817", "Abc123!@#", profilePicture30, "user");
+
+    user31 = await createUser("Elizabeth", "Torres", "elizabeth.torres31@example.com", "9293335817", "Abc123!@#", profilePicture31, "admin");
+    user32 = await createUser("Aiden", "Nguyen", "aiden.nguyen32@example.com", "9293335817", "Abc123!@#", profilePicture32, "user");
+    user33 = await createUser("Abigail", "Hill", "abigail.hill33@example.com", "9293335817", "Abc123!@#", profilePicture33, "admin");
+    user34 = await createUser("Samuel", "Flores", "samuel.flores34@example.com", "9293335817", "Abc123!@#", profilePicture34, "user");
+    user35 = await createUser("Madison", "Green", "madison.green35@example.com", "9293335817", "Abc123!@#", profilePicture35, "admin");
+    user36 = await createUser("Joseph", "Adams", "joseph.adams36@example.com", "9293335817", "Abc123!@#", profilePicture36, "user");
+    user37 = await createUser("Scarlett", "Nelson", "scarlett.nelson37@example.com", "9293335817", "Abc123!@#", profilePicture37, "admin");
+    user38 = await createUser("Carter", "Baker", "carter.baker38@example.com", "9293335817", "Abc123!@#", profilePicture38, "user");
+    user39 = await createUser("Victoria", "Gonzalez", "victoria.gonzalez39@example.com", "9293335817", "Abc123!@#", profilePicture39, "admin");
+    user40 = await createUser("Jayden", "Carter", "jayden.carter40@example.com", "9293335817", "Abc123!@#", profilePicture40, "user");
+
+    user41 = await createUser("Gabriel", "Phillips", "gabriel.phillips41@example.com", "9293335817", "Abc123!@#", profilePicture41, "admin");
+    user42 = await createUser("Zoey", "Evans", "zoey.evans42@example.com", "9293335817", "Abc123!@#", profilePicture42, "user");
+    user43 = await createUser("Luke", "Turner", "luke.turner43@example.com", "9293335817", "Abc123!@#", profilePicture43, "admin");
+    user44 = await createUser("Grace", "Parker", "grace.parker44@example.com", "9293335817", "Abc123!@#", profilePicture44, "user");
+    user45 = await createUser("Jack", "Collins", "jack.collins45@example.com", "9293335817", "Abc123!@#", profilePicture45, "admin");
+    user46 = await createUser("Layla", "Edwards", "layla.edwards46@example.com", "9293335817", "Abc123!@#", profilePicture46, "user");
+    user47 = await createUser("Ryan", "Stewart", "ryan.stewart47@example.com", "9293335817", "Abc123!@#", profilePicture47, "admin");
+    user48 = await createUser("Chloe", "Sanchez", "chloe.sanchez48@example.com", "9293335817", "Abc123!@#", profilePicture48, "user");
+    user49 = await createUser("Henry", "Morris", "henry.morris49@example.com", "9293335817", "Abc123!@#", profilePicture49, "user");
+    user50 = await createUser("Addison", "Nguyen", "addison.nguyen50@example.com", "9293335817", "Abc123!@#", profilePicture50, "user");
 
 
     const drinkIds = [];

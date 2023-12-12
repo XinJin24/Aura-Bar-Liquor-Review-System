@@ -1,3 +1,6 @@
+function redirectToPage(drinkId) {
+    window.location.href = '/drink/' + drinkId;
+}
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById("messageModal");
     const btn = document.getElementById("messageBtn");

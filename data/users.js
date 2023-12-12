@@ -45,11 +45,11 @@ export const createUser = async (
     if (ifExist) {
         throw `Error: ${email} is already registered, Please Login`;
     }
-    if(typeof profilePictureLocation === 'string'){
-        profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
+    if(!profilePictureLocation){
+        profilePictureLocation = "public/pictures/defaultUserProfilePicture.png"
     }
     else{
-        profilePictureLocation = await copyPictureAndReturnPath(profilePictureLocation);
+        profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
     }
     const user = {
         firstName: firstName,
@@ -123,7 +123,12 @@ export const updateUser = async (
         throw `Error: User with email ${email} not found`;
     }
     const oldProfilePictureLocation = user.profilePictureLocation;
-    profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
+    if(!profilePictureLocation){
+        profilePictureLocation = "public/pictures/defaultUserProfilePicture.png"
+    }
+    else{
+        profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
+    }
     const updatedUser = {
         firstName: firstName,
         lastName: lastName,
@@ -141,12 +146,8 @@ export const updateUser = async (
         throw `Error: Failed to update user with email ${email}`;
     }
     try {
-        if (oldProfilePictureLocation!=='') {
-            const currentFilePath = fileURLToPath(import.meta.url);
-            const currentDirPath = dirname(currentFilePath);
-            const absolutePath = join(currentDirPath.replace('data', 'public'), oldProfilePictureLocation);
-            await access(absolutePath);
-            await unlink(absolutePath);
+        if(oldProfilePictureLocation !=="public/pictures/defaultUserProfilePicture.png") {
+            await validation.deleteAPicture(oldProfilePictureLocation);
         }
     } catch (error) {
         throw `Error: Failed to delete old drink picture at ${oldProfilePictureLocation}`;
@@ -346,7 +347,8 @@ export const copyPictureAndReturnPath = async (file) => {
         const newPath = path.resolve(`./public/pictures/${imgName}`);
         await fs.writeFile(newPath, data);
         await fs.unlink(file.path);
-        return newPath;
+        // return newPath;
+        return `../public/pictures/${imgName}`;
     } catch (err) {
         throw  `Error: error when processing file: ${err.message}`;
     }

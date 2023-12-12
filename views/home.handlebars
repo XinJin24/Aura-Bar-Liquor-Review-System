@@ -8,9 +8,8 @@
 
     <form id="categoryForm" method="post">
         <label for="category">Drink Category:</label>
-        <input name="category" id="category"></input>
+        <input name="category" id="category">
         <button type="submit" class="btn btn-primary">Filter By Drink Category</button>
-
     </form>
     <form id="sortingForm" method="post">
         <label for="sorting">Select Order</label>
@@ -26,22 +25,10 @@
         <div class="col-md-12 text-right">
             <img src="{{userProfilePictureLocation}}" alt="Profile Picture" class="profile-picture" />
             <span>{{firstName}} {{lastName}}</span>
-            <a href="/logout" class="btn btn-primary">Logout</a>
-            <a href="/user/{{userId}}" class="btn btn-primary">User home</a>
         </div>
-    {{else}}
-        <div class="col-md-12 text-right">
-            <a href="/login" class="btn btn-primary">Login </a>
-            <a href="/register" class="btn btn-primary">Register</a>
-        </div>
-    {{/if}}
-
-    {{#if login}}
         <button id="messageBtn" class="btn btn-secondary">Send Message</button>
     {{/if}}
-
     <h1>{{title}}</h1>
-
     {{#if drinks.length}}
         <ul class="displaydrinks">
             {{#each drinks}}
@@ -69,9 +56,6 @@
             </form>
         </div>
     </div>
-
-
-
     <p>
         Start by highlighting the fact that there is a growing demand for information about bars and liquor products.
         People often want to know about the quality of service, pricing, ambiance, and the variety of drinks available.
@@ -79,10 +63,5 @@
         The project also aims to enhance the user experience for those looking for liquor options.
         By providing a user-friendly app, we're not only helping consumers find the best options but also saving their time and effort.
     </p>
-    <script>
-        function redirectToPage(drinkId) {
-            window.location.href = 'drink/' + drinkId;
-        }
-    </script>
     <script src="../public/js/home.js"></script>
 </div>

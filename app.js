@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 const staticDir = express.static(__dirname + '/public');
 app.use('/public', staticDir);
 app.use('/', staticDir);
+app.use(express.static('public'));
 
 const hbs = exphbs.create({
     defaultLayout: 'main',
@@ -75,6 +76,7 @@ app.use(session({
 //     req.session.destroy();
 //     return res.render('logout', { title: 'logout' });
 // });
+
 
 configRoutes(app);
 

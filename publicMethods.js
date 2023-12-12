@@ -1,4 +1,4 @@
-import {access, copyFile, mkdir} from 'fs/promises';
+import {access, copyFile, mkdir, unlink} from 'fs/promises';
 import {ObjectId} from "mongodb";
 import {dirname, join} from "path";
 import {fileURLToPath} from "url";
@@ -141,15 +141,12 @@ const exportedMethods = {
         if(typeof file === 'string'){
             try {
                 await access(file);
-
                 const currentFilePath = fileURLToPath(import.meta.url);
                 const currentDirPath = dirname(currentFilePath);
                 const picturesDir = join(currentDirPath, 'public', 'pictures');
                 await mkdir(picturesDir, { recursive: true });
-
                 const fileName = `${Date.now()}_${file.split("\\").pop()}`;
                 const newFilePath = join(picturesDir, fileName);
-
                 try {
                     //file already exist
                     await access(newFilePath);
@@ -164,7 +161,7 @@ const exportedMethods = {
                 throw `Error: Some error happened when processing your photos`;
             }
         }else{
-             await copyPictureAndReturnPath(file, valName);
+             return await copyPictureAndReturnPath(file, valName);
         }
     },
     validateArrayOfIds(Ids) {
@@ -315,6 +312,27 @@ const exportedMethods = {
             throw `Error: message should have more than 2 chars and less than 10 thousand chars`;
         }
         return message;
+    },
+    async deleteAPicture(filePath) {
+        if (filePath !== '') {
+            try{
+                console.log("old", filePath);
+                const currentFilePath = fileURLToPath(import.meta.url);
+                const currentDirPath = dirname(currentFilePath);
+                console.log("curr", currentDirPath);
+                const absolutePath = join(currentDirPath, filePath);
+                console.log("abs", absolutePath);
+                await access(absolutePath);
+                await unlink(absolutePath);
+                console.log("no problem")
+                return {pictureDeleted: true}
+            }catch (error){
+                console.log(error);
+            }
+
+        } else {
+            return {pictureDeleted: true}
+        }
     }
 
 

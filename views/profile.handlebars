@@ -8,11 +8,14 @@
         <p>{{user.phoneNumber}}</p>
         <label>Role:</label>
         <p>{{user.role}}</p>
+        <button id="editUserInfoBtn" class="btn btn-secondary">Edit My Info</button>
         {{!-- display reserved drinks --}}
         <h3>Reserved Drinks:</h3>
             <ul>
                 {{#each drinkReserved as |drink|}}
-                <li>{{drink}}</li>
+                    <li>{{drinkPictureLocation}}</li>
+                    <li>{{name}}</li>
+                    <button class="btn btn-primary" onclick="redirectToPage('drink/{{_id}}')">View Drink Details</button>
                 {{/each}}
             </ul>
 
@@ -24,10 +27,41 @@
                 <img src="{{drinkPicture}}" alt="drink Picture" class="drink-picture" />
                 <li>{{reviewText}}</li>
                 <li>{{timestamp}}</li>
+                <button class="btn btn-primary" onclick="redirectToPage('{{drinkId}}')">View Review Details</button>
             {{/each}}
         </ul>
     {{else}}
         <a href="/login">Please Log In To View Your Profile</a>
-    {{/if}}    
+    {{/if}}
+    <script src="../public/js/profile.js"></script>
+
+
+    <div id="editInfoModal" class="modal hidden-div">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Edit My Info</h2>
+            <div id="error" class="hidden-div"></div>
+            <form id="editInfoForm" enctype="multipart/form-data">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" value="{{user.firstName}}">
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" value="{{user.lastName}}">
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" value="{{user.email}}">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" value="{{user.phoneNumber}}">
+                <label for="oldPassword">Old Password:</label>
+                <input type="password" id="oldPassword" name="oldPassword">
+                <label for="newPassword">New Password:</label>
+                <input type="password" id="newPassword" name="newPassword">
+                <label for="confirmNewPassword">Confirm New Password:</label>
+                <input type="password" id="confirmNewPassword" name="confirmNewPassword">
+                <label for="photoInput">Profile Photo:</label>
+                <input type="file" id="photoInput" name="photoInput" accept="image/*">
+                <input type="submit" value="Update">
+            </form>
+        </div>
+    </div>
 
 </main>
+

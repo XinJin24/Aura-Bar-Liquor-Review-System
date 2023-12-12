@@ -184,27 +184,26 @@ export const getAllReviewsOnADrink = async (drinkId) => {
     if (!drink) {
         throw `Error: drink with drinkId ${drinkId} not found`;
     }
-
-    const sortedReviews = drink.reviews.sort((a, b) => {
-        return new Date(b.timestamp) - new Date(a.timestamp);
-    });
-
+    const reviewsOnThisDrink=drink.reviews;
     let reviewsArray = [];
 
-    for (let j = 0; j < sortedReviews.length; j++) {
-        const reviewId = sortedReviews[j].toString();
+    for (let j = 0; j < reviewsOnThisDrink.length; j++) {
+        const reviewId = reviewsOnThisDrink[j].toString();
         const reviewCollection = await reviews();
         const userCollection = await users();
         const review = await reviewCollection.findOne({_id: new ObjectId(reviewId)});
         const user = await userCollection.findOne({_id: new ObjectId(review.userId)});
         const singleReview ={};
-        singleReview.userProfilePictureLocation = user.userProfilePictureLocation;
+        singleReview.userProfilePictureLocation = user.profilePictureLocation;
         singleReview.owner = user.firstName +" " + user.lastName;
         singleReview.reviewText = review.reviewText;
-        singleReview.timestamp = review.timestamp;
+        singleReview.timestamp = review.timeStamp;
         reviewsArray.push(singleReview);
     }
-    return reviewsArray;
+    const sortedReviews = reviewsArray.sort((a, b) => {
+        return new Date(b.timestamp) - new Date(a.timestamp);
+    });
+    return sortedReviews;
 };
 
 export const increaseReservedCounts = async (
