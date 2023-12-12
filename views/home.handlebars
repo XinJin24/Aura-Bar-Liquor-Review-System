@@ -1,4 +1,4 @@
-<div>
+
 <!--    <form id="nameForm" method="post">-->
 <!--        <label for="name">Drink Name:</label>-->
 <!--        <input name="name" id="name"></input>-->
@@ -21,6 +21,7 @@
 <!--        <button type="submit" class="btn btn-primary">sort</button>-->
 <!--    </form>-->
 
+<div>
     {{#if login}}
         <div class="col-md-12 text-right">
             <img src="{{userProfilePictureLocation}}" alt="Profile Picture" class="profile-picture" />
@@ -33,6 +34,18 @@
     <button id="showAllButton" class="btn btn-primary" style="display: none;">Show All</button>
     <input type="text" id="searchBar" placeholder="Search drinks...">
     <button id="searchButton">Search</button>
+
+    <div>
+        <label for="sortOptions">Sort By:</label>
+        <select id="sortOptions">
+            <option value="priceDesc">Price (High to Low)</option>
+            <option value="priceAsc">Price (Low to High)</option>
+            <option value="topRating">Top Rating</option>
+            <option value="topReserved">Top Reserved</option>
+        </select>
+        <button id="sortButton" class="btn btn-primary">Sort</button>
+    </div>
+
 
     <div id="drinksContainer">
         {{#if drinks.length}}

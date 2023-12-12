@@ -40,6 +40,45 @@ function fetchAllDrinks() {
     });
 }
 
+function fetchAndSortDrinks(sortBy) {
+    $.ajax({
+        type: "GET",
+        url: "/sortDrinks",
+        data: { sortBy: sortBy },
+        success: function(drinks) {
+            const drinksContainer = document.getElementById('drinksContainer');
+            drinksContainer.innerHTML = '';
+
+            if (drinks.length === 0) {
+                drinksContainer.innerHTML = '<p>No drinks available</p>';
+                return;
+            }
+            const ul = document.createElement('ul');
+            ul.className = 'displaydrinks';
+
+            drinks.forEach(drink => {
+                const li = document.createElement('li');
+                li.className = 'alldrinks';
+                li.innerHTML = `
+                    <h2>${drink.name}</h2>
+                    <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
+                    <p>Category: ${drink.category}</p>
+                    <p>Rating: ${drink.rating}</p>
+                    <p>Price: ${drink.price}</p>
+                    <p>Reserved Counts: ${drink.reservedCounts}</p>
+                    <button class="btn btn-primary" onclick="redirectToPage('${drink._id}')">View Details</button>
+                `;
+                ul.appendChild(li);
+            });
+
+            drinksContainer.appendChild(ul);
+        },
+        error: function(error) {
+            console.error("Error fetching sorted drinks:", error);
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById("messageModal");
     const btn = document.getElementById("messageBtn");
@@ -47,21 +86,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById("searchButton");
     const searchBar = document.getElementById("searchBar");
     const showAllButton = document.getElementById('showAllButton');
+    const sortButton = document.getElementById('sortButton');
+    const sortOptions = document.getElementById('sortOptions');
 
     if (searchButton) {
         searchButton.addEventListener('click', function() {
-            // ... existing AJAX call for search ...
-            showAllButton.style.display = 'block'; // Show the "Show All" button after search
+            showAllButton.style.display = 'block';
         });
     }
 
     if (showAllButton) {
         showAllButton.addEventListener('click', function() {
-            // Fetch all drinks (you might need to write a separate function or AJAX call for this)
-            fetchAllDrinks(); // This is a function that you will need to define to fetch all drinks
-            showAllButton.style.display = 'none'; // Hide the "Show All" button
+            fetchAllDrinks();
+            showAllButton.style.display = 'none';
         });
     }
+
+    sortButton.addEventListener('click', function() {
+        console.log("Sort button clicked, option:", sortOptions.value);
+        const selectedOption = sortOptions.value;
+        fetchAndSortDrinks(selectedOption);
+    });
 
     if (btn) {
         btn.onclick = function () {

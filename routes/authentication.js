@@ -343,8 +343,31 @@ router.
             drink.editable = true;
         }
     }
-
     return res.status(200).json(availableDrinks);
 });
+
+
+router.route('/sortDrinks').get(async (req, res) => {
+    const sortBy = req.query.sortBy;
+    let drinks = await getAllDrinks();
+    drinks = drinks.filter(drink => drink.available);
+
+    if (sortBy === 'priceDesc') {
+        drinks =  drinks.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'priceAsc') {
+        drinks =  drinks.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'topRating') {
+        drinks =  drinks.sort((a, b) => b.rating - a.rating);
+    } else if (sortBy === 'topReserved') {
+        drinks =  drinks.sort((a, b) => b.reservedCounts - a.reservedCounts);
+    }
+    if (req.session.user && req.session.user.role === "admin") {
+        for (let drink of drinks) {
+            drink.editable = true;
+        }
+    }
+    return res.status(200).json(drinks);
+});
+
 
 export default router;
