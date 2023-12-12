@@ -314,17 +314,16 @@ const exportedMethods = {
         return message;
     },
     async deleteAPicture(filePath) {
+        if(filePath ==="public/pictures/defaultUserProfilePicture.png"){
+            return {pictureDeleted: true}
+        }
         if (filePath !== '') {
             try{
-                console.log("old", filePath);
                 const currentFilePath = fileURLToPath(import.meta.url);
                 const currentDirPath = dirname(currentFilePath);
-                console.log("curr", currentDirPath);
-                const absolutePath = join(currentDirPath, filePath);
-                console.log("abs", absolutePath);
+                const absolutePath = currentDirPath+filePath;
                 await access(absolutePath);
                 await unlink(absolutePath);
-                console.log("no problem")
                 return {pictureDeleted: true}
             }catch (error){
                 console.log(error);

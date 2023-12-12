@@ -1,9 +1,9 @@
-import Router from "express"
+import Router, {query} from "express"
 
 const router = Router();
 import validation from "../publicMethods.js";
 import {createUser, getUserInfoByUserId, getUserPasswordById, loginUser} from "../data/users.js";
-import {getAllDrinks, getDrinkInfoByName, getDrinkInfoByCategory, getDrinkInfoByRating} from "../data/drinks.js";
+import {getAllDrinks} from "../data/drinks.js";
 import xss from "xss";
 import AWS from 'aws-sdk';
 import multer from "multer";
@@ -40,17 +40,22 @@ router
     let userProfilePictureLocation = null;
     let login = false;
     let isAdmin = false;
+
+
     if (req.session.user) {
         login = true;
         userId = req.session.user.userId;
-        userFirstName = req.session.user.firstName;
-        userLstName = req.session.user.lastName;
-        userProfilePictureLocation = req.session.user.profilePictureLocation
         if (req.session.user.role === "admin") {
             isAdmin = true;
         }
+        const user = await getUserInfoByUserId(userId);
+        userFirstName = user.firstName;
+        userLstName = user.lastName;
+        userProfilePictureLocation = user.profilePictureLocation;
     }
-    const allDrinks = await getAllDrinks();
+    let allDrinks = await getAllDrinks();
+    allDrinks = allDrinks.filter(drink => drink.available);
+
     if (req.session.user && req.session.user.role === "admin") {
         for (let drink of allDrinks) {
             drink.editable = true;
@@ -61,56 +66,56 @@ router
         lastName: userLstName, userProfilePictureLocation: userProfilePictureLocation, login: login, isAdmin: isAdmin
     });
 })
-    .post(async (req, res) => {
-        let name = xss(req.body.name);
-        let category = xss(req.body.category);
-        let rating = xss(req.body.rating);
-        if (!name && !category && !rating) {
-            res.status(400).render('home', {
-                title: "Search error", message: 'Sort/Filter missing'
-            });
-        }
-        try {
-            name = validation.validateName(name, "drinkName");
-            category = validation.validateDrinkCategory(category, "drinkCategory");
-            rating = validation.validateRating(rating);
-        } catch (error) {
-            return res.status(400).render('error', {
-                title: "InputError", message: error
-            })
-        }
-
-        try {//  let categoryList = await getDrinkInfoByCategory(category); let ratingList = await getDrinkInfoByRating(rating);
-
-            if (name) {
-                let nameList = await getDrinkInfoByName(name); //drinkname?
-                if (nameList.length === 0) {
-                    return res.render('home', {title: "Profile", message: "Not found"});
-                } else {
-                    return res.render('home', {title: "Profile", sortTerm: nameList});
-                }
-            } else if (category) {
-                let categoryList = await getDrinkInfoByCategory(category); //drinkname?
-                if (categoryList.length === 0) {
-                    return res.render('home', {title: "Profile", message: "Not found"});
-                } else {
-                    return res.render('home', {title: "Profile", sortTerm: categoryList});
-                }
-            } else if (rating) {
-                let ratingList = await getDrinkInfoByRating(rating); //drinkname?
-                if (ratingList.length === 0) {
-                    return res.render('home', {title: "Profile", message: "Not found"});
-                } else {
-                    return res.render('home', {title: "Profile", sortTerm: ratingList});
-                }
-            } else {
-                return res.status(500).render('home', {title: "error", message: "Internal Server Error"});
-            }
-        } catch (error) {
-            console.error(error);
-            return res.status(500).render('error', {title: "Error", message: "Validation Error: getDrinkInfoByName"})
-        }
-    })
+    // .post(async (req, res) => {
+    //     let name = xss(req.body.name);
+    //     let category = xss(req.body.category);
+    //     let rating = xss(req.body.rating);
+    //     if (!name && !category && !rating) {
+    //         res.status(400).render('home', {
+    //             title: "Search error", message: 'Sort/Filter missing'
+    //         });
+    //     }
+    //     try {
+    //         name = validation.validateName(name, "drinkName");
+    //         category = validation.validateDrinkCategory(category, "drinkCategory");
+    //         rating = validation.validateRating(rating);
+    //     } catch (error) {
+    //         return res.status(400).render('error', {
+    //             title: "InputError", message: error
+    //         })
+    //     }
+    //
+    //     try {//  let categoryList = await getDrinkInfoByCategory(category); let ratingList = await getDrinkInfoByRating(rating);
+    //
+    //         if (name) {
+    //             let nameList = await getDrinkInfoByName(name); //drinkname?
+    //             if (nameList.length === 0) {
+    //                 return res.render('home', {title: "Profile", message: "Not found"});
+    //             } else {
+    //                 return res.render('home', {title: "Profile", sortTerm: nameList});
+    //             }
+    //         } else if (category) {
+    //             let categoryList = await getDrinkInfoByCategory(category); //drinkname?
+    //             if (categoryList.length === 0) {
+    //                 return res.render('home', {title: "Profile", message: "Not found"});
+    //             } else {
+    //                 return res.render('home', {title: "Profile", sortTerm: categoryList});
+    //             }
+    //         } else if (rating) {
+    //             let ratingList = await getDrinkInfoByRating(rating); //drinkname?
+    //             if (ratingList.length === 0) {
+    //                 return res.render('home', {title: "Profile", message: "Not found"});
+    //             } else {
+    //                 return res.render('home', {title: "Profile", sortTerm: ratingList});
+    //             }
+    //         } else {
+    //             return res.status(500).render('home', {title: "error", message: "Internal Server Error"});
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //         return res.status(500).render('error', {title: "Error", message: "Validation Error: getDrinkInfoByName"})
+    //     }
+    // })
 
 
 router
@@ -300,5 +305,46 @@ router
             res.status(401).json({ message: 'Error: User not logged in' });
         }
     })
+
+
+router.
+    route('/search').get(async (req, res) => {
+    const keyword = req.query.query;
+    let drinks = await getAllDrinks();
+    let availableDrinks = drinks.filter(drink => drink.available);
+
+    let filteredDrink = availableDrinks;
+
+    if (keyword) {
+        filteredDrink = availableDrinks.filter(drink =>
+            drink.name.toLowerCase().includes(keyword.toLowerCase()) ||
+            drink.category.toLowerCase().includes(keyword.toLowerCase()) ||
+            drink.recipe.toLowerCase().includes(keyword.toLowerCase())
+        );
+    }
+
+    if (req.session.user && req.session.user.role === "admin") {
+        for (let drink of filteredDrink) {
+            drink.editable = true;
+        }
+    }
+
+    return res.status(200).json(filteredDrink);
+});
+
+
+router.
+    route('/getAllDrinks').get(async (req, res) => {
+    let drinks = await getAllDrinks();
+    let availableDrinks = drinks.filter(drink => drink.available);
+
+    if (req.session.user && req.session.user.role === "admin") {
+        for (let drink of availableDrinks) {
+            drink.editable = true;
+        }
+    }
+
+    return res.status(200).json(availableDrinks);
+});
 
 export default router;
