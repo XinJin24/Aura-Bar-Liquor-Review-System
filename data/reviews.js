@@ -42,7 +42,6 @@ export const createReview = async (
     }
 
     const updateDrinkRating = await updateAllDrinkRating();
-
     if (updateDrinkRating.updatedAllDrinkRating !==true) {
         throw "Error: Some issue happened when updating all drinks' rating"
     }

@@ -1,6 +1,6 @@
 import {
     addReviewIdToADrink,
-    createDrink, getAllDrinks,
+    createDrink, getAllDrinks, updateAllDrinkRating,
 } from "./data/drinks.js"
 import {fileURLToPath} from "url";
 import {dirname, join} from "path";
@@ -1152,7 +1152,7 @@ try {
         const randomDrinkId = drinkIds[Math.floor(Math.random() * drinkIds.length)];
         const randomUserId = userIds[Math.floor(Math.random() * userIds.length)];
         const randomReviewText = reviewTexts[Math.floor(Math.random() * reviewTexts.length)];
-        const randomRating = (Math.random() * 5).toFixed(1); // Random rating between 0 and 5
+        const randomRating = (Math.random() * 5).toFixed(1);
         const randomReviewPicture = reviewPictures[Math.floor(Math.random() * reviewPictures.length)];
 
         await createReview(randomDrinkId, randomUserId, randomReviewText, randomRating, randomReviewPicture);
@@ -1166,6 +1166,7 @@ try {
         await addReviewIdToAUser(reviewId, userId);
         await addReviewIdToADrink(reviewId,drinkId);
     }
+    await updateAllDrinkRating();
 
 }catch (error){
     console.log(error);
