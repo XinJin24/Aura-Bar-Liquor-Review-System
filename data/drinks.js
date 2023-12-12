@@ -270,40 +270,36 @@ export const reserveDrink = async (
 }
 
 export const updateAllDrinkRating = async () => {
-
     try{
         const allDrinks = await getAllDrinks();
-
         for (const drink of allDrinks) {
-            const reviews = await getAllReviewsOnADrink(drink._id.toString());
-            if(reviews.length === 0 || reviews === undefined){
-                continue;
-            }
-            const reviewCount = reviews.length;
-            let totalRating = 0;
-            for (const review of reviews) {
-                const oneReview = await getReviewInfoByReviewId(review);
-                totalRating += oneReview.rating;
-            }
-            const rating = (totalRating / reviewCount).toFixed(2);
-
-
-            const updatedDrinkRating = {
-                rating: rating,
-            };
-            const drinkCollection = await drinks();
-            const updateDrink = await drinkCollection.updateOne(
-                { _id: drink._id },
-                { $set: updatedDrinkRating }
-            );
-            if (updateDrink.modifiedCount === 0) {
-                throw `Error: Failed to update all drinks' ratings `;
+            const reviews = drink.reviews;
+            if(reviews.length !== 0){
+                const reviewCount = reviews.length;
+                let totalRating = 0;
+                for (const review of reviews) {
+                    const oneReview = await getReviewInfoByReviewId(review);
+                    totalRating += oneReview.rating;
+                }
+                const rating = (totalRating / reviewCount).toFixed(1);
+                const updatedDrinkRating = {
+                    rating: rating,
+                };
+                const drinkCollection = await drinks();
+                const updateDrink = await drinkCollection.updateOne(
+                    { _id: drink._id },
+                    { $set: updatedDrinkRating }
+                );
+                if (updateDrink.modifiedCount === 0) {
+                    throw `Error: Failed to update all drinks' ratings `;
+                }
             }
         }
+        return { updatedAllDrinkRating: true };
     }catch (error){
             throw "Error: Some problem occurred when updating all drinks review."
     }
-    return { updatedAllDrinkRating: true };
+
 };
 
 export const addReviewIdToADrink = async (

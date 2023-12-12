@@ -59,6 +59,8 @@ router
                 //render drink, review, user info to user home page
                 return res.render('profile',
                     {
+                        isAdmin: req.session.user.role === "admin",
+                        login:true,
                         title: "Profile",
                         user: req.session.user,
                         drinkReserved: drinkReservedArray,

@@ -318,7 +318,7 @@ const exportedMethods = {
             try{
                 const currentFilePath = fileURLToPath(import.meta.url);
                 const currentDirPath = dirname(currentFilePath);
-                const absolutePath = currentDirPath+filePath;
+                const absolutePath = currentDirPath + filePath.replace("..","");
                 await access(absolutePath);
                 await unlink(absolutePath);
                 return {pictureDeleted: true}
@@ -330,7 +330,5 @@ const exportedMethods = {
             return {pictureDeleted: true}
         }
     }
-
-
 }
 export default exportedMethods;
