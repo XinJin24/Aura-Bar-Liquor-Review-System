@@ -11,9 +11,6 @@ const exportedMethods = {
         id = id.trim();
         if (id.length === 0)
             throw `Error:${valName}cannot be an empty string or just spaces`;
-        if (!ObjectId.isValid(id)) {
-            throw `Error: ${valName} must be an valid ObjectId`;
-        }
         return id;
     },
     validateName(name, valName) {

@@ -2,7 +2,14 @@ import Router from "express";
 
 const router = Router();
 import validation from "../publicMethods.js";
-import {createDrink, deleteDrink, getAllReviewsOnADrink, getDrinkInfoByDrinkId, updateDrink} from "../data/drinks.js";
+import {
+    createDrink,
+    deleteDrink,
+    getAllReviewsOnADrink,
+    getDrinkInfoByDrinkId,
+    reserveDrink,
+    updateDrink
+} from "../data/drinks.js";
 import xss from "xss";
 
 
@@ -26,7 +33,7 @@ router
             res.status(403).render("error", {
                 errorMsg: "Sorry, You are not admin, hence you cannot add a drink...",
                 login: true,
-                isAdmin:false,
+                isAdmin: false,
                 title: "Authorization Error"
             });
         } else {
@@ -34,7 +41,7 @@ router
             return res.status(401).render("error", {
                 errorMsg: "Please Login to add a drink.",
                 login: false,
-                isAdmin:false,
+                isAdmin: false,
                 title: "Error"
             });
         }
@@ -91,9 +98,9 @@ router
         if (req.session.user) {
             //if the drinkId is wrong
             let drinkId = null;
-            try{
+            try {
                 drinkId = validation.validateId(req.params.id, "ID");
-            }catch(error){
+            } catch (error) {
                 return res.status(400).render("drinkInfo", {
                     error: error,
                     login: true,
@@ -107,10 +114,11 @@ router
 
                 const isAdmin = req.session.user.role === "admin";
                 return res.status(200).render('drinkInfo', {
+                    userId: req.session.user.userId,
                     title: "Drink Detail",
                     drinkInfo: drinkInfo,
                     reviews: reviews,
-                    login:true,
+                    login: true,
                     isAdmin: isAdmin
                 });
             } catch (error) {
@@ -131,36 +139,36 @@ router
     })
     .post(async (req, res) => {
         //post is to edit a drink
-        if(req.session.user && req.session.user.role ==="admin"){
+        if (req.session.user && req.session.user.role === "admin") {
             let drinkId = null;
             let name = null;
             let category = null;
             let recipe = null;
             let drinkPictureLocation = null;
             let price = null;
-            try{
+            try {
                 drinkId = validation.validateId(req.params._id, "drinkId");
                 name = validation.validateName(xss(req.body.name), "Drink Name");
                 category = validation.validateDrinkCategory(xss(req.body.category), "Drink Category")
                 recipe = validation.validateDrinkRecipe(xss(req.body.recipe));
                 drinkPictureLocation = validation.validateIfFileExist(xss(req.body.drinkPictureLocation));
                 price = validation.validatePrice(xss(req.body.price));
-            }catch (error){
+            } catch (error) {
                 return res.status(400).render("updateDrinkInfo", {
                     error: error,
                     login: true,
                     title: "Update Drink"
                 });
             }
-            try{
+            try {
                 const updatedDrink = await updateDrink(drinkId, name, category, recipe, drinkPictureLocation, price);
-                if(updatedDrink.updatedDrink===true){
-                    return res.status(200).redirect('/drinkInfo/'+drinkId);
-                }else{
+                if (updatedDrink.updatedDrink === true) {
+                    return res.status(200).redirect('/drinkInfo/' + drinkId);
+                } else {
                     throw "Error happened then updating a drink."
                 }
 
-            }catch (error){
+            } catch (error) {
                 console.error(error);
                 return res.status(500).render('error', {
                     title: "Error",
@@ -168,13 +176,13 @@ router
                 });
             }
             //if no admin,
-        } else if(req.session.user && req.session.user.role !=="admin"){
+        } else if (req.session.user && req.session.user.role !== "admin") {
             return res.status(401).render("error", {
                 errorMsg: "you do not have a privileges to edit a drink",
                 login: true,
                 title: "Error",
             });
-        }else{
+        } else {
             return res.status(401).render("error", {
                 errorMsg: "Olease login first to edit a drink",
                 login: false,
@@ -183,25 +191,25 @@ router
         }
     })
     .delete(async (req, res) => {
-        if(req.session.user && req.session.user.role ==="admin"){
+        if (req.session.user && req.session.user.role === "admin") {
             let drinkId = null;
-            try{
+            try {
                 drinkId = validation.validateId(req.params._id, "drinkId");
-            }catch (error){
+            } catch (error) {
                 return res.status(400).render("updateDrinkInfo", {
                     error: error,
                     login: true,
                     title: "Update Drink"
                 });
             }
-            try{
+            try {
                 const deletedDrink = await deleteDrink(drinkId);
-                if(deletedDrink.deleteDrink===true){
+                if (deletedDrink.deleteDrink === true) {
                     return res.status(200).redirect('/');
-                }else{
+                } else {
                     throw "Error happened then deleting a drink."
                 }
-            }catch (error){
+            } catch (error) {
                 console.error(error);
                 return res.status(500).render('error', {
                     title: "Error",
@@ -209,13 +217,13 @@ router
                 });
             }
             //if no admin,
-        } else if(req.session.user && req.session.user.role !=="admin"){
+        } else if (req.session.user && req.session.user.role !== "admin") {
             return res.status(401).render("error", {
                 errorMsg: "you do not have a privileges to delete a drink",
                 login: true,
                 title: "Error",
             });
-        }else{
+        } else {
             //if no logged in
             return res.status(401).render("error", {
                 errorMsg: "please login first to edit a drink",
@@ -225,7 +233,23 @@ router
         }
     });
 
-// if the user click on the edit button, it will direct the user to a new page exclusively for modifying the review information
 
+router
+    .post('/reserveDrink/:id', async (req, res) => {
+        if (req.session.user) {
+            try {
+                const drinkId = req.params.id;
+                const userId = req.session.user.userId;
+                await reserveDrink(userId, drinkId);
+                return res.status(200).send("Drink reserved successfully.");
+            } catch (error) {
+                console.error("Error reserving drink:", error);
+                return res.status(500).send("Error reserving drink.");
+            }
+        }else{
+            console.error("Error reserving drink:", error);
+            return res.status(401).send("Please Login in first to reverse a Drink");
+        }
+    });
 
 export default router;

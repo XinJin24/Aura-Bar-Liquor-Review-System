@@ -5,7 +5,6 @@ import {
     getUserInfoByEmail,
     getUserInfoByUserId,
     loginUser,
-    reserveDrink,
     updateUser
 
 } from "../data/users.js"

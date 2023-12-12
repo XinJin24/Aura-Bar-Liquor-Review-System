@@ -103,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     sortButton.addEventListener('click', function() {
-        console.log("Sort button clicked, option:", sortOptions.value);
         const selectedOption = sortOptions.value;
         fetchAndSortDrinks(selectedOption);
     });

@@ -37,12 +37,11 @@ router
                 }
                 let drinkReserved = await getAllDrinkReservedByUserId(userId);
                 let reviews = await getAllReviewsByUserId(userId);
-                // console.log(drinkReserved);
                 //store drink and review into a array and display them to frontend
                 let drinkReservedArray = [];
                 let reviewsArray = [];
                 for (let i = 0; i < drinkReserved.length; i++) {
-                    drinkReservedArray.push(await getDrinkInfoByDrinkId(drinkReserved[i].toString()));
+                    drinkReservedArray.push(await getDrinkInfoByDrinkId(drinkReserved[i].drinkId));
                 }
                 for (let j = 0; j < reviews.length; j++) {
                     const review = await getReviewInfoByReviewId(reviews[j].toString());

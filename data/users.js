@@ -292,53 +292,6 @@ export const deleteOneReviewFromUser = async (
     return true;
 }
 
-export const reserveDrink = async (
-    userId, drinkId
-)=>{
-    userId = validation.validateId(userId, "userId");
-    drinkId = validation.validateId(drinkId, "drinkId");
-
-    const userCollection = await users();
-    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
-    if (!user) {
-        throw `Error: User with ID ${userId} not found`;
-    }
-
-    const drinkCollection = await drinks();
-    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId) });
-
-    if (!drink) {
-        throw `Error: drink with ID ${drinkId} not found`;
-    }
-
-    if (!drink.available) {
-        throw `Error: drink with ID ${drinkId} not available, cannot reverse`;
-    }
-
-    const timestamp = validation.generateCurrentDate();
-    const reservedDrink = { drinkId, timestamp };
-    const updatedReservedDrinks = [...user.drinkReserved, reservedDrink];
-    const updateResult = await userCollection.updateOne(
-        { _id: user._id },
-        { $set: { drinkReserved: updatedReservedDrinks } }
-    );
-    if (updateResult.modifiedCount === 0) {
-        throw `Error: Failed to reserve drink for user with ID ${userId}`;
-    }
-
-    const newReservedCount = drink.reservedCounts + 1;
-    const updatedCounts = await drinkCollection.updateOne(
-        { _id: drink._id },
-        { $set: { reservedCounts: newReservedCount } }
-    );
-    if (updatedCounts.modifiedCount === 0) {
-        throw `Error: Failed to drink reserved count for user with drink ID ${drink._id}`;
-    }
-
-
-    return {reservedDrink, userId};
-}
-
 export const copyPictureAndReturnPath = async (file) => {
     try {
         const data = await fs.readFile(file.path);
@@ -347,7 +300,6 @@ export const copyPictureAndReturnPath = async (file) => {
         const newPath = path.resolve(`./public/pictures/${imgName}`);
         await fs.writeFile(newPath, data);
         await fs.unlink(file.path);
-        // return newPath;
         return `../public/pictures/${imgName}`;
     } catch (err) {
         throw  `Error: error when processing file: ${err.message}`;

@@ -226,37 +226,48 @@ export const increaseReservedCounts = async (
     }
     return { increaseReservedCounts: true };
 }
-export const reserveDrink = async (userId, drinkId) => {
+
+
+export const reserveDrink = async (
+    userId, drinkId
+)=>{
     userId = validation.validateId(userId, "userId");
     drinkId = validation.validateId(drinkId, "drinkId");
 
     const userCollection = await users();
     const user = await userCollection.findOne({ _id: new ObjectId(userId) });
-
     if (!user) {
         throw `Error: User with ID ${userId} not found`;
     }
 
+    const drinkCollection = await drinks();
+    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId) });
+
+    if (!drink) {
+        throw `Error: drink with ID ${drinkId} not found`;
+    }
+
+    if (!drink.available) {
+        throw `Error: drink with ID ${drinkId} not available, cannot reverse`;
+    }
+
     const timestamp = validation.generateCurrentDate();
     const reservedDrink = { drinkId, timestamp };
-
     const updatedReservedDrinks = [...user.drinkReserved, reservedDrink];
-
     const updateResult = await userCollection.updateOne(
         { _id: user._id },
         { $set: { drinkReserved: updatedReservedDrinks } }
     );
-
     if (updateResult.modifiedCount === 0) {
         throw `Error: Failed to reserve drink for user with ID ${userId}`;
     }
 
-    const increasedReservedCounts = await increaseReservedCounts(drinkId);
-    if(!increasedReservedCounts.increaseReservedCounts === true){
-        throw "Error: failed to increased Reserved Counts"
+    const increasedReservedCount = await increaseReservedCounts(drinkId);
+    if (increasedReservedCount.increaseReservedCounts !== true) {
+        throw `Error: Failed to drink reserved count for user with drink ID ${drink._id}`;
     }
-    return { reservedDrink, userId };
-};
+    return {reservedDrink: true};
+}
 
 export const updateAllDrinkRating = async () => {
 

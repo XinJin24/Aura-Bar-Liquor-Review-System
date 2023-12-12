@@ -1,5 +1,5 @@
 function redirectToPage(drinkId) {
-    window.location.href = '/drink/' + drinkId;
+    window.location.href =  drinkId;
 }
 
 let checkName = (strVal, valName) => {

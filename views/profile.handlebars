@@ -9,17 +9,15 @@
         <label>Role:</label>
         <p>{{user.role}}</p>
         <button id="editUserInfoBtn" class="btn btn-secondary">Edit My Info</button>
-        {{!-- display reserved drinks --}}
         <h3>Reserved Drinks:</h3>
             <ul>
                 {{#each drinkReserved as |drink|}}
-                    <li>{{drinkPictureLocation}}</li>
+                    <img src="{{drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
                     <li>{{name}}</li>
-                    <button class="btn btn-primary" onclick="redirectToPage('drink/{{_id}}')">View Drink Details</button>
+                    <button class="btn btn-primary" onclick="redirectToPage('/drink/{{_id}}')">View Drink Details</button>
                 {{/each}}
             </ul>
 
-        {{!-- display reviews --}}
         <h3>Reviews:</h3>
         <ul>
             {{#each reviews as |review|}}

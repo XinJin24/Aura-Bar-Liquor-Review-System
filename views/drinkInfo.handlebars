@@ -9,8 +9,8 @@
             <p>Recipe: {{drinkInfo.recipe}}</p>
             <p>Rating: {{drinkInfo.rating}}</p>
             <p>Price: {{drinkInfo.price}}</p>
-            <button class="btn btn-success" onclick="reserveDrink('{{_id}}')">Reserve</button>
             <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
+            <button class="btn btn-success" id="reserveButton" data-drinkid="{{drinkInfo._id}}">Reserve</button>
         </div>
 
         <div>
