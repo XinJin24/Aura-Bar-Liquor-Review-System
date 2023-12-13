@@ -259,6 +259,7 @@ const exportedMethods = {
         return recipe;
     },
     validatePrice(price, valName) {
+        price = Number(price);
         if (typeof price !== "number") {
             throw `Error: ${valName} must be a valid number.`;
         }

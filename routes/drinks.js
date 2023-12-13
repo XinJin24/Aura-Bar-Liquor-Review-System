@@ -55,11 +55,12 @@ router
             let drinkPictureLocation = null;
             let price = null;
             try {
-                name = validation.validateName(xss(req.body.name), "Drink Name");
+                name = validation.validateName(xss(req.body.name), "Drink Name");//改个名字，别叫name
                 category = validation.validateDrinkCategory(xss(req.body.category));
                 recipe = validation.validateDrinkRecipe(xss(req.body.recipe));
                 drinkPictureLocation = validation.validateIfFileExist(xss(req.body.drinkPictureLocation));
                 price = validation.validatePrice(xss(req.body.price));
+                console.log(price);
             } catch (error) {
                 return res.status(400).render("createDrink", {
                     error: error,

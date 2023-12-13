@@ -1,6 +1,3 @@
-import { access } from 'fs/promises';
-
-let drink_form = document.getElementById(drink_form);
 
 let checkName = (strVal) =>{
     if(!strVal){
@@ -31,8 +28,6 @@ let validateDrinkCategory = (category, valName) =>{
     if (!validCategories.includes(category)) {
         throw `category is not a valid category in this bar`;
     }
-
-    return category;
 }
 
 let validateDrinkRecipe = (recipe) =>{
@@ -43,17 +38,24 @@ let validateDrinkRecipe = (recipe) =>{
     if(recipe.length < 5 || recipe > 10000){
         throw `Error: recipe should have more than 5 chars and less than 10 thousand chars`;
     }
-    return recipe;
 }
 
 let validatePrice = (price) =>{
-    if (typeof price !== "number") {
-        throw `price must be a valid number.`;
+    console.log(price);
+    console.log(typeof price);
+    var converted = Number(price);
+    console.log(typeof converted);
+    if(isNaN(converted)){
+        throw `converted error`;
     }
-    if (price < 0) {
+    if (converted < 0) {
         throw `price cannot be a negative value.`;
     }
-    return price;
+    // return converted;
+    // if (typeof price !== "number") {
+    //     throw `price must be a valid number.`;
+    // }
+
 }
 
 let validateRating = (rating) =>{
@@ -68,81 +70,48 @@ let validateRating = (rating) =>{
     if (numericRating < 0 || numericRating > 5) {
         throw `rating should be between 0 and 5.`;
     }
-    return numericRating;
 }
 
-let checkIfFileExist = async (filePath, valName) => {
-    if (typeof filePath !== "string") {
-        throw `Error: ${valName} must be a valid string(no empty spaces)!`;
-    } else if(filePath.trim().length === 0){
-        return "";
-    }
-    try {
-        await access(filePath);
-        return filePath;
-    } catch (err) {
-        throw `Error: File at path ${filePath} is inaccessible.`;
-    }
-}
-
-let clientError4 = document.getElementById("clientError4");
-clientError4.style.display = 'none';
-let valid4 = false;
-
-drink_form.addEventListener('submit', async (event) =>{
-    if(!valid4){
+let valid3 = false;
+$('#error').hide()
+$('#drinkEdit_form').submit((event)=>{
+    if(!valid3)
+    {
         event.preventDefault();
         try{
-            if(document.getElementById("name")){
-                checkName(document.getElementById("name").value);
-            }
-            if(document.getElementById("category")){
-                validateDrinkCategory(document.getElementById("category").value);
-            }
-            if(document.getElementById("recipe")){
-                validateDrinkRecipe(document.getElementById("recipe").value);
-            }
-            if(document.getElementById("rating")){
-                validateRating(document.getElementById("rating").value);//rating
-            }
-            if(document.getElementById("price")){
-                validatePrice(document.getElementById("price").value);
-            }            
-            if(document.getElementById("drinkPictureLocation")){
-                let fileInput = document.getElementById("drinkPictureLocation");
-                if(fileInput.files.length > 0){
-                    try{
-                        await checkIfFileExist(fileInput.files[0]);
-                    }catch(e){
-                        console.error(e);
-                        throw e;
-                    }                
-                }
-            }            
-            valid4 = true;
-            drink_form.submit();
-            valid4 = false;
-
+            if($('#name').length)
+                checkName($('#name').val())
+            if($('#category').length)
+                validateDrinkCategory($('#category').val())
+            if($('#recipe').length)
+                validateDrinkRecipe($('#recipe').val());
+            if($('#rating').length)
+                validateRating($('#rating').val())
+            if($('#price').length)
+                validatePrice($('#price').val());
+            valid3=true;
+            $('#drinkEdit_form').submit();
+            valid3=false;
         }catch(e){
-            const errorInfo = document.createElement('p');
-            errorInfo.textContent = e;
-            clientError4.innerHTML = '';
-            clientError4.appendChild(errorInfo);
-            clientError4.style.display = 'block';
+            $('#error').hide();
+            $('#error').append(`<p>${e}</p>`);
+            $('#error').show();
         }
     }
+})
+
+document.addEventListener('DOMContentLoaded', function () {
+    let imageInput = document.getElementById('drinkPictureLocation');
+    let imagePreview = document.getElementById('previewImg');
+
+    imageInput.addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
 });
 
-let newProfilePictureLocation = document.getElementById("drinkPictureLocation");
-let previewImg = document.getElementById("previewImg");
-
-newProfilePictureLocation.addEventListener('change', function(event){
-    if(this.files && this.files[0]){
-        previewImg.src = URL.createObjectURL(event.target.files[0]);
-        // let reader = new FileReader();
-        // reader.onload = function(e){
-        //     previewImg.src = e.target.result;//Assign the data URL to the src attribute of img
-        // }
-        // reader.readAsDataURL(this.files[0]);
-    }
-});
