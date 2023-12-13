@@ -311,7 +311,7 @@ const exportedMethods = {
         return message;
     },
     async deleteAPicture(filePath) {
-        if(filePath ==="public/pictures/defaultUserProfilePicture.png"){
+        if(filePath ==="public/pictures/defaultUserProfilePicture.jpg"){
             return {pictureDeleted: true}
         }
         if (filePath !== '') {

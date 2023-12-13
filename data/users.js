@@ -46,7 +46,7 @@ export const createUser = async (
         throw `Error: ${email} is already registered, Please Login`;
     }
     if(!profilePictureLocation){
-        profilePictureLocation = "public/pictures/defaultUserProfilePicture.png"
+        profilePictureLocation = "public/pictures/defaultUserProfilePicture.jpg"
     }
     else{
         profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
@@ -124,7 +124,7 @@ export const updateUser = async (
     }
     const oldProfilePictureLocation = user.profilePictureLocation;
     if(!profilePictureLocation){
-        profilePictureLocation = "public/pictures/defaultUserProfilePicture.png"
+        profilePictureLocation = "public/pictures/defaultUserProfilePicture.jpg"
     }
     else{
         profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
@@ -146,7 +146,7 @@ export const updateUser = async (
         throw `Error: Failed to update user with email ${email}`;
     }
     try {
-        if(oldProfilePictureLocation !=="public/pictures/defaultUserProfilePicture.png") {
+        if(oldProfilePictureLocation !=="public/pictures/defaultUserProfilePicture.jpg") {
             await validation.deleteAPicture(oldProfilePictureLocation);
         }
     } catch (error) {
