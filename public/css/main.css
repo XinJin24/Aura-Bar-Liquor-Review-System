@@ -68,4 +68,37 @@
     max-height: 200px;
     margin-top: 10px;
 }
-
+#drinkPhoto {
+    max-width: 400px;
+    max-height: 400px;
+    margin-top: 10px;
+}
+#customerPhoto {
+    max-width: 50px;
+    max-height: 50px;
+    margin-top: 10px;
+    margin-right: 10px;
+    float: left;
+}
+.review-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+.customer-details {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+.customer-details span {
+    margin-right: 10px;
+}
+.review-text {
+    clear: both;
+    padding-top: 5px;
+}
+.review-header {
+    display: flex;
+    align-items: center; /* This ensures vertical alignment in the center */
+}
