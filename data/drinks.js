@@ -131,6 +131,35 @@ export const deleteDrink = async (
     return { deleteDrink: true };
 }
 
+export const restockDrink = async (
+    drinkId
+) => {
+    drinkId = validation.validateId(drinkId,"drinkId");
+
+    const drinkCollection = await drinks();
+    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId)});
+
+    if (!drink) {
+        throw `Error: drink with drinkId ${drinkId} not found, cannot delete`;
+    }
+    if(drink.available === true){
+        return { restockedDrink: true };
+    }
+    const updatedDrink ={
+        available: true
+    };
+    const updateDrink = await drinkCollection.updateOne(
+        { _id: drink._id },
+        { $set: updatedDrink }
+    );
+    if (updateDrink.modifiedCount === 0) {
+        throw `Error: Failed to delete drink with drinkId: ${drink._id}, drink name: ${drink.name}`;
+    }
+    return { restockedDrink: true };
+}
+
+
+
 export const getDrinkInfoByDrinkId = async (
     drinkId
 ) => {

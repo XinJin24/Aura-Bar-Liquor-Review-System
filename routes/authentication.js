@@ -370,4 +370,53 @@ router.route('/sortDrinks').get(async (req, res) => {
 });
 
 
+router
+    .route('/admin').get(async (req, res) => {
+    if (req.session.user && req.session.user.role === "admin") {
+        let userId = null;
+        let userFirstName = null;
+        let userLstName = null;
+        let userProfilePictureLocation = null;
+        let login = false;
+        let isAdmin = false;
+
+        if (req.session.user) {
+            login = true;
+            userId = req.session.user.userId;
+            if (req.session.user.role === "admin") {
+                isAdmin = true;
+            }
+            const user = await getUserInfoByUserId(userId);
+            userFirstName = user.firstName;
+            userLstName = user.lastName;
+            userProfilePictureLocation = user.profilePictureLocation;
+        }
+        let allDrinks = await getAllDrinks();
+        if (req.session.user && req.session.user.role === "admin") {
+            for (let drink of allDrinks) {
+                drink.editable = true;
+            }
+        }
+        return res.render('admin', {
+            title: "Admin Page", drinks: allDrinks, firstName: userFirstName, userId: userId,
+            lastName: userLstName, userProfilePictureLocation: userProfilePictureLocation, login: login, isAdmin: isAdmin
+        });
+    } else if(req.session.user && req.session.user.role === "user"){
+        return res.status(401).render("error", {
+            errorMsg: "Sorry, This page is solely for admin!",
+            login: false,
+            title: "Access Error",
+            redirect: "/home"
+        });
+    } else{
+        return res.status(401).render("error", {
+            errorMsg: "please use your admin credentials to log in!",
+            login: false,
+            title: "Error",
+            redirect: "/login"
+        });
+    }
+});
+
+
 export default router;

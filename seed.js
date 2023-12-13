@@ -1168,6 +1168,7 @@ try {
     }
     await updateAllDrinkRating();
 
+    console.log("finished loading all drinks, users and reviews");
 }catch (error){
     console.log(error);
 }

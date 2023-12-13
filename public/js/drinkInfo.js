@@ -84,10 +84,11 @@ let checkIfFileExist = async (filePath, valName) => {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const reserveButton = document.getElementById('reserveButton');
+    const reserveButton= document.getElementById('reserveButton');
     if (reserveButton) {
         reserveButton.addEventListener('click', function() {
             const drinkId = this.getAttribute('data-drinkid');
+            console.log("here");
             $.ajax({
                 type: "POST",
                 url: `/drink/reserveDrink/${drinkId}`,

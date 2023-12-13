@@ -2,12 +2,8 @@ import {users, drinks} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 import validation from "../publicMethods.js";
 import bcrypt from 'bcrypt';
-import {fileURLToPath} from "url";
-import {dirname, join} from "path";
-import {access, unlink} from "fs/promises";
 import fs from 'fs/promises';
 import path from 'path';
-
 
 /**
  * @param {ObjectId} _id - A globally unique identifier to represent the user.
@@ -46,7 +42,7 @@ export const createUser = async (
         throw `Error: ${email} is already registered, Please Login`;
     }
     if(!profilePictureLocation){
-        profilePictureLocation = "public/pictures/defaultUserProfilePicture.jpg"
+        profilePictureLocation = "public/pictures/defaultUserProfilePicture.jpg";
     }
     else{
         profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
@@ -108,7 +104,7 @@ export const updateUser = async (
     email,
     phoneNumber,
     password,
-    profilePictureLocation,
+    profilePictureLocation
 ) => {
     firstName = validation.validateName(firstName, "firstName");
     lastName = validation.validateName(lastName, "lastName");

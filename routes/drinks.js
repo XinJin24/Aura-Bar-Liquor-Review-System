@@ -7,7 +7,7 @@ import {
     deleteDrink,
     getAllReviewsOnADrink,
     getDrinkInfoByDrinkId,
-    reserveDrink,
+    reserveDrink, restockDrink,
     updateDrink
 } from "../data/drinks.js";
 import xss from "xss";
@@ -195,44 +195,24 @@ router
         if (req.session.user && req.session.user.role === "admin") {
             let drinkId = null;
             try {
-                drinkId = validation.validateId(req.params._id, "drinkId");
-            } catch (error) {
-                return res.status(400).render("updateDrinkInfo", {
-                    error: error,
-                    login: true,
-                    title: "Update Drink"
-                });
-            }
-            try {
+                drinkId = validation.validateId(req.params.id, "drinkId");
                 const deletedDrink = await deleteDrink(drinkId);
                 if (deletedDrink.deleteDrink === true) {
-                    return res.status(200).redirect('/');
+                    return res.status(200).json({ message: 'Drink deleted successfully' });
                 } else {
-                    throw "Error happened then deleting a drink."
+                    throw "Error happened then deleting a drink.";
                 }
             } catch (error) {
                 console.error(error);
-                return res.status(500).render('error', {
-                    title: "Error",
-                    message: "Internal Server Error"
-                });
+                return res.status(500).json({ error: 'Internal Server Error' });
             }
-            //if no admin,
         } else if (req.session.user && req.session.user.role !== "admin") {
-            return res.status(401).render("error", {
-                errorMsg: "you do not have a privileges to delete a drink",
-                login: true,
-                title: "Error",
-            });
+            return res.status(401).json({ error: 'You do not have privileges to delete a drink' });
         } else {
-            //if no logged in
-            return res.status(401).render("error", {
-                errorMsg: "please login first to edit a drink",
-                login: false,
-                title: "Error",
-            });
+            return res.status(401).json({ error: 'Please login first to delete a drink' });
         }
     });
+
 
 
 router
@@ -252,5 +232,21 @@ router
             return res.status(401).send("Please Login in first to reverse a Drink");
         }
     });
+
+
+router
+    .post('/restockDrink/:id', async (req, res) => {
+    if (!req.session.user || req.session.user.role !== "admin") {
+        return res.status(401).json({ error: "Unauthorized access" });
+    }
+
+    try {
+        const drinkId = req.params.id;
+        await restockDrink(drinkId);
+        res.status(200).json({ message: "Drink restocked successfully" });
+    } catch (error) {
+        res.status(500).json({ error: error.toString() });
+    }
+});
 
 export default router;

@@ -1,0 +1,105 @@
+<div>
+    {{#if login}}
+        <div class="col-md-12 text-right">
+            <img src="{{userProfilePictureLocation}}" alt="Profile Picture" class="profile-picture" />
+            <span>{{firstName}} {{lastName}}</span>
+        </div>
+    {{/if}}
+    <h1>{{title}}</h1>
+    <button id="addDrinkButton" class="btn btn-success">Add New Drink</button><br>
+    <button id="showAllButton" class="btn btn-primary" style="display: none;">Show All</button>
+    <input type="text" id="searchBar" placeholder="Search drinks...">
+    <button id="searchButton">Search</button>
+
+    <div>
+        <label for="sortOptions">Sort By:</label>
+        <select id="sortOptions">
+            <option value="priceDesc">Price (High to Low)</option>
+            <option value="priceAsc">Price (Low to High)</option>
+            <option value="topRating">Top Rating</option>
+            <option value="topReserved">Top Reserved</option>
+        </select>
+        <button id="sortButton" class="btn btn-primary">Sort</button>
+    </div>
+
+
+    <div id="drinksContainer">
+        {{#if drinks.length}}
+            <ul class="displaydrinks">
+                {{#each drinks}}
+                    <li class="alldrinks">
+                        <h2>{{name}}</h2>
+                        <img src="{{drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
+                        <p>Category: {{category}}</p>
+                        <p>Rating: {{rating}}</p>
+                        <p>Price: {{price}}</p>
+                        <p>Reserved Counts: {{reservedCounts}}</p>
+                        <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Details</button>
+                        <button class="btn btn-warning updateButton" data-drinkid="{{_id}}">Update Drink</button>
+                        {{#if available}}
+                            <button class="btn btn-danger deleteButton" data-drinkid="{{_id}}">Remove Drink</button>
+                        {{else}}
+                            <button class="btn btn-danger restockButton" data-drinkid="{{_id}}">Restock Drink</button>
+                        {{/if}}
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <p>No drinks available</p>
+        {{/if}}
+    </div>
+
+    <div id="messageModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="messageForm">
+                <textarea name="message" placeholder="Type your message here..."></textarea>
+                <input type="submit" value="Send Message">
+            </form>
+        </div>
+    </div>
+    <p>
+        Start by highlighting the fact that there is a growing demand for information about bars and liquor products.
+        People often want to know about the quality of service, pricing, ambiance, and the variety of drinks available.
+        Our project can address this need by providing a platform for reviews and ratings.
+        The project also aims to enhance the user experience for those looking for liquor options.
+        By providing a user-friendly app, we're not only helping consumers find the best options but also saving their time and effort.
+    </p>
+    <script src="../public/js/admin.js"></script>
+
+
+    <div id="addDrinkModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Add New Drink</h2>
+            <form id="addDrinkForm">
+                <div>
+                    <label for="name">Drink Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div>
+                    <label for="category">Category:</label>
+                    <input type="text" id="category" name="category" required>
+                </div>
+                <div>
+                    <label for="recipe">Recipe:</label>
+                    <textarea id="recipe" name="recipe" required></textarea>
+                </div>
+                <div>
+                    <label for="rating">Rating (1-5):</label>
+                    <input type="number" id="rating" name="rating" min="1" max="5" required>
+                </div>
+                <div>
+                    <label for="price">Price:</label>
+                    <input type="number" id="price" name="price" required>
+                </div>
+                <div>
+                    <label for="drinkPicture">Upload Image:</label>
+                    <input type="file" id="drinkPicture" name="drinkPicture" accept="image/*" required>
+                </div>
+                <button type="button" id="submitNewDrink">Add Drink</button>
+            </form>
+        </div>
+    </div>
+
+</div>
