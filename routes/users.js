@@ -80,6 +80,7 @@ router
     .post(upload.single("photoInput"), async (req, res) => {
         if(req.session.user) {
             try{
+                console.log(req.file)
                 let firstName = validation.validateName(xss(req.body.firstName), "First Name");
                 let lastName = validation.validateName(xss(req.body.lastName), "Last Name");
                 let email = validation.validateEmail(xss(req.body.email));

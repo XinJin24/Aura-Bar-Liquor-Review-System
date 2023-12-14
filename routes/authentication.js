@@ -128,6 +128,7 @@ router
         }
     })
     .post(upload.single("photoInput"), async (req, res) => {
+        console.log(req.file)
         let firstNameInput = xss(req.body.firstNameInput);//same as frontend
         let lastNameInput = xss(req.body.lastNameInput);
         let emailAddressInput = xss(req.body.emailAddressInput);
@@ -158,6 +159,7 @@ router
             });
         }
         try {
+            console.log(req.file)
             const user = await createUser(firstNameInput,
                 lastNameInput,
                 emailAddressInput,

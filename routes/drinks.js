@@ -10,8 +10,11 @@ import {
     reserveDrink, restockDrink,
     updateDrink
 } from "../data/drinks.js";
-import xss from "xss";
 
+
+import xss from "xss";
+import {createUser} from "../data/users.js";
+import {createReview} from "../data/reviews.js";
 
 //drink detail page and shows all reviews, if the review is made by the user, it will show the edit button
 
@@ -212,6 +215,7 @@ router
             return res.status(401).json({ error: 'Please login first to delete a drink' });
         }
     });
+
 
 
 

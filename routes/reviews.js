@@ -1,8 +1,18 @@
 import validation from "../publicMethods.js";
 import {getUserIdByEmail, getUserInfoByUserId} from "../data/users.js";
-import {deleteReview, getReviewInfoByReviewId, updateReview} from "../data/reviews.js";
+import {createReview, deleteReview, getReviewInfoByReviewId, updateReview} from "../data/reviews.js";
 import {getDrinkInfoByDrinkId} from "../data/drinks.js";
 import router from "./drinks.js";
+// import multer from "multer";
+
+// const upload = multer({
+//     dest: "../public/reviewPics/",
+//     limits: {fileSize: 10485760},
+//     onError: function (err, next) {
+//         console.log("error", err);
+//         next(err);
+//     },
+// });
 
 router
     .route('/review/:id')
@@ -168,4 +178,33 @@ router
             }
         }
     });
+// router
+//     .route('/new')
+//     .post(upload.single("reviewPictureLocation"),async(req,res) =>{
+//         if(!req.session.user) {
+//             return res.redirect('/login');
+//         }
+//         // const drinkId = req.params.id;
+//         const userId = req.session.user.userId;
+//         let reviewText = req.body.reviewText;
+//         let rating = req.body.rating;
+//         let reviewPictureLocation = req.file;
+//         console.log(req)
+//         try{
+//             reviewText = validation.validateReviewText(reviewText);
+//             rating = validation.validateRating(rating);
+//             const insertResult=await createReview(drinkId,userId,reviewText,rating,reviewPictureLocation)
+//             if(insertResult.insertedReview){
+//                 res.status(200).json({ message: "Review inserted successfully" });
+//             }
+//             else
+//             {
+//                 res.status(500).send("Error reserving drink.");
+//             }
+//         }catch (error){
+//             return res.status(400).render('error', {
+//                 title: "InputError", errorMsg: error
+//             });
+//         }
+//     })
 export default router;

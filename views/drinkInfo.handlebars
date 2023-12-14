@@ -33,7 +33,7 @@
         </div>
         <div>
             <h2>Add a Review</h2>
-            <form id="addReview" action="/drink/{{drinkInfo._id}}" method="POST">
+            <form id="addReview" action="/drink/addReview/{{drinkInfo._id}}" method="POST">
                 <div>
                     <label for="reviewText">Review:
                         <textarea id="reviewText" name="reviewText" required></textarea>
@@ -41,7 +41,13 @@
                 </div>
                 <div>
                     <label for="rating">Rating (1-5):
-                        <input type="number" id="rating" name="rating" required min="1" max="5">
+                        <input type="text" id="rating" name="rating" required pattern="[0-5]" title="Rating must be a number between 0 and 5" >
+                    </label>
+                </div>
+                <div>
+                    <label for="reviewPictureLocation">Upload Image:
+                        <input type="file" id="reviewPictureLocation" name="reviewPictureLocation" accept="image/*">
+                        <img id="imagePreview" src="#" alt="Image Preview">
                     </label>
                 </div>
                 <div>
@@ -104,6 +110,10 @@
 <!--    {{else}}-->
 <!--        <p>Please log in to view details about this drink.</p>-->
 <!--    {{/if}}-->
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous"></script>
     <script src="../public/js/drinkInfo.js"></script>
  
 </main>

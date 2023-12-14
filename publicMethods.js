@@ -200,6 +200,8 @@ const exportedMethods = {
         return description;
     },
     validateRating(rating) {
+        if (typeof rating === "number" && rating>=0 && rating<=5)
+            return rating;
         if (typeof rating !== "string" || rating.trim().length === 0) {
             throw `Error: rating should be a valid string with number 0 - 5(no empty spaces)`;
         }
@@ -301,7 +303,8 @@ const exportedMethods = {
             throw "Error: Invalid phone number format";
         }
         return phoneNumber;
-    },validateCallForServiceMessage(message) {
+    },
+    validateCallForServiceMessage(message) {
         if (typeof message !== "string" || message.trim().length === 0) {
             throw `Error: message should be a valid string (no empty spaces)`;
         }

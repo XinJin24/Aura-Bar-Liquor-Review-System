@@ -1,57 +1,19 @@
 
 // let drinkid_form = document.getElementById(drinkid_form);
-let checkName = (strVal) =>{
+let checkReviewText = (strVal) =>{
     if(!strVal){
-        throw `you should provide a name`;
+        throw `you should provide a review`;
     }
     if(typeof strVal !== "string"){
-        throw `name should be a string`;
+        throw `review should be a string`;
     }
     strVal = strVal.trim();
-    if(strVal.length < 2 || strVal.length > 100){
-        throw `name should be at least 2 characters long with a max of 100 characters`;
+    if(strVal.length < 2 || strVal.length > 1000){
+        throw `review should be at least 2 characters long with a max of 1000 characters`;
     }
     if (!isNaN(strVal)){
-        throw `${strVal} is not a valid value for name as it only contains digits`;
+        throw `${strVal} is not a valid value for review as it only contains digits`;
     }
-}
-
-let validateDrinkCategory = (category, valName) =>{
-    if (!category) {
-        throw `category not supplied`;
-    }
-    if (typeof category !== "string" || category.trim().length === 0) {
-        throw `category should be a valid string (no empty spaces)`;
-    }
-    category = category.trim().toLowerCase();
-    const validCategories = ["whiskey", "vodka", "rum", "gin", "tequila", "brandy", "liqueur", "wine", "beer", "juice", "other"];
-
-    if (!validCategories.includes(category)) {
-        throw `category is not a valid category in this bar`;
-    }
-
-    return category;
-}
-
-let validateDrinkRecipe = (recipe) =>{
-    if (typeof recipe !== "string" || recipe.trim().length === 0) {
-        throw `Error: recipe should be a valid string (no empty spaces)`;
-    }
-    recipe = recipe.trim();
-    if(recipe.length < 5 || recipe > 10000){
-        throw `Error: recipe should have more than 5 chars and less than 10 thousand chars`;
-    }
-    return recipe;
-}
-
-let validatePrice = (price) =>{
-    if (typeof price !== "number") {
-        throw `price must be a valid number.`;
-    }
-    if (price < 0) {
-        throw `price cannot be a negative value.`;
-    }
-    return price;
 }
 
 let validateRating = (rating) =>{
@@ -69,19 +31,53 @@ let validateRating = (rating) =>{
     return numericRating;
 }
 
-let checkIfFileExist = async (filePath, valName) => {
-    if (typeof filePath !== "string") {
-        throw `Error: ${valName} must be a valid string(no empty spaces)!`;
-    } else if(filePath.trim().length === 0){
-        return "";
+let valid5 = false;
+$('#error').hide()
+$('#addReview').submit((event)=>{
+    if(!valid5)
+    {
+        event.preventDefault();
+        try{
+            if($('#reviewText').length)
+                checkReviewText($('#reviewText').val())
+            if($('#rating').length)
+                validateRating($('#rating').val())
+            valid5=true;
+            $('#addReview').submit();
+            valid5=false;
+        }catch(e){
+            $('#error').hide();
+            $('#error').append(`<p>${e}</p>`);
+            $('#error').show();
+        }
     }
-    try {
-        await access(filePath);
-        return filePath;
-    } catch (err) {
-        throw `Error: File at path ${filePath} is inaccessible.`;
-    }
-}
+})
+
+
+// function previewImage(event) {
+//     var reader = new FileReader();
+//     reader.onload = function(){
+//         var output = document.getElementById('imagePreview');
+//         output.src = reader.result;
+//         output.style.display = 'block';
+//     };
+//     reader.readAsDataURL(event.target.files[0]);
+// }
+
+document.addEventListener('DOMContentLoaded', function () {
+    let imageInput = document.getElementById('reviewPictureLocation');
+    let imagePreview = document.getElementById('imagePreview');
+
+    imageInput.addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const reserveButton= document.getElementById('reserveButton');
