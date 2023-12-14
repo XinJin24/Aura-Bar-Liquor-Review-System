@@ -69,26 +69,22 @@ let validateRating = (rating) =>{
     return numericRating;
 }
 
-let checkIfFileExist = async (filePath, valName) => {
-    if (typeof filePath !== "string") {
-        throw `Error: ${valName} must be a valid string(no empty spaces)!`;
-    } else if(filePath.trim().length === 0){
-        return "";
-    }
-    try {
-        await access(filePath);
-        return filePath;
-    } catch (err) {
-        throw `Error: File at path ${filePath} is inaccessible.`;
-    }
-}
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    document.querySelectorAll('.deleteButton').forEach(button => {
+        button.addEventListener('click', function() {
+            const reviewId = this.getAttribute('data-reviewid');
+            deleteReview(reviewId);
+        });
+    });
+
+
+
     const reserveButton= document.getElementById('reserveButton');
     if (reserveButton) {
         reserveButton.addEventListener('click', function() {
             const drinkId = this.getAttribute('data-drinkid');
-            console.log("here");
             $.ajax({
                 type: "POST",
                 url: `/drink/reserveDrink/${drinkId}`,
@@ -104,70 +100,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
-
-
-
-
-
-// let clientError5 = document.getElementById("clientError5");
-// clientError5.style.display = 'none';
-// let valid5 = false;
-//
-// drinkid_form.addEventListener('submit', async (event) =>{
-//     if(!valid5){
-//         event.preventDefault();
-//         try{
-//             if(document.getElementById("name")){
-//                 checkName(document.getElementById("name").value);
-//             }
-//             if(document.getElementById("category")){
-//                 validateDrinkCategory(document.getElementById("category").value);
-//             }
-//             if(document.getElementById("recipe")){
-//                 validateDrinkRecipe(document.getElementById("recipe").value);
-//             }
-//             if(document.getElementById("rating")){
-//                 validateRating(document.getElementById("rating").value);
-//             }
-//             if(document.getElementById("price")){
-//                 validatePrice(document.getElementById("price").value);
-//             }
-//             if(document.getElementById("drinkPictureLocation")){
-//                 let fileInput = document.getElementById("drinkPictureLocation");
-//                 if(fileInput.files.length > 0){
-//                     try{
-//                         await checkIfFileExist(fileInput.files[0]);
-//                     }catch(e){
-//                         console.error(e);
-//                         throw e;
-//                     }
-//                 }
-//             }
-//             valid5 = true;
-//             drinkid_form.submit();
-//             valid5 = false;
-//
-//         }catch(e){
-//             const errorInfo = document.createElement('p');
-//             errorInfo.textContent = e;
-//             clientError5.innerHTML = '';
-//             clientError5.appendChild(errorInfo);
-//             clientError5.style.display = 'block';
-//         }
-//     }
-// });
-//
-// let newProfilePictureLocation = document.getElementById("drinkPictureLocation");
-// let previewImg = document.getElementById("previewImg");
-//
-// newProfilePictureLocation.addEventListener('change', function(event){
-//     if(this.files && this.files[0]){
-//         previewImg.src = URL.createObjectURL(event.target.files[0]);
-//         // let reader = new FileReader();
-//         // reader.onload = function(e){
-//         //     previewImg.src = e.target.result;//Assign the data URL to the src attribute of img
-//         // }
-//         // reader.readAsDataURL(this.files[0]);
-//     }
-// });
+function deleteReview(reviewId) {
+    if (confirm('Are you sure you want to delete this review?')) {
+        $.ajax({
+            type: 'DELETE',
+            url: `./review/${reviewId}`,
+            success: function(response) {
+                alert('Review deleted successfully');
+                location.reload();
+            },
+            error: function(error) {
+                console.error('Error deleting review:', error);
+                alert('Error deleting review');
+            }
+        });
+    }
+}

@@ -1,5 +1,5 @@
 function redirectToPage(drinkId) {
-    window.location.href =  drinkId;
+    window.location.href =  '/drink/'+drinkId;
 }
 
 let checkName = (strVal, valName) => {
@@ -164,10 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 confirmNewPassword = checkPassword(confirmNewPassword, "confirm password");
                 checkConfirm(newPassword, confirmNewPassword);
 
-                for (let [key, value] of formData.entries()) {
-                    console.log(key, value);
-                }
-
                 $.ajax({
                     type: "POST",
                     url: "/checkPassword",
@@ -190,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     contentType: false,
                                     success: function (response) {
                                         alert("Information updated successfully.");
-                                        editInfoModal.classList.remove("hidden-div");
+                                        editInfoModal.style.display = 'none';
                                     },
                                     error: function (error) {
                                         alert("Error happened when updating your information.");

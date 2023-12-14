@@ -9,7 +9,7 @@
             <p>Recipe: {{drinkInfo.recipe}}</p>
             <p>Rating: {{drinkInfo.rating}}</p>
             <p>Price: {{drinkInfo.price}}</p>
-            <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink Picture" id="drinkPhoto" />
+            <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink Picture" id="drinkPhoto"/>
             <button class="btn btn-success" id="reserveButton" data-drinkid="{{drinkInfo._id}}">Reserve</button>
         </div>
 
@@ -19,10 +19,15 @@
                 {{#each reviews}}
                     <li class="review-item">
                         <div class="review-header">
-                            <img src="{{userProfilePictureLocation}}" alt="" id="customerPhoto" />
+                            <img src="{{userProfilePictureLocation}}" alt="" id="customerPhoto"/>
                             <div class="customer-details">
                                 <span>{{owner}}</span>
                                 <span>{{timestamp}}</span>
+                                {{#if myPost}}
+                                    <button class="" id="reviewEditBtn">Edit</button>
+                                    <button class="btn btn-danger deleteButton" data-reviewid="{{reviewId}}">Delete</button>
+
+                                {{/if}}
                             </div>
                         </div>
                         <p>{{reviewText}}</p>
@@ -31,79 +36,31 @@
             </ul>
 
         </div>
-        <div>
-            <h2>Add a Review</h2>
-            <form id="addReview" action="/drink/{{drinkInfo._id}}" method="POST">
-                <div>
-                    <label for="reviewText">Review:
-                        <textarea id="reviewText" name="reviewText" required></textarea>
-                    </label>
-                </div>
-                <div>
-                    <label for="rating">Rating (1-5):
-                        <input type="number" id="rating" name="rating" required min="1" max="5">
-                    </label>
-                </div>
-                <div>
-                    <button type="submit" id="postReview">Post Review</button>
-                </div>
-            </form>
-            <div id="error" class="hidden-div">error message</div>
-        </div>
 
-<!--        {{#if isAdmin}}-->
-<!--            <form id="drinkEdit_form" action="/drink/new" method="POST">-->
-<!--                <div>-->
-<!--                    <label for="name">Name:-->
-<!--                        <input type="text" id="name" name="name" value="{{drinkInfo.name}}" required>-->
-<!--                    </label>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    <label for="category">Category:-->
-<!--                        <input type="text" id="category" name="category" value="{{drinkInfo.category}}" required>-->
-<!--                    </label>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    <label for="recipe">Recipe:-->
-<!--                        <input type="text" id="recipe" name="recipe" value="{{drinkInfo.recipe}}" required>-->
-<!--                    </label>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    <label for="rating">Rating:-->
-<!--                        <input type="text" id="rating" name="rating" value="{{drinkInfo.rating}}" required>-->
-<!--                    </label>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    <label for="price">Price:-->
-<!--                        <input type="text" id="price" name="price" value="{{drinkInfo.price}}" required>-->
-<!--                    </label>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    <label for="drinkPictureLocation">Upload Image:-->
-<!--                        <input type="file" id="drinkPictureLocation" name="drinkPictureLocation" required>-->
-<!--                        <img id="previewImg" src="{{drinkInfo.drinkPictureLocation}}" alt="Preview Image">-->
-<!--                    </label>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    <ul class="errorInfo">-->
-<!--                        {{#if error}}-->
-<!--                            <li>{{error}}</li>-->
-<!--                        {{/if}}-->
-<!--                    </ul>-->
-<!--                </div>-->
-<!--                <button type="submit" id="submit">Submit</button>-->
-<!--            </form>-->
-<!--            <form id="delete_form" action="/{{drinkInfo._id}}" method="DELETE">-->
-<!--                <input type="hidden" name="_method" value="DELETE">-->
-<!--                <button type="submit" id="delete">Delete</button>-->
-<!--            </form>-->
-<!--        {{else}}-->
-<!--            <div id="error"></div>-->
 
-<!--        {{/if}}-->
-<!--    {{else}}-->
-<!--        <p>Please log in to view details about this drink.</p>-->
-<!--    {{/if}}-->
+        {{#unless hasReview}}
+            <div>
+                <h2>Add a Review</h2>
+                <form id="addReview" action="/drink/{{drinkInfo._id}}" method="POST">
+                    <div>
+                        <label for="reviewText">Review:
+                            <textarea id="reviewText" name="reviewText" required></textarea>
+                        </label>
+                    </div>
+                    <div>
+                        <label for="rating">Rating (1-5):
+                            <input type="number" id="rating" name="rating" required min="1" max="5">
+                        </label>
+                    </div>
+                    <div>
+                        <button type="submit" id="postReview">Post Review</button>
+                    </div>
+                </form>
+                <div id="error" class="hidden-div">error message</div>
+            </div>
+        {{/unless}}
+    {{/if}}
+
+
     <script src="../public/js/drinkInfo.js"></script>
- 
 </main>

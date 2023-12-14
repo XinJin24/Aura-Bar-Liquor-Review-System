@@ -38,6 +38,7 @@ export const createDrink = async (
         throw `Error: ${name} is already exist in the drinks library.`;
     }
     drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
+
     const drink = {
         name: name,
         category: category,
@@ -54,7 +55,8 @@ export const createDrink = async (
     if (!insertDrink.acknowledged || !insertDrink.insertedId) {
         throw `Error: couldn't add drink with the drink name: ${name}`;
     }
-    return {insertedDrink: true};
+
+    return {insertedDrink: true, _id: insertDrink.insertedId};
 
 }
 
@@ -72,13 +74,18 @@ export const updateDrink = async (
     recipe = validation.validateDrinkRecipe(recipe);
     price = validation.validatePrice(price, "Drink Price");
     const drinkCollection = await drinks();
-    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId) });
+    const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
 
     if (!drink) {
         throw `Error: drink with the drinkId: ${drink} not found`;
     }
     const oldDrinkPictureLocation = drink.drinkPictureLocation;
-    drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
+    if(drinkPictureLocation === ""){
+        drinkPictureLocation = oldDrinkPictureLocation;
+    } else{
+        drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
+    }
+
     const updatedDrink = {
         name: name,
         category: category,
@@ -86,94 +93,94 @@ export const updateDrink = async (
         drinkPictureLocation: drinkPictureLocation,
         price: price
     };
+
     const updateDrink = await drinkCollection.updateOne(
-        { _id: drink._id },
-        { $set: updatedDrink }
+        {_id: drink._id},
+        {$set: updatedDrink}
     );
     if (updateDrink.modifiedCount === 0) {
-        throw `Error: Failed to update drink with drinkId: ${drink._id}, drink name: ${name}`;
+        return {updatedDrink: true};
     }
     //delete the old drink picture file
     try {
-        if (oldDrinkPictureLocation!=='') {
+        if ((drinkPictureLocation !== oldDrinkPictureLocation) && oldDrinkPictureLocation !== '') {
             await validation.deleteAPicture(oldDrinkPictureLocation);
         }
     } catch (error) {
         throw `Error: Failed to delete old drink picture at ${oldDrinkPictureLocation}`;
     }
-    return { updatedDrink: true };
+    return {updatedDrink: true};
 }
 
 export const deleteDrink = async (
     drinkId
 ) => {
-    drinkId = validation.validateId(drinkId,"drinkId");
+    drinkId = validation.validateId(drinkId, "drinkId");
 
     const drinkCollection = await drinks();
-    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId)});
+    const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
 
     if (!drink) {
         throw `Error: drink with drinkId ${drinkId} not found, cannot delete`;
     }
-    if(drink.available ===false){
-        return { deleteDrink: true };
+    if (drink.available === false) {
+        return {deleteDrink: true};
     }
-    const updatedDrink ={
+    const updatedDrink = {
         available: false
     };
     const updateDrink = await drinkCollection.updateOne(
-        { _id: drink._id },
-        { $set: updatedDrink }
+        {_id: drink._id},
+        {$set: updatedDrink}
     );
     if (updateDrink.modifiedCount === 0) {
         throw `Error: Failed to delete drink with drinkId: ${drink._id}, drink name: ${drink.name}`;
     }
-    return { deleteDrink: true };
+    return {deleteDrink: true};
 }
 
 export const restockDrink = async (
     drinkId
 ) => {
-    drinkId = validation.validateId(drinkId,"drinkId");
+    drinkId = validation.validateId(drinkId, "drinkId");
 
     const drinkCollection = await drinks();
-    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId)});
+    const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
 
     if (!drink) {
         throw `Error: drink with drinkId ${drinkId} not found, cannot delete`;
     }
-    if(drink.available === true){
-        return { restockedDrink: true };
+    if (drink.available === true) {
+        return {restockedDrink: true};
     }
-    const updatedDrink ={
+    const updatedDrink = {
         available: true
     };
     const updateDrink = await drinkCollection.updateOne(
-        { _id: drink._id },
-        { $set: updatedDrink }
+        {_id: drink._id},
+        {$set: updatedDrink}
     );
     if (updateDrink.modifiedCount === 0) {
         throw `Error: Failed to delete drink with drinkId: ${drink._id}, drink name: ${drink.name}`;
     }
-    return { restockedDrink: true };
+    return {restockedDrink: true};
 }
-
 
 
 export const getDrinkInfoByDrinkId = async (
     drinkId
 ) => {
-    drinkId = validation.validateId(drinkId,"drinkId");
+    drinkId = validation.validateId(drinkId, "drinkId");
 
     const drinkCollection = await drinks();
-    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId)});
+    const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
 
     if (!drink) {
         throw `Error: drink with drinkId ${drinkId} not found`;
     }
 
     const drinkInfo = {
-        _id:drink._id.toString(),
+        _id: drink._id.toString(),
         name: drink.name,
         category: drink.category,
         recipe: drink.recipe,
@@ -205,11 +212,11 @@ export const getAllReviewsOnADrink = async (drinkId) => {
     drinkId = validation.validateId(drinkId, "drinkId");
 
     const drinkCollection = await drinks();
-    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId) });
+    const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
     if (!drink) {
         throw `Error: drink with drinkId ${drinkId} not found`;
     }
-    const reviewsOnThisDrink=drink.reviews;
+    const reviewsOnThisDrink = drink.reviews;
     let reviewsArray = [];
 
     for (let j = 0; j < reviewsOnThisDrink.length; j++) {
@@ -218,10 +225,12 @@ export const getAllReviewsOnADrink = async (drinkId) => {
         const userCollection = await users();
         const review = await reviewCollection.findOne({_id: new ObjectId(reviewId)});
         const user = await userCollection.findOne({_id: new ObjectId(review.userId)});
-        const singleReview ={};
+        const singleReview = {};
         singleReview.userProfilePictureLocation = user.profilePictureLocation;
+        singleReview.reviewId = review._id.toString();
         singleReview.reviewPicture = review.reviewPictureLocation;
-        singleReview.owner = user.firstName +" " + user.lastName;
+        singleReview.userId = user._id.toString();
+        singleReview.owner = user.firstName + " " + user.lastName;
         singleReview.reviewText = review.reviewText;
         singleReview.timestamp = review.timeStamp;
         reviewsArray.push(singleReview);
@@ -235,42 +244,42 @@ export const getAllReviewsOnADrink = async (drinkId) => {
 export const increaseReservedCounts = async (
     drinkId
 ) => {
-    drinkId = validation.validateId(drinkId,"drinkId");
+    drinkId = validation.validateId(drinkId, "drinkId");
 
     const drinkCollection = await drinks();
-    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId)});
+    const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
 
     if (!drink) {
         throw `Error: drink with drinkId ${drinkId} not found, cannot increase ReservedCounts`;
     }
-    const currentCounts =  drink.reservedCounts;
+    const currentCounts = drink.reservedCounts;
     const updatedCounts = currentCounts + 1;
-    const updatedDrink = { reservedCounts: updatedCounts };
+    const updatedDrink = {reservedCounts: updatedCounts};
     const updateDrink = await drinkCollection.updateOne(
-        { _id: drink._id },
-        { $set: updatedDrink }
+        {_id: drink._id},
+        {$set: updatedDrink}
     );
     if (updateDrink.modifiedCount === 0) {
         throw `Error: Failed to increase ReservedCounts for drinkId: ${drink._id}, drink name: ${name}`;
     }
-    return { increaseReservedCounts: true };
+    return {increaseReservedCounts: true};
 }
 
 
 export const reserveDrink = async (
     userId, drinkId
-)=>{
+) => {
     userId = validation.validateId(userId, "userId");
     drinkId = validation.validateId(drinkId, "drinkId");
 
     const userCollection = await users();
-    const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+    const user = await userCollection.findOne({_id: new ObjectId(userId)});
     if (!user) {
         throw `Error: User with ID ${userId} not found`;
     }
 
     const drinkCollection = await drinks();
-    const drink = await drinkCollection.findOne({ _id: new ObjectId(drinkId) });
+    const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
 
     if (!drink) {
         throw `Error: drink with ID ${drinkId} not found`;
@@ -281,11 +290,11 @@ export const reserveDrink = async (
     }
 
     const timestamp = validation.generateCurrentDate();
-    const reservedDrink = { drinkId, timestamp };
+    const reservedDrink = {drinkId, timestamp};
     const updatedReservedDrinks = [...user.drinkReserved, reservedDrink];
     const updateResult = await userCollection.updateOne(
-        { _id: user._id },
-        { $set: { drinkReserved: updatedReservedDrinks } }
+        {_id: user._id},
+        {$set: {drinkReserved: updatedReservedDrinks}}
     );
     if (updateResult.modifiedCount === 0) {
         throw `Error: Failed to reserve drink for user with ID ${userId}`;
@@ -299,11 +308,11 @@ export const reserveDrink = async (
 }
 
 export const updateAllDrinkRating = async () => {
-    try{
+    try {
         const allDrinks = await getAllDrinks();
         for (const drink of allDrinks) {
             const reviews = drink.reviews;
-            if(reviews.length !== 0){
+            if (reviews.length !== 0) {
                 const reviewCount = reviews.length;
                 let totalRating = 0;
                 for (const review of reviews) {
@@ -316,17 +325,14 @@ export const updateAllDrinkRating = async () => {
                 };
                 const drinkCollection = await drinks();
                 const updateDrink = await drinkCollection.updateOne(
-                    { _id: drink._id },
-                    { $set: updatedDrinkRating }
+                    {_id: drink._id},
+                    {$set: updatedDrinkRating}
                 );
-                if (updateDrink.modifiedCount === 0) {
-                    throw `Error: Failed to update all drinks' ratings `;
-                }
             }
         }
-        return { updatedAllDrinkRating: true };
-    }catch (error){
-            throw "Error: Some problem occurred when updating all drinks review."
+        return {updatedAllDrinkRating: true};
+    } catch (error) {
+        throw "Error: Some problem occurred when updating all drinks review."
     }
 
 };
@@ -339,50 +345,24 @@ export const addReviewIdToADrink = async (
 
     const UpdatedReviewId = [...drink.reviews, reviewId];
     const updateResult = await drinkCollection.updateOne(
-        { _id: drink._id },
-        { $set: { reviews: UpdatedReviewId } }
+        {_id: drink._id},
+        {$set: {reviews: UpdatedReviewId}}
     );
     return drink;
 };
 
-// export let getDrinkInfoByName = async(drinkName) =>{
-//
-//     drinkName= validation.validateName(drinkName,"drinkName");
-//
-//     const drinkCollection = await drinks();
-//     const drinkList = await drinkCollection.find({ name: drinkName}).toArray();
-//
-//     if (!drinkList) {
-//         throw `Error: drink with drinkName ${drinkName} not found`;
-//     }
-//
-//     return drinkList;
-// }
-//
-// export let getDrinkInfoByCategory = async (category) => {
-//
-//     category =  validation.validateDrinkCategory(category, "category");
-//     const drinkCollection = await drinks();
-//     const drinkList = await drinkCollection.find({ category: category}).toArray();
-//
-//     if (!drinkList) {
-//         throw `Error: drink with category ${category} not found`;
-//     }
-//     return drinkList;
-// }
-//
-// export let getDrinkInfoByRating = async (rating) => {
-//
-//     rating = validation.validateRating(rating);
-//
-//     let s = 0;
-//     if (rating === 'ascending'){
-//         s = 1;
-//     }
-//     if (rating === 'descending'){
-//         s = -1;
-//     }
-//     const drinkCollection = await drinks();
-//     let drinkList = await drinkCollection.find({}).sort({ rating: s }).toArray();
-//     return drinkList;
-// }
+export const deleteReviewIdFromADrink = async (reviewId, drinkId)=>{
+    const drinkCollection = await drinks();
+    const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
+    if (!drink) {
+        throw `Error: drink with ID ${drinkId} not found`;
+    }
+    const UpdatedReviewId = drink.reviews.filter(review => review !== reviewId);
+    const updateResult = await drinkCollection.updateOne(
+        {_id: drink._id},
+        {$set: {reviews: UpdatedReviewId}});
+    if (updateResult.modifiedCount === 0) {
+        throw `Error: Failed to delete the review io`;
+    }
+    return {reviewIdDeleted: true};
+};

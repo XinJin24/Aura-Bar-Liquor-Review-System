@@ -14,7 +14,7 @@
                 {{#each drinkReserved as |drink|}}
                     <img src="{{drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
                     <li>{{name}}</li>
-                    <button class="btn btn-primary" onclick="redirectToPage('/drink/{{_id}}')">View Drink Details</button>
+                    <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Drink Details</button>
                 {{/each}}
             </ul>
 

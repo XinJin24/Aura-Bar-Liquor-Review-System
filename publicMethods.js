@@ -134,7 +134,7 @@ const exportedMethods = {
         return role;
     },
     async validateIfFileExist(file, valName) {
-        if(!file)return "";
+        if(!file || file === "")return "";
         if(typeof file === 'string'){
             try {
                 await access(file);

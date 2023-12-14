@@ -6,7 +6,6 @@ import {fileURLToPath} from "url";
 import {dirname, join} from "path";
 import {addReviewIdToAUser, createUser, getAllUsers} from "./data/users.js";
 import {createReview, getAllReviews} from "./data/reviews.js";
-import {users} from "./config/mongoCollections.js";
 
 const currentFilePath = fileURLToPath(import.meta.url);
 const currentDirPath = dirname(currentFilePath)+"/test/";

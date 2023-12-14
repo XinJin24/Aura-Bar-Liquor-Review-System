@@ -2,7 +2,7 @@ import validation from "../publicMethods.js";
 import {drinks, reviews} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 import {deleteOneReviewFromUser} from "./users.js";
-import {updateAllDrinkRating} from "./drinks.js";
+import {deleteReviewIdFromADrink, updateAllDrinkRating} from "./drinks.js";
 
 /**
  * @param {ObjectId} _id - A unique identifier that guarantees the uniqueness of each review.
@@ -110,14 +110,22 @@ export const deleteReview = async (
         throw `Error: review with reviewId ${reviewId} not found, cannot delete`;
     }
     let userId = review.userId.toString();
-    const deleteReview = await reviewCollection.deleteOne({_id: new ObjectId(reviewId)});
-    if (deleteReview.deletedCount === 0) {
-        throw `Error: could not delete review with reviewId: ${reviewId}`;
-    }
+    let drinkId = review.drinkId.toString();
+
+
     const deleteReviewFromUser = await deleteOneReviewFromUser(reviewId, userId);
     if (deleteReviewFromUser !== true) {
         throw `Error: some error happened when deleting reviewId: ${reviewId}`
     }
+    const deleteReviewFromDrink = await deleteReviewIdFromADrink(reviewId, drinkId);
+    if (deleteReviewFromDrink.reviewIdDeleted !== true) {
+        throw `Error: some error happened when deleting reviewId: ${reviewId} from drink id ${drinkId}`
+    }
+    const deleteReview = await reviewCollection.deleteOne({_id: new ObjectId(reviewId)});
+    if (deleteReview.deletedCount === 0) {
+        throw `Error: could not delete review with reviewId: ${reviewId}`;
+    }
+
     const updateDrinkRating = await updateAllDrinkRating();
 
     if (updateDrinkRating.updatedAllDrinkRating !==true) {

@@ -12,6 +12,19 @@ import {
 } from "../data/drinks.js";
 import xss from "xss";
 
+import multer from "multer";
+import session from "express-session";
+import {getAllReviewsByUserId} from "../data/users.js";
+
+const upload = multer({
+    dest: "../public/uploads/",
+    limits: {fileSize: 10485760},
+    onError: function (err, next) {
+        console.log("error", err);
+        next(err);
+    },
+});
+
 
 //drink detail page and shows all reviews, if the review is made by the user, it will show the edit button
 
@@ -46,47 +59,27 @@ router
             });
         }
     })
-    .post(async (req, res) => {
-        //adding a drink
+    .post(upload.single("drinkPicture"), async (req, res) => {
         if (req.session.user && req.session.user.role === "admin") {
-            let name = null;
-            let category = null;
-            let recipe = null;
-            let drinkPictureLocation = null;
-            let price = null;
+            let name, category, recipe, price;
             try {
-                name = validation.validateName(xss(req.body.name), "Drink Name");//改个名字，别叫name
+                name = validation.validateDrinkName(xss(req.body.drinkName), "Drink Name");
                 category = validation.validateDrinkCategory(xss(req.body.category));
                 recipe = validation.validateDrinkRecipe(xss(req.body.recipe));
-                drinkPictureLocation = validation.validateIfFileExist(xss(req.body.drinkPictureLocation));
                 price = validation.validatePrice(xss(req.body.price));
-                console.log(price);
-            } catch (error) {
-                return res.status(400).render("createDrink", {
-                    error: error,
-                    login: true,
-                    title: "Add A Drink"
-                });
-            }
+                const drinkPictureLocation = req.file;
+                if (req.file === undefined) {
+                    throw "you must attach a picture to show to the customers";
+                }
 
-            try {
                 const newDrink = await createDrink(name, category, recipe, drinkPictureLocation, price);
-                res.status(200).redirect("/drinks/" + newDrink._id.toString());
+                res.status(200).json({success: true, drinkId: newDrink._id.toString()});
             } catch (error) {
                 console.error(error);
-                return res.status(500).render('error', {
-                    title: "Error",
-                    message: "Internal Server Error"
-                });
+                res.status(500).json({error: `Internal Server Error, reanson: ${error}`});
             }
-
         } else {
-            //if not logged in, cannot create a new drink
-            return res.status(401).render("error", {
-                errorMsg: "Please Login to add a drink.",
-                login: false,
-                title: "Error"
-            });
+            res.status(401).json({error: "Please Login to add a drink."});
         }
     });
 
@@ -110,9 +103,20 @@ router
             }
             // get the drinksInfo
             try {
+                const sessionUserId = req.session.user.userId;
                 const drinkInfo = await getDrinkInfoByDrinkId(drinkId);
                 const reviews = await getAllReviewsOnADrink(drinkId);
-
+                let hasReview = false;
+                const sessionUserAllReviews = await getAllReviewsByUserId(sessionUserId);
+                for(const review of reviews){
+                    review.myPost =false;
+                    if(review.userId === sessionUserId){
+                        review.myPost =true;
+                    }
+                    if(sessionUserAllReviews.includes(review.reviewId)){
+                        hasReview = true;
+                    }
+                }
                 const isAdmin = req.session.user.role === "admin";
                 return res.status(200).render('drinkInfo', {
                     userId: req.session.user.userId,
@@ -120,7 +124,8 @@ router
                     drinkInfo: drinkInfo,
                     reviews: reviews,
                     login: true,
-                    isAdmin: isAdmin
+                    isAdmin: isAdmin,
+                    hasReview: hasReview
                 });
             } catch (error) {
                 console.error(error);
@@ -138,55 +143,45 @@ router
             });
         }
     })
-    .post(async (req, res) => {
-        //post is to edit a drink
-        if (req.session.user && req.session.user.role === "admin") {
-            let drinkId = null;
-            let name = null;
-            let category = null;
-            let recipe = null;
-            let drinkPictureLocation = null;
-            let price = null;
-            try {
-                drinkId = validation.validateId(req.params._id, "drinkId");
-                name = validation.validateName(xss(req.body.name), "Drink Name");
-                category = validation.validateDrinkCategory(xss(req.body.category), "Drink Category")
-                recipe = validation.validateDrinkRecipe(xss(req.body.recipe));
-                drinkPictureLocation = validation.validateIfFileExist(xss(req.body.drinkPictureLocation));
-                price = validation.validatePrice(xss(req.body.price));
-            } catch (error) {
-                return res.status(400).render("updateDrinkInfo", {
-                    error: error,
-                    login: true,
-                    title: "Update Drink"
-                });
-            }
-            try {
-                const updatedDrink = await updateDrink(drinkId, name, category, recipe, drinkPictureLocation, price);
-                if (updatedDrink.updatedDrink === true) {
-                    return res.status(200).redirect('/drinkInfo/' + drinkId);
-                } else {
-                    throw "Error happened then updating a drink."
-                }
-
-            } catch (error) {
-                console.error(error);
-                return res.status(500).render('error', {
-                    title: "Error",
-                    message: "Internal Server Error"
-                });
-            }
-            //if no admin,
-        } else if (req.session.user && req.session.user.role !== "admin") {
+    .post(upload.single("drinkPicture_update"),async (req, res) => {
+        if (!req.session.user) {
             return res.status(401).render("error", {
-                errorMsg: "you do not have a privileges to edit a drink",
+                errorMsg: "Please login first to edit a drink",
+                login: false,
+                title: "Error",
+            });
+        }
+        if (req.session.user && req.session.user.role !== "admin") {
+            return res.status(401).render("error", {
+                errorMsg: "You do not have privileges to edit a drink",
                 login: true,
                 title: "Error",
             });
-        } else {
-            return res.status(401).render("error", {
-                errorMsg: "Olease login first to edit a drink",
-                login: false,
+        }
+
+        try {
+            const drinkId = validation.validateId(xss(req.body.drinkId_update));
+            const name = validation.validateDrinkName(xss(req.body.drinkName_update), "Drink Name");
+            const category = validation.validateDrinkCategory(xss(req.body.category_update), "Drink Category")
+            const recipe = validation.validateDrinkRecipe(xss(req.body.recipe_update));
+            const price = validation.validatePrice(xss(req.body.price_update));
+            let drinkPictureLocation = "";
+            if (req.file) {
+                drinkPictureLocation = req.file;
+            }
+
+            const updatedDrink = await updateDrink(drinkId, name, category, recipe, drinkPictureLocation, price);
+            if (!updatedDrink.updatedDrink) {
+                throw "Error happened while updating the drink.";
+            }
+
+            return res.status(200).json({success: true});
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).render("error", {
+                errorMsg: error,
+                login: true,
                 title: "Error",
             });
         }
@@ -198,21 +193,20 @@ router
                 drinkId = validation.validateId(req.params.id, "drinkId");
                 const deletedDrink = await deleteDrink(drinkId);
                 if (deletedDrink.deleteDrink === true) {
-                    return res.status(200).json({ message: 'Drink deleted successfully' });
+                    return res.status(200).json({message: 'Drink deleted successfully'});
                 } else {
                     throw "Error happened then deleting a drink.";
                 }
             } catch (error) {
                 console.error(error);
-                return res.status(500).json({ error: 'Internal Server Error' });
+                return res.status(500).json({error: 'Internal Server Error'});
             }
         } else if (req.session.user && req.session.user.role !== "admin") {
-            return res.status(401).json({ error: 'You do not have privileges to delete a drink' });
+            return res.status(401).json({error: 'You do not have privileges to delete a drink'});
         } else {
-            return res.status(401).json({ error: 'Please login first to delete a drink' });
+            return res.status(401).json({error: 'Please login first to delete a drink'});
         }
     });
-
 
 
 router
@@ -227,7 +221,7 @@ router
                 console.error("Error reserving drink:", error);
                 return res.status(500).send("Error reserving drink.");
             }
-        }else{
+        } else {
             console.error("Error reserving drink:", error);
             return res.status(401).send("Please Login in first to reverse a Drink");
         }
@@ -236,17 +230,30 @@ router
 
 router
     .post('/restockDrink/:id', async (req, res) => {
-    if (!req.session.user || req.session.user.role !== "admin") {
-        return res.status(401).json({ error: "Unauthorized access" });
-    }
+        if (!req.session.user || req.session.user.role !== "admin") {
+            return res.status(401).json({error: "Unauthorized access"});
+        }
 
-    try {
-        const drinkId = req.params.id;
-        await restockDrink(drinkId);
-        res.status(200).json({ message: "Drink restocked successfully" });
-    } catch (error) {
-        res.status(500).json({ error: error.toString() });
-    }
-});
+        try {
+            const drinkId = req.params.id;
+            await restockDrink(drinkId);
+            res.status(200).json({message: "Drink restocked successfully"});
+        } catch (error) {
+            res.status(500).json({error: error.toString()});
+        }
+    });
 
+router
+    .get('/api/:id', async (req, res) => {
+        if (!req.session.user || req.session.user.role !== "admin") {
+            return res.status(401).json({error: "Unauthorized access"});
+        }
+        try {
+            const drinkId = req.params.id;
+            const drinkInfo = await getDrinkInfoByDrinkId(drinkId);
+            res.status(200).json(drinkInfo);
+        } catch (error) {
+            res.status(500).json({error: error.toString()});
+        }
+    });
 export default router;

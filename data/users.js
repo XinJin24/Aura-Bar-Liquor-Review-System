@@ -290,6 +290,7 @@ export const deleteOneReviewFromUser = async (
 
 export const copyPictureAndReturnPath = async (file) => {
     try {
+
         const data = await fs.readFile(file.path);
         const extName = file.mimetype.split('/')[1];
         const imgName = `${file.filename}.${extName}`;
