@@ -187,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     success: function (response) {
                                         alert("Information updated successfully.");
                                         editInfoModal.style.display = 'none';
+                                        location.reload();
                                     },
                                     error: function (error) {
                                         alert("Error happened when updating your information.");

@@ -42,8 +42,65 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    document.querySelectorAll('.editReviewButton').forEach(button => {
+        button.addEventListener('click', function() {
+            const reviewId = this.getAttribute('data-reviewid');
+
+            document.getElementById('updateReviewId').value = reviewId;
+            document.getElementById('updateReviewModal').style.display = 'block';
+        });
+    });
+
+    document.getElementById('closeUpdateModal').addEventListener('click', () => {
+        document.getElementById('updateReviewModal').style.display = 'none';
+    });
+
     const reserveButton = document.getElementById('reserveButton');
     const addReviewForm = document.getElementById('addReviewForm');
+    const updateReviewForm = document.getElementById('updateReviewForm');
+
+    document.getElementById('closeUpdateModal').addEventListener('click', () => {
+        document.getElementById('updateReviewModal').style.display = 'none';
+    });
+
+    if (updateReviewForm) {
+        updateReviewForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(updateReviewForm);
+            const errorMessage = document.getElementById("updateReview_error");
+            errorMessage.innerHTML = "";
+            errorMessage.classList.add('hidden-div');
+
+            try {
+                let updateReviewText = formData.get("updateReviewText");
+                let updateRating = formData.get("updateRating");
+                let updateReviewPhoto = formData.get("updateReviewPhoto");
+                const reviewId = formData.get("updateReviewId");
+
+                updateReviewText = validateReviewText(updateReviewText);
+                updateRating = validateRating(updateRating);
+
+                $.ajax({
+                    type: 'PUT',
+                    url: `./review/${reviewId}`, // Adjust URL as needed
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        alert('Review updated successfully.');
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        errorMessage.classList.remove('hidden-div');
+                        errorMessage.innerHTML = error;
+                    }
+                });
+            } catch (error) {
+                errorMessage.classList.remove('hidden-div');
+                errorMessage.innerHTML = error;
+            }
+        });
+    }
 
     if (addReviewForm) {
         addReviewForm.addEventListener('submit', function (e) {
@@ -52,7 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const errorMessage = document.getElementById("addReview_error");
             errorMessage.innerHTML = "";
             errorMessage.classList.add('hidden-div');
-
 
             try {
                 let reviewText = formData.get("reviewText");

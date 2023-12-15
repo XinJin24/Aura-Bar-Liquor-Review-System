@@ -121,7 +121,7 @@ router
                 }
                 const isAdmin = req.session.user.role === "admin";
                 let isReservable = true;
-                if(drinkInfo.available === false){
+                if(drinkInfo.available === false || drinkInfo.stocks ===0){
                     isReservable = false;
                 }
                 return res.status(200).render('drinkInfo', {

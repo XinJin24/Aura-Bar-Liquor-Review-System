@@ -120,7 +120,7 @@ export const updateUser = async (
     }
     const oldProfilePictureLocation = user.profilePictureLocation;
     if(!profilePictureLocation){
-        profilePictureLocation = "public/pictures/defaultUserProfilePicture.jpg"
+        profilePictureLocation = "../public/pictures/defaultUserProfilePicture.jpg"
     }
     else{
         profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);
@@ -128,7 +128,6 @@ export const updateUser = async (
     const updatedUser = {
         firstName: firstName,
         lastName: lastName,
-        email: email,
         phoneNumber: phoneNumber,
         password: await bcrypt.hash(password, 15),
         profilePictureLocation: profilePictureLocation
@@ -148,7 +147,9 @@ export const updateUser = async (
     } catch (error) {
         throw `Error: Failed to delete old drink picture at ${oldProfilePictureLocation}`;
     }
-    return { updatedUser: true };
+    const newUserInfo = await getUserInfoByEmail(email);
+
+    return { updatedUser: true, newUserInfo:newUserInfo};
 }
 
 export const getAllReviewsByUserId = async (
@@ -223,6 +224,7 @@ export const getUserInfoByEmail = async (
         throw `Error: User with email ${email} not found`;
     }
     return {
+        userId: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,

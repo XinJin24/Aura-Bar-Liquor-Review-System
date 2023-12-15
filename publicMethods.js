@@ -41,35 +41,14 @@ const exportedMethods = {
         return `${month}/${day}/${year} ${hour}:${minutes}`;
     },
     validateDateTime(inputDate) {
-        const currentDate = new Date();
+        const dateTimeRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/(20[2-9][0-9]) ([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
 
-        if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(inputDate)) {
-            throw `Error: ${inputDate} is not a valid date.`;
+        if (typeof inputDate !== "string") {
+            throw "DateTime must be a string.";
         }
-
-        const [datePart, timePart] = inputDate.split(" ");
-        const [month, day, year] = datePart.split("/").map(Number);
-
-        const validYear = currentDate.getFullYear() + 2;
-
-        if (year < 1900 || year > validYear || month === 0 || month > 12) {
-            throw `Error: ${inputDate} is not a valid date.`;
+        if (!dateTimeRegex.test(inputDate)) {
+            throw "Invalid date and time format. Must be in MM/DD/YYYY HH:MM format.";
         }
-
-        const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-        if ((year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0)) && month === 2) {
-            monthLength[1] = 29;
-        }
-
-        if (!(day > 0 && day <= monthLength[month - 1])) {
-            throw `Error: ${inputDate} is not a valid date.`;
-        }
-
-        if (!/^([0-1]?[0-9]|2[0-3]):([0-5][0-9])(:[0-5][0-9])?$/.test(timePart)) {
-            throw `Error: ${inputDate} is not a valid time.`;
-        }
-
         return inputDate;
     },
     validateEmail(email) {
@@ -322,6 +301,9 @@ const exportedMethods = {
     },
     async deleteAPicture(filePath) {
         if(filePath ==="public/pictures/defaultUserProfilePicture.jpg"){
+            return {pictureDeleted: true}
+        }
+        if(filePath ==="../public/pictures/defaultUserProfilePicture.jpg"){
             return {pictureDeleted: true}
         }
         if (filePath !== '') {
