@@ -55,7 +55,6 @@ function fetchAndSortDrinks(sortBy) {
             }
             const ul = document.createElement('ul');
             ul.className = 'displaydrinks';
-
             drinks.forEach(drink => {
                 const li = document.createElement('li');
                 li.className = 'alldrinks';
@@ -153,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             drinksContainer.innerHTML = '<p>No drinks available</p>';
                             return;
                         }
-
                         const ul = document.createElement('ul');
                         ul.className = 'displaydrinks';
                         drinks.forEach(drink => {

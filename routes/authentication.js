@@ -8,6 +8,7 @@ import xss from "xss";
 import AWS from 'aws-sdk';
 import multer from "multer";
 import bcrypt from "bcrypt";
+import {createReview} from "../data/reviews.js";
 
 const businessPhone = "+19293335817";
 const upload = multer({
@@ -417,6 +418,31 @@ router
         });
     }
 });
+
+router
+    .route('/review/new')
+    .post(upload.single("reviewPhotoInput"), async (req, res) => {
+        console.log("correct route------------------------------------------------------------");
+        if (req.session.user) {
+            let reviewText, rating, reviewPhotoInput, drinkId, userId;
+            try {
+                drinkId = validation.validateId(xss(req.body.drinkId));
+                reviewText = validation.validateReviewText(xss(req.body.reviewText));
+                rating = validation.validateRating(xss(req.body.rating));
+                userId = req.session.user.userId;
+
+                reviewPhotoInput = req.file;
+
+                const newReview = await createReview(drinkId, userId, reviewText, rating, reviewPhotoInput);
+                res.status(200).json({success: true});
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({error: `Internal Server Error, reanson: ${error}`});
+            }
+        } else {
+            res.status(401).json({error: "Please Login to add a drink."});
+        }
+    });
 
 
 export default router;

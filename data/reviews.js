@@ -1,5 +1,5 @@
 import validation from "../publicMethods.js";
-import {drinks, reviews} from "../config/mongoCollections.js";
+import {drinks, reviews, users} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 import {deleteOneReviewFromUser} from "./users.js";
 import {deleteReviewIdFromADrink, updateAllDrinkRating} from "./drinks.js";
@@ -20,12 +20,13 @@ export const createReview = async (
     rating,
     reviewPictureLocation
 ) => {
-    drinkId = validation.validateId(drinkId, "drinkId");
+    drinkId = validation.validateId(drinkId.toString(), "drinkId");
     userId = validation.validateId(userId, "userId");
     reviewText = validation.validateReviewText(reviewText);
     rating = validation.validateRating(rating);
-    reviewPictureLocation = await validation.validateIfFileExist(reviewPictureLocation, "Review Picture Location");
+    reviewPictureLocation = await validation.validateIfFileExist(reviewPictureLocation);
 
+    // create and insert a new review
     const reviewCollection = await reviews();
     const review = {
         timeStamp: validation.generateCurrentDate(),
@@ -35,12 +36,68 @@ export const createReview = async (
         rating: rating,
         reviewPictureLocation: reviewPictureLocation
     }
-
     const insertReview = await reviewCollection.insertOne(review);
     if (!insertReview.acknowledged || !insertReview.insertedId) {
         throw `Error: couldn't add review`;
     }
+    else{
+        // updating the user
+        try{
+            const userCollection = await users();
+            const user = await userCollection.findOne({_id: new ObjectId(userId)});
+            if(!user){
+                throw `Error: Can't add the review since the userId isn't exist`;
+            }
 
+            let originalReviewId = user.reviewIds;
+            originalReviewId.push(insertReview.insertedId.toString());
+            const updatedUser = await userCollection.updateOne(
+                {_id: new ObjectId(userId)},
+                {$set: {reviewIds:originalReviewId}}
+            );
+
+            //updating the drink
+            const drinkCollection = await drinks();
+            const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
+            if(!drink){
+                throw `Error: Can't add the review since the drinkId isn't exist`;
+            }
+            let originalReviews = drink.reviews;
+            originalReviews.push(insertReview.insertedId.toString());
+            const updatedDrink = await drinkCollection.updateOne(
+                {_id: new ObjectId(drinkId)},
+                {$set: {reviews:originalReviews}}
+            );
+        } catch (error){
+            const reviewIdToRemove = insertReview.insertedId;
+
+            const userCollection = await users();
+            const removeTheReivewIdFromUserCollection = await userCollection.updateMany(
+                { reviewIds: reviewIdToRemove },
+                { $pull: { reviewIds: reviewIdToRemove } }
+            );
+
+            const drinkCollection = await drinks();
+            const removeTheReivewIdFromDrinkCollection = await drinkCollection.updateMany(
+                { reviewIds: reviewIdToRemove },
+                { $pull: { reviews: reviewIdToRemove } }
+            );
+
+            const deleteTheNewlyCreatedReview = await reviewCollection.deleteOne({ _id: reviewIdToRemove });
+
+            if (removeTheReivewIdFromUserCollection.modifiedCount !== 0) {
+                console.log('error happened, the newly created review was removed from the user collection');
+            }
+
+            if (removeTheReivewIdFromDrinkCollection.modifiedCount !== 0) {
+                console.log('error happened, the newly created review was removed from the drink collection');
+            }
+
+            if (deleteTheNewlyCreatedReview.modifiedCount !== 0) {
+                console.log('error happened, the newly created review was removed from the review collection');
+            }
+        }
+    }
     const updateDrinkRating = await updateAllDrinkRating();
     if (updateDrinkRating.updatedAllDrinkRating !==true) {
         throw "Error: Some issue happened when updating all drinks' rating"

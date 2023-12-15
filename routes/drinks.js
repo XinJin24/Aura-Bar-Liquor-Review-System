@@ -13,7 +13,6 @@ import {
 import xss from "xss";
 
 import multer from "multer";
-import session from "express-session";
 import {getAllReviewsByUserId} from "../data/users.js";
 
 const upload = multer({
@@ -60,19 +59,22 @@ router
         }
     })
     .post(upload.single("drinkPicture"), async (req, res) => {
+        console.log("testing");
         if (req.session.user && req.session.user.role === "admin") {
-            let name, category, recipe, price;
+            let name, category, recipe, price, stocks;
             try {
                 name = validation.validateDrinkName(xss(req.body.drinkName), "Drink Name");
                 category = validation.validateDrinkCategory(xss(req.body.category));
                 recipe = validation.validateDrinkRecipe(xss(req.body.recipe));
+                stocks = validation.validateStocks(xss(req.body.stocks));
                 price = validation.validatePrice(xss(req.body.price));
+
                 const drinkPictureLocation = req.file;
                 if (req.file === undefined) {
                     throw "you must attach a picture to show to the customers";
                 }
 
-                const newDrink = await createDrink(name, category, recipe, drinkPictureLocation, price);
+                const newDrink = await createDrink(name, category, recipe, drinkPictureLocation, stocks, price);
                 res.status(200).json({success: true, drinkId: newDrink._id.toString()});
             } catch (error) {
                 console.error(error);
@@ -118,6 +120,10 @@ router
                     }
                 }
                 const isAdmin = req.session.user.role === "admin";
+                let isReservable = true;
+                if(drinkInfo.available === false){
+                    isReservable = false;
+                }
                 return res.status(200).render('drinkInfo', {
                     userId: req.session.user.userId,
                     title: "Drink Detail",
@@ -125,7 +131,8 @@ router
                     reviews: reviews,
                     login: true,
                     isAdmin: isAdmin,
-                    hasReview: hasReview
+                    hasReview: hasReview,
+                    isReservable: isReservable
                 });
             } catch (error) {
                 console.error(error);
@@ -164,13 +171,14 @@ router
             const name = validation.validateDrinkName(xss(req.body.drinkName_update), "Drink Name");
             const category = validation.validateDrinkCategory(xss(req.body.category_update), "Drink Category")
             const recipe = validation.validateDrinkRecipe(xss(req.body.recipe_update));
+            const stocks = validation.validateStocks(xss(req.body.stocks_update));
             const price = validation.validatePrice(xss(req.body.price_update));
             let drinkPictureLocation = "";
             if (req.file) {
                 drinkPictureLocation = req.file;
             }
 
-            const updatedDrink = await updateDrink(drinkId, name, category, recipe, drinkPictureLocation, price);
+            const updatedDrink = await updateDrink(drinkId, name, category, recipe, drinkPictureLocation, stocks,price);
             if (!updatedDrink.updatedDrink) {
                 throw "Error happened while updating the drink.";
             }
@@ -233,10 +241,11 @@ router
         if (!req.session.user || req.session.user.role !== "admin") {
             return res.status(401).json({error: "Unauthorized access"});
         }
-
         try {
             const drinkId = req.params.id;
-            await restockDrink(drinkId);
+            let stockAmount = xss(req.body.stockAmount);
+            stockAmount = validation.validateStocks(stockAmount);
+            await restockDrink(drinkId, stockAmount);
             res.status(200).json({message: "Drink restocked successfully"});
         } catch (error) {
             res.status(500).json({error: error.toString()});
@@ -256,4 +265,5 @@ router
             res.status(500).json({error: error.toString()});
         }
     });
+
 export default router;

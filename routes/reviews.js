@@ -1,8 +1,19 @@
 import validation from "../publicMethods.js";
 import {getUserIdByEmail, getUserInfoByUserId} from "../data/users.js";
-import {deleteReview, getReviewInfoByReviewId, updateReview} from "../data/reviews.js";
+import {createReview, deleteReview, getReviewInfoByReviewId, updateReview} from "../data/reviews.js";
 import {getDrinkInfoByDrinkId} from "../data/drinks.js";
 import router from "./drinks.js";
+import xss from "xss";
+
+import multer from "multer";
+const upload = multer({
+    dest: "../public/uploads/",
+    limits: {fileSize: 10485760},
+    onError: function (err, next) {
+        console.log("error", err);
+        next(err);
+    },
+});
 
 router
     .route('/review/:id')
@@ -146,4 +157,8 @@ router
             res.status(400).json({error: error.toString()});
         }
     });
+
+
+
+
 export default router;

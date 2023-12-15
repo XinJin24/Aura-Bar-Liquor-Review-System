@@ -200,16 +200,26 @@ const exportedMethods = {
         return description;
     },
     validateRating(rating) {
-        if (typeof rating !== "string" || rating.trim().length === 0) {
-            throw `Error: rating should be a valid string with number 0 - 5(no empty spaces)`;
-        }
-        rating = rating.trim();
-        const numericRating = Number(rating);
-        if (isNaN(numericRating)) {
-            throw `Error: rating should be a valid number between 0 and 5.`;
+        let numericRating;
+        if (typeof rating === "string") {
+            rating = rating.trim();
+            if (rating.length === 0) throw "Rating cannot be all empty spaces";
+
+            numericRating = Number(rating);
+
+            if (isNaN(numericRating)) {
+                throw "Rating should be a valid number.";
+            }
+        } else if (typeof rating === "number") {
+            numericRating = rating;
+        } else {
+            throw "Rating should be a number or a string representing a number.";
         }
         if (numericRating < 0 || numericRating > 5) {
-            throw `Error: rating should be between 0 and 5.`;
+            throw "Rating should be between 0 and 5.";
+        }
+        if (!/^\d+(\.\d{1,2})?$/.test(numericRating.toString())) {
+            throw "Rating should have at most two decimal places.";
         }
         return numericRating;
     },
@@ -220,16 +230,15 @@ const exportedMethods = {
         if (typeof name !== "string" || name.trim().length === 0) {
             throw `Error: ${valName} should be a valid string (no empty spaces)`;
         }
-
         name = name.trim();
-        const nameRegex = /^[a-zA-Z0-9\sáéíóúüñäëïöü']+$/;
-        if (!nameRegex.test(name)) {
-            throw `Error: ${valName} must only contain alphanumeric characters (a-z, A-Z, 0-9), spaces, and special characters including ' and should not contain other special characters`;
+        const hasAlphabet = /[a-zA-Z]/.test(name);
+        const validCharacters = /^[a-zA-Z0-9\sáéíóúüñäëïöü]*$/;
+        if (!hasAlphabet || !validCharacters.test(name)) {
+            throw `Error: ${valName} must contain at least one alphabet character and only include alphabets, numbers, spaces, and special characters áéíóúüñäëïöü`;
         }
         if (name.length < 2 || name.length > 100) {
             throw `Error: ${valName} length must be at least 2 characters long with a max of 100 characters`;
         }
-
         return name;
     },
     validateDrinkCategory(category, valName) {
@@ -330,6 +339,28 @@ const exportedMethods = {
         } else {
             return {pictureDeleted: true}
         }
+    },
+    validateStocks(stocks) {
+        if (typeof stocks !== "string" && typeof stocks !== "number") {
+            throw `Error: stocks should be a valid number (no empty spaces)`;
+        }
+        if(typeof stocks === 'string' && stocks.trim().length !==0){
+            stocks = stocks.trim();
+            if (!/^\d+$/.test(stocks)) {
+                throw `Error: stocks must be an integer.`;
+            }
+            stocks = Number(stocks);
+        }
+        if (!Number.isInteger(stocks)) {
+            throw `Error: stocks must be a whole number.`;
+        }
+        if (isNaN(stocks)) {
+            throw `Error: stocks must be a valid number.`;
+        }
+        if (stocks < 0 || stocks > 500) {
+            throw `Error: stocks amount should be between 0 and 500.`;
+        }
+        return stocks;
     }
 }
 export default exportedMethods;

@@ -33,6 +33,7 @@
                         <p>Category: {{category}}</p>
                         <p>Rating: {{rating}}</p>
                         <p>Price: {{price}}</p>
+                        <p>Stocks: {{stocks}}</p>
                         <p>Reserved Counts: {{reservedCounts}}</p>
                         <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Details</button>
                         <button class="btn btn-warning updateButton" data-drinkid="{{_id}}">Update Drink</button>
@@ -91,6 +92,10 @@
                     <input type="number" id="price" name="price" required>
                 </div>
                 <div>
+                    <label for="stocks">Stocks:</label>
+                    <input type="number" id="stocks" name="stocks" required>
+                </div>
+                <div>
                     <label for="drinkPicture">Upload Image:</label>
                     <input type="file" id="drinkPicture" name="drinkPicture" accept="image/*" required>
                 </div>
@@ -123,6 +128,10 @@
                     <input type="number" id="price_update" name="price_update" required>
                 </div>
                 <div>
+                    <label for="stocks_update">Stocks:</label>
+                    <input type="number" id="stocks_update" name="stocks_update" required>
+                </div>
+                <div>
                     <label for="drinkPicture_update">Upload Image:</label>
                     <input type="file" id="drinkPicture_update" name="drinkPicture_update" accept="image/*" required>
                     <img id="currentDrinkImage" src="" alt="Current Drink Image" style="max-width: 100px; max-height: 100px;"/>
@@ -132,5 +141,19 @@
         </div>
     </div>
 
-
+    <div id="updateStocksModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" id="closeStocksModal">&times;</span>
+            <h2>What is the amount to restock?</h2>
+            <div id="updateStocks_error" class="hidden-div"></div>
+            <form id="updateStockForm">
+                <input type="hidden" id="drinkId_stocks" name="drinkId_stocks">
+                <div>
+                    <label for="stockAmount">Amount: </label>
+                    <input type="text" id="stockAmount" name="stockAmount" required>
+                </div>
+                <button type="button" id="submitUpdateStocks">Restock</button>
+            </form>
+        </div>
+    </div>
 </div>

@@ -9,8 +9,11 @@
             <p>Recipe: {{drinkInfo.recipe}}</p>
             <p>Rating: {{drinkInfo.rating}}</p>
             <p>Price: {{drinkInfo.price}}</p>
-            <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink Picture" id="drinkPhoto"/>
-            <button class="btn btn-success" id="reserveButton" data-drinkid="{{drinkInfo._id}}">Reserve</button>
+            <p>Stocks: {{drinkInfo.stocks}}</p>
+            <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink Picture" id="drinkPhoto"/><br>
+            {{# if drinkInfo.isReservable}}
+                <button class="btn btn-success" id="reserveButton" data-drinkid="{{drinkInfo._id}}">Reserve</button>
+            {{/if}}
         </div>
 
         <div>
@@ -25,32 +28,38 @@
                                 <span>{{timestamp}}</span>
                                 {{#if myPost}}
                                     <button class="" id="reviewEditBtn">Edit</button>
-                                    <button class="btn btn-danger deleteButton" data-reviewid="{{reviewId}}">Delete</button>
-
+                                    <button class="btn btn-danger deleteButton" data-reviewid="{{reviewId}}">Delete
+                                    </button>
                                 {{/if}}
                             </div>
                         </div>
                         <p>{{reviewText}}</p>
+                        {{#if reviewPicture}}
+                            <img src="{{reviewPicture}}" alt="review_Picture" id="reviewPhoto"/><br>
+                        {{/if}}
                     </li>
                 {{/each}}
             </ul>
-
         </div>
 
 
         {{#unless hasReview}}
             <div>
                 <h2>Add a Review</h2>
-                <form id="addReview" action="/drink/{{drinkInfo._id}}" method="POST">
+                <div id="addReview_error" class="hidden-div"></div>
+                <form id="addReviewForm" method="POST">
+                    <input type="hidden" id="drinkId" name="drinkId" value="{{drinkInfo._id}}">
                     <div>
-                        <label for="reviewText">Review:
-                            <textarea id="reviewText" name="reviewText" required></textarea>
-                        </label>
+                        <label for="reviewText">Review:</label>
+                        <textarea id="reviewText" name="reviewText" required></textarea>
                     </div>
                     <div>
-                        <label for="rating">Rating (1-5):
-                            <input type="number" id="rating" name="rating" required min="1" max="5">
-                        </label>
+                        <label for="rating">Rating (1-5):</label>
+                        <input type="number" id="rating" name="rating" required min="1" max="5">
+                    </div>
+                    <div>
+                        <label for="reviewPhotoInput">Review Photo:</label>
+                        <input type="file" id="reviewPhotoInput" name="reviewPhotoInput" accept="image/*">
                     </div>
                     <div>
                         <button type="submit" id="postReview">Post Review</button>

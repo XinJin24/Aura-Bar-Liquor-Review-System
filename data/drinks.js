@@ -2,9 +2,6 @@ import validation from "../publicMethods.js";
 import {drinks, reviews, users} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
 import {getReviewInfoByReviewId} from "./reviews.js";
-import {access, unlink} from 'fs/promises';
-import {dirname, join} from "path";
-import {fileURLToPath} from "url";
 
 /**
  * @param {ObjectId} _id - A globally unique identifier for the specific drink.
@@ -15,8 +12,10 @@ import {fileURLToPath} from "url";
  * @param {array} reviews - An array that stores references (IDs) to the reviews.
  * @param {Array(String)} drinkPictureLocation - the location of the drink picture.
  * @param {number} price - the price of the drink.
- * @param {number} reservedCounts - The number of users who have reserved the specific drink..
+ * @param {number} reservedCounts - The number of users who have reserved the specific drink.
  * @param {boolean} available - The boolean that indicate the available of the drink.
+ * @param {number} stocks - The stock amount of the drink
+ * @param {boolean} nameInLowerCase - the drinks name in lower case
  */
 
 //"whiskey", "vodka", "rum", "gin", "tequila", "brandy", "liqueur", "wine", "beer", "juice", "other"
@@ -25,15 +24,19 @@ export const createDrink = async (
     category,
     recipe,
     drinkPictureLocation,
+    stocks,
     price
 ) => {
     name = validation.validateDrinkName(name, "DrinkName");
     category = validation.validateDrinkCategory(category, "DrinkCategory");
     recipe = validation.validateDrinkRecipe(recipe);
     price = validation.validatePrice(price, "Drink Price");
+    stocks = validation.validateStocks(stocks);
+
+    const thisNameInLowerCase = name.toLowerCase();
 
     const drinkCollection = await drinks();
-    const ifExist = await drinkCollection.findOne({name: name});
+    const ifExist = await drinkCollection.findOne({nameInLowerCase: thisNameInLowerCase});
     if (ifExist) {
         throw `Error: ${name} is already exist in the drinks library.`;
     }
@@ -48,7 +51,9 @@ export const createDrink = async (
         drinkPictureLocation: drinkPictureLocation,
         price: price,
         reservedCounts: 0,
-        available: true
+        available: true,
+        stocks: stocks,
+        nameInLowerCase: thisNameInLowerCase
     }
 
     const insertDrink = await drinkCollection.insertOne(drink);
@@ -66,6 +71,7 @@ export const updateDrink = async (
     category,
     recipe,
     drinkPictureLocation,
+    stocks,
     price
 ) => {
     drinkId = validation.validateId(drinkId, "Drink Id");
@@ -73,6 +79,8 @@ export const updateDrink = async (
     category = validation.validateDrinkCategory(category, "Drink Category");
     recipe = validation.validateDrinkRecipe(recipe);
     price = validation.validatePrice(price, "Drink Price");
+    stocks = validation.validateStocks(stocks);
+
     const drinkCollection = await drinks();
     const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
 
@@ -80,9 +88,9 @@ export const updateDrink = async (
         throw `Error: drink with the drinkId: ${drink} not found`;
     }
     const oldDrinkPictureLocation = drink.drinkPictureLocation;
-    if(drinkPictureLocation === ""){
+    if (drinkPictureLocation === "") {
         drinkPictureLocation = oldDrinkPictureLocation;
-    } else{
+    } else {
         drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
     }
 
@@ -91,7 +99,8 @@ export const updateDrink = async (
         category: category,
         recipe: recipe,
         drinkPictureLocation: drinkPictureLocation,
-        price: price
+        price: price,
+        stocks: stocks
     };
 
     const updateDrink = await drinkCollection.updateOne(
@@ -140,9 +149,10 @@ export const deleteDrink = async (
 }
 
 export const restockDrink = async (
-    drinkId
+    drinkId, stockAmount
 ) => {
     drinkId = validation.validateId(drinkId, "drinkId");
+    stockAmount = validation.validateStocks(stockAmount);
 
     const drinkCollection = await drinks();
     const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
@@ -150,11 +160,17 @@ export const restockDrink = async (
     if (!drink) {
         throw `Error: drink with drinkId ${drinkId} not found, cannot delete`;
     }
-    if (drink.available === true) {
-        return {restockedDrink: true};
+    const originalStockAmount = drink.stocks;
+    let updatedStockAmount = stockAmount;
+    if (originalStockAmount) {
+        updatedStockAmount = originalStockAmount + stockAmount;
+    }
+
+    if (updatedStockAmount > 500) {
+        throw `Error: Failed to stock since the updated stocking would be exceed 500.`;
     }
     const updatedDrink = {
-        available: true
+        available: true, stocks: updatedStockAmount
     };
     const updateDrink = await drinkCollection.updateOne(
         {_id: drink._id},
@@ -190,6 +206,8 @@ export const getDrinkInfoByDrinkId = async (
         price: drink.price,
         reservedCounts: drink.reservedCounts,
         available: drink.available,
+        stocks: drink.stocks,
+        nameInLowerCase: drink.nameInLowerCase
     };
 
     return drinkInfo;
@@ -254,7 +272,19 @@ export const increaseReservedCounts = async (
     }
     const currentCounts = drink.reservedCounts;
     const updatedCounts = currentCounts + 1;
-    const updatedDrink = {reservedCounts: updatedCounts};
+    const currentStocks = drink.stocks;
+    let available = true;
+    if (drink.available === false) {
+        available = false;
+    }
+    let updatedStocks = 0;
+    if (currentStocks >= 1) {
+        updatedStocks = currentStocks - 1;
+    }
+    if (updatedStocks === 0) {
+        available = false;
+    }
+    const updatedDrink = {reservedCounts: updatedCounts, stocks: updatedStocks, available: available};
     const updateDrink = await drinkCollection.updateOne(
         {_id: drink._id},
         {$set: updatedDrink}
@@ -285,8 +315,8 @@ export const reserveDrink = async (
         throw `Error: drink with ID ${drinkId} not found`;
     }
 
-    if (!drink.available) {
-        throw `Error: drink with ID ${drinkId} not available, cannot reverse`;
+    if (!drink.available || drink.stocks === 0) {
+        throw `Error: drink with ID ${drinkId} not available, cannot reserve`;
     }
 
     const timestamp = validation.generateCurrentDate();
@@ -351,7 +381,7 @@ export const addReviewIdToADrink = async (
     return drink;
 };
 
-export const deleteReviewIdFromADrink = async (reviewId, drinkId)=>{
+export const deleteReviewIdFromADrink = async (reviewId, drinkId) => {
     const drinkCollection = await drinks();
     const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
     if (!drink) {
