@@ -110,10 +110,12 @@ export const updateUser = async (
     lastName = validation.validateName(lastName, "lastName");
     email = validation.validateEmail(email, "email");
     phoneNumber = validation.validatePhoneNumber(phoneNumber);
+    // console.log(phoneNumber);
     password = validation.validatePassword(password, "password");
 
     const userCollection = await users();
     const user = await userCollection.findOne({ email: email });
+    // console.log('original' + user);
 
     if (!user) {
         throw `Error: User with email ${email} not found`;
@@ -129,14 +131,16 @@ export const updateUser = async (
         firstName: firstName,
         lastName: lastName,
         phoneNumber: phoneNumber,
-        password: await bcrypt.hash(password, 15),
+        password: await bcrypt.hash(password, 12),
         profilePictureLocation: profilePictureLocation
     };
-
+    // console.log(updatedUser);
+    // console.log('update' + updatedUser.phoneNumber);
     const updateUser = await userCollection.updateOne(
         { _id: user._id },
         { $set: updatedUser }
     );
+    // console.log(updateUser);
     if (updateUser.modifiedCount === 0) {
         throw `Error: Failed to update user with email ${email}`;
     }
@@ -148,7 +152,7 @@ export const updateUser = async (
         throw `Error: Failed to delete old drink picture at ${oldProfilePictureLocation}`;
     }
     const newUserInfo = await getUserInfoByEmail(email);
-
+  
     return { updatedUser: true, newUserInfo:newUserInfo};
 }
 

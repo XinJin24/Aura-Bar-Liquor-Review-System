@@ -98,6 +98,8 @@
                 <div>
                     <label for="drinkPicture">Upload Image:</label>
                     <input type="file" id="drinkPicture" name="drinkPicture" accept="image/*" required>
+                    <img  id="imagePreview" src="" alt="Image Preview" style="display: none;" >
+                    <button type="button" id="removeImageBtn" style="display: none;">Remove Image</button>
                 </div>
                 <button type="button" id="submitNewDrink">Add Drink</button>
             </form>
@@ -134,7 +136,9 @@
                 <div>
                     <label for="drinkPicture_update">Upload Image:</label>
                     <input type="file" id="drinkPicture_update" name="drinkPicture_update" accept="image/*" required>
-                    <img id="currentDrinkImage" src="" alt="Current Drink Image" style="max-width: 100px; max-height: 100px;"/>
+<!--                    <img id="currentDrinkImage" src="" alt="Current Drink Image" style="max-width: 100px; max-height: 100px;"/>-->
+                    <img  id="newPreview" src="" alt="newPreview" style="display: none;" >
+                    <button type="button" id="removePreviewBtn" style="display: none;">Remove Image</button>
                 </div>
                 <button type="button" id="submitUpdateDrink">Save Changes</button>
             </form>
