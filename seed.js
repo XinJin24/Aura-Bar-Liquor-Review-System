@@ -8,7 +8,7 @@ import {addReviewIdToAUser, createUser, getAllUsers} from "./data/users.js";
 import {createReview, getAllReviews} from "./data/reviews.js";
 
 const currentFilePath = fileURLToPath(import.meta.url);
-const currentDirPath = dirname(currentFilePath)+"/test/";
+const currentDirPath = dirname(currentFilePath) + "/test/";
 
 
 let drink1 = null;
@@ -362,7 +362,6 @@ const reviewPicture49 = join(currentDirPath, "reviewPhotos/review49.jpg");
 const reviewPicture50 = join(currentDirPath, "reviewPhotos/review50.jpg");
 
 
-
 const reviewTexts = [
     "A delightful surprise.",
     "Exemplary quality.",
@@ -596,137 +595,134 @@ const reviewPictures = [
 ];
 
 
-
-
-
 //"whiskey", "vodka", "rum", "gin", "tequila", "brandy", "liqueur", "wine", "beer", "juice", "other"
 try {
-    drink1 = await createDrink("Old Fashioned", "whiskey","- 2 oz bourbon or rye whiskey\n" +
+    drink1 = await createDrink("Old Fashioned", "whiskey", "- 2 oz bourbon or rye whiskey\n" +
         "- 2 dashes Angostura bitters\n" +
         "- 1 sugar cube or 1 tsp sugar\n" +
-        "- Orange twist garnish",drinkPicturePath1,10,10);
+        "- Orange twist garnish", drinkPicturePath1, 10, 10);
 
-    drink2 = await createDrink("Margarita", "tequila","- 2 oz silver tequila\n" +
+    drink2 = await createDrink("Margarita", "tequila", "- 2 oz silver tequila\n" +
         "- 1 oz Cointreau\n" +
         "- 1 oz lime juice\n" +
-        "- Salt for the rim",drinkPicturePath2,10,12);
+        "- Salt for the rim", drinkPicturePath2, 10, 12);
 
     drink3 = await createDrink("Cosmopolitan", "vodka", "- 1.5 oz citrus vodka\n" +
         "- 1 oz Cointreau\n" +
         "- .5 oz lime juice\n" +
-        "- .25 oz cranberry juice", drinkPicturePath3, 10,15);
+        "- .25 oz cranberry juice", drinkPicturePath3, 10, 15);
 
-    drink4 = await createDrink("Negroni", "gin","- 1 oz gin\n" +
+    drink4 = await createDrink("Negroni", "gin", "- 1 oz gin\n" +
         "- 1 oz Campari\n" +
-        "- 1 oz sweet vermouth",drinkPicturePath4,10,19);
+        "- 1 oz sweet vermouth", drinkPicturePath4, 10, 19);
 
-    drink5 = await createDrink("Moscow Mule", "vodka ","- 2 oz vodka\n" +
+    drink5 = await createDrink("Moscow Mule", "vodka ", "- 2 oz vodka\n" +
         "- 4 to 6 oz ginger beer\n" +
-        "- .5 oz lime juice",drinkPicturePath5,10,10);
+        "- .5 oz lime juice", drinkPicturePath5, 10, 10);
 
     drink6 = await createDrink("Martini", "vodka", "- 3 oz gin or vodka\n" +
         "- .5 oz dry vermouth\n" +
-        "- Lemon peel or olive", drinkPicturePath6, 10,22);
+        "- Lemon peel or olive", drinkPicturePath6, 10, 22);
 
     drink7 = await createDrink("Mojito", "rum", "- 3 mint leaves\n" +
         "- 2 oz white rum\n" +
         "- .75 oz lime juice\n" +
-        "- .5 oz simple syrup", drinkPicturePath7, 10,18);
+        "- .5 oz simple syrup", drinkPicturePath7, 10, 18);
 
     drink8 = await createDrink("Whiskey Sour", "whiskey", "- 2 oz whiskey\n" +
         "- 1 oz lemon juice\n" +
         "- 1 tsp sugar\n" +
-        "- 1 egg white (optional)", drinkPicturePath8, 10,14);
+        "- 1 egg white (optional)", drinkPicturePath8, 10, 14);
 
     drink9 = await createDrink("French 75", "gin", "- 2 oz gin\n" +
         "- 2 dashes simple syrup\n" +
         "- .5 oz lemon juice\n" +
-        "- Champagne", drinkPicturePath9, 10,20);
+        "- Champagne", drinkPicturePath9, 10, 20);
 
     drink10 = await createDrink("Manhattan", "whiskey", "- 2 oz rye whiskey\n" +
         "- 1 oz sweet vermouth\n" +
-        "- 2 dashes Angostura bitters", drinkPicturePath10, 10,24);
+        "- 2 dashes Angostura bitters", drinkPicturePath10, 10, 24);
 
     // New drinks
     drink11 = await createDrink("Spritz", "mix", "- Equal parts Aperol\n" +
         "- Equal parts Cinzano Prosecco\n" +
-        "- Splash of Soda", drinkPicturePath11, 10,16);
+        "- Splash of Soda", drinkPicturePath11, 10, 16);
 
     drink12 = await createDrink("Gimlet", "mix", "- 2 oz gin or vodka\n" +
         "- .75 oz simple syrup\n" +
-        "- .75 oz lime juice", drinkPicturePath12, 10,14);
+        "- .75 oz lime juice", drinkPicturePath12, 10, 14);
 
     drink13 = await createDrink("Sazerac", "whiskey", "- 2 oz rye whiskey\n" +
         "- .5 oz simple syrup\n" +
         "- 2 dashes Peychaud's bitters\n" +
-        "- Absinthe", drinkPicturePath13, 10,21);
+        "- Absinthe", drinkPicturePath13, 10, 21);
 
     drink14 = await createDrink("Pimm's Cup", "mix", "- 50 ml (about 1.75 oz) Pimm's No.1\n" +
         "- 150 ml (about 5 oz) lemonade\n" +
         "- Mint, orange, strawberries\n" +
-        "- Cucumber to garnish", drinkPicturePath14, 10,18);
+        "- Cucumber to garnish", drinkPicturePath14, 10, 18);
 
     drink15 = await createDrink("Aviation", "gin", "- 2 oz gin\n" +
         "- .5 oz maraschino liqueur\n" +
         "- .75 oz lemon juice\n" +
-        "- .25 oz creme de violette", drinkPicturePath15, 10,20);
+        "- .25 oz creme de violette", drinkPicturePath15, 10, 20);
 
     drink16 = await createDrink("Vesper", "mix", "- 3 oz gin\n" +
         "- 1 oz vodka\n" +
-        "- .5 oz Lillet blanc", drinkPicturePath16, 10,25);
+        "- .5 oz Lillet blanc", drinkPicturePath16, 10, 25);
 
     drink17 = await createDrink("Tom Collins", "gin", "- 2 oz Old Tom gin\n" +
         "- 1 oz lemon juice\n" +
         "- .5 oz simple syrup\n" +
-        "- Club soda to top", drinkPicturePath17, 10,16);
+        "- Club soda to top", drinkPicturePath17, 10, 16);
 
     drink18 = await createDrink("Mimosa", "champagne", "- 2.5 oz champagne\n" +
-        "- 2.5 oz orange juice", drinkPicturePath18, 10,12);
+        "- 2.5 oz orange juice", drinkPicturePath18, 10, 12);
 
     drink19 = await createDrink("Paloma", "tequila", "- 2 oz tequila\n" +
         "- .5 oz lime juice\n" +
-        "- Grapefruit soda to top", drinkPicturePath19, 10,14);
+        "- Grapefruit soda to top", drinkPicturePath19, 10, 14);
 
     drink20 = await createDrink("Last Word", "mix", "- .75 oz gin\n" +
         "- .75 oz maraschino liqueur\n" +
         "- .75 oz green chartreuse\n" +
-        "- .75 oz lime juice", drinkPicturePath20, 10,22);
+        "- .75 oz lime juice", drinkPicturePath20, 10, 22);
 
     drink21 = await createDrink("Sidecar", "brandy", "- 2 oz VS or VSOP Cognac\n" +
         "- 1 oz Cointreau\n" +
-        "- .75 oz lemon juice", drinkPicturePath21, 10,18);
+        "- .75 oz lemon juice", drinkPicturePath21, 10, 18);
 
     drink22 = await createDrink("Mint Julep", "bourbon", "- 2 oz bourbon\n" +
         "- 8-10 mint leaves\n" +
-        "- .25 oz simple syrup", drinkPicturePath22, 10,15);
+        "- .25 oz simple syrup", drinkPicturePath22, 10, 15);
 
     drink23 = await createDrink("Daiquiri", "rum", "- 2 oz light rum\n" +
         "- 1 oz simple syrup\n" +
-        "- 1 oz lime juice", drinkPicturePath23, 10,14);
+        "- 1 oz lime juice", drinkPicturePath23, 10, 14);
 
     drink24 = await createDrink("Dark 'n Stormy", "rum", "- 1.5 oz Gosling's Black Seal Rum\n" +
-        "- Ginger beer to top", drinkPicturePath24, 10,16);
+        "- Ginger beer to top", drinkPicturePath24, 10, 16);
 
     drink25 = await createDrink("Martinez", "gin", "- 1.5 oz Old Tom gin\n" +
         "- 1.5 oz sweet vermouth\n" +
         "- .25 oz Luxardo maraschino liqueur\n" +
-        "- 2 dashes Angostura or orange bitters", drinkPicturePath25, 10,20);
+        "- 2 dashes Angostura or orange bitters", drinkPicturePath25, 10, 20);
 
     drink26 = await createDrink("Boulevardier", "mix", "- 1 oz Campari\n" +
         "- 1 oz sweet red vermouth\n" +
         "- 1 oz to 1.5 oz bourbon (rye whiskey is often used instead in modern-day versions)", drinkPicturePath26, 19);
 
     drink27 = await createDrink("Gin and Tonic", "gin", "- 2 oz gin\n" +
-        "- 4 to 6 oz tonic water", drinkPicturePath27, 10,12);
+        "- 4 to 6 oz tonic water", drinkPicturePath27, 10, 12);
 
     drink28 = await createDrink("Penicillin", "whiskey", "- 2 oz blended Scotch\n" +
         "- .75 oz freshly squeezed lemon juice\n" +
         "- .75 oz honey-ginger syrup\n" +
-        "- .25 oz Islay single malt Scotch", drinkPicturePath28, 10,23);
+        "- .25 oz Islay single malt Scotch", drinkPicturePath28, 10, 23);
 
     drink29 = await createDrink("Champagne Cocktail", "champagne", "- 1 sugar cube\n" +
         "- 3 dashes Angostura bitters\n" +
-        "- Top with champagne", drinkPicturePath29, 10,17);
+        "- Top with champagne", drinkPicturePath29, 10, 17);
 
     drink30 = await createDrink("Long Island Iced Tea", "mix", "- .5 oz gin\n" +
         "- .5 oz white rum\n" +
@@ -734,14 +730,14 @@ try {
         "- .5 oz vodka\n" +
         "- .5 oz triple sec\n" +
         "- 1.25 oz homemade sour mix, or .75 oz freshly squeezed lemon juice and .5 oz simple syrup\n" +
-        "Coca Cola, to taste", drinkPicturePath30, 10,21);
+        "Coca Cola, to taste", drinkPicturePath30, 10, 21);
 
     // New drinks
     drink31 = await createDrink("Greyhound", "mix", "- 2 oz vodka or gin\n" +
-        "- 4 oz grapefruit juice", drinkPicturePath31, 10,14);
+        "- 4 oz grapefruit juice", drinkPicturePath31, 10, 14);
 
     drink32 = await createDrink("Kir Royale", "mix", "- .5 oz creme de cassis\n" +
-        "- Champagne, to top (or another sparkling wine)", drinkPicturePath32, 10,18);
+        "- Champagne, to top (or another sparkling wine)", drinkPicturePath32, 10, 18);
 
     drink33 = await createDrink("Bloody Mary", "vodka", "- 2.5 oz vodka\n" +
         "- .75 cup tomato juice\n" +
@@ -750,7 +746,7 @@ try {
         "- 2 dashes hot sauce (optional)\n" +
         "- .25 tsp prepared horseradish\n" +
         "- 1 pinch celery salt\n" +
-        "- 1 pinch black pepper", drinkPicturePath33, 10,16);
+        "- 1 pinch black pepper", drinkPicturePath33, 10, 16);
 
     drink34 = await createDrink("Mai Tai", "rum", "- Lime wedge, for rimming\n" +
         "- .5 tbsp chili powder\n" +
@@ -760,27 +756,27 @@ try {
         "- Juice of 1 lime\n" +
         "- 1 oz orange Curaçao\n" +
         "- .5 oz orgeat syrup\n" +
-        "- 1 tbsp grenadine", drinkPicturePath34, 10,22);
+        "- 1 tbsp grenadine", drinkPicturePath34, 10, 22);
 
     drink35 = await createDrink("Bellini", "mix", "- 1.5 oz fresh white peach puree\n" +
-        "- Prosecco, to top", drinkPicturePath35, 10,16);
+        "- Prosecco, to top", drinkPicturePath35, 10, 16);
 
     drink36 = await createDrink("Sex on the Beach", "mix", "- 1.5 oz vodka\n" +
         "- .5 oz peach schnapps\n" +
         "- 2 oz orange juice\n" +
-        "- 2 oz cranberry juice", drinkPicturePath36, 10,20);
+        "- 2 oz cranberry juice", drinkPicturePath36, 10, 20);
 
     drink37 = await createDrink("White Russian", "mix", "- 1.5 oz vodka\n" +
         "- .75 oz Kahlua\n" +
-        "- .75 oz heavy cream", drinkPicturePath37, 10,18);
+        "- .75 oz heavy cream", drinkPicturePath37, 10, 18);
 
     drink38 = await createDrink("Piña Colada", "rum", "- 2.5 oz rum\n" +
         "- 3 oz pineapple juice\n" +
-        "- 1 oz coconut cream (usually Coco Lopez)", drinkPicturePath38, 10,15);
+        "- 1 oz coconut cream (usually Coco Lopez)", drinkPicturePath38, 10, 15);
 
     drink39 = await createDrink("Bee's Knees", "gin", "- 2 oz gin\n" +
         "- .75 oz freshly squeezed lemon juice\n" +
-        "- .5 oz honey syrup", drinkPicturePath39, 10,17);
+        "- .5 oz honey syrup", drinkPicturePath39, 10, 17);
 
     drink40 = await createDrink("Sangria", "mix", "- 1 (750-ml) bottle red wine\n" +
         "- 1 cup orange juice\n" +
@@ -790,19 +786,18 @@ try {
         "- 1 apple, sliced\n" +
         "- 1 cup blueberries\n" +
         "- 1 cup sliced strawberries\n" +
-        "- 1 (12-oz) can seltzer", drinkPicturePath40, 10,25);
+        "- 1 (12-oz) can seltzer", drinkPicturePath40, 10, 25);
 
     drink41 = await createDrink("Espresso Martini", "mix", "- 2 oz vodka\n" +
         "- 1 oz coffee liquor\n" +
         "- 1 oz espresso (or cold brew coffee concentrate)\n" +
-        "- .5 oz simple syrup", drinkPicturePath41, 10,21);
+        "- .5 oz simple syrup", drinkPicturePath41, 10, 21);
 
     drink42 = await createDrink("Death in the Afternoon", "mix", "- 1.5 oz absinthe\n" +
-        "- About 4.5 oz chilled Champagne", drinkPicturePath42, 10,24);
+        "- About 4.5 oz chilled Champagne", drinkPicturePath42, 10, 24);
 
     drink43 = await createDrink("Screwdriver", "vodka", "- 1 to 2 oz vodka\n" +
-        "- Freshly squeezed orange juice, to top*", drinkPicturePath43, 10,14);
-
+        "- Freshly squeezed orange juice, to top*", drinkPicturePath43, 10, 14);
 
 
     user1 = await createUser("Mike", "River", "mike.river1@example.com", "9293335817", "Abc123!@#", profilePicture1, "admin");
@@ -824,11 +819,11 @@ try {
     const drinks = await getAllDrinks();
 
 
-    for(const user of users){
+    for (const user of users) {
         userIds.push(user._id.toString());
     }
 
-    for(const drink of drinks){
+    for (const drink of drinks) {
         drinkIds.push(drink._id.toString());
     }
 
@@ -843,31 +838,29 @@ try {
     }
 
     const reviews = await getAllReviews();
-    for(const review of reviews){
+    for (const review of reviews) {
         const reviewId = review._id.toString();
         const drinkId = review.drinkId.toString();
         const userId = review.userId.toString();
         await addReviewIdToAUser(reviewId, userId);
-        await addReviewIdToADrink(reviewId,drinkId);
+        await addReviewIdToADrink(reviewId, drinkId);
     }
     await updateAllDrinkRating();
 
     for (const userId of userIds) {
         let reservedDrinks = new Set();
-        while (reservedDrinks.size < 2) {
-            const randomDrinkId = drinkIds[Math.floor(Math.random() * drinkIds.length)];
-            if (!reservedDrinks.has(randomDrinkId)) {
-                try {
-                    await reserveDrink(userId, randomDrinkId);
-                    reservedDrinks.add(randomDrinkId);
-                } catch (error) {
-                    console.error(`Error reserving drink: ${error}`);
-                }
+        const randomDrinkId = drinkIds[Math.floor(Math.random() * drinkIds.length)];
+        if (!reservedDrinks.has(randomDrinkId)) {
+            try {
+                await reserveDrink(userId, randomDrinkId);
+                reservedDrinks.add(randomDrinkId);
+            } catch (error) {
+                console.error(`Error reserving drink: ${error}`);
             }
         }
     }
 
     console.log("Finished loading all drinks, users, reviews, and added reservations");
-}catch (error){
+} catch (error) {
     console.log(error);
 }

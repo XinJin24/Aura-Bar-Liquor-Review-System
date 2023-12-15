@@ -42,7 +42,7 @@ export const createUser = async (
         throw `Error: ${email} is already registered, Please Login`;
     }
     if(!profilePictureLocation){
-        profilePictureLocation = "public/pictures/defaultUserProfilePicture.jpg";
+        profilePictureLocation = "../pictures/defaultUserProfilePicture.jpg";
     }
     else{
         profilePictureLocation = await validation.validateIfFileExist(profilePictureLocation);

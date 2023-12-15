@@ -116,6 +116,7 @@ const exportedMethods = {
         if(!file || file === "")return "";
         if(typeof file === 'string'){
             try {
+                console.log("before error");
                 await access(file);
                 const currentFilePath = fileURLToPath(import.meta.url);
                 const currentDirPath = dirname(currentFilePath);
