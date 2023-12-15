@@ -109,6 +109,7 @@ router
                         phoneNumber,
                         newPassword,
                         req.file);
+
                     if(user.updatedUser !== true){
                         return res.status(500).json({ success: false, message: "internal server error" });
                     }

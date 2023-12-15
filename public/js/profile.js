@@ -138,6 +138,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const fileInput = document.getElementById('photoInput');
     const editInfoForm = document.getElementById("editInfoForm");
+
+    // fileInput.addEventListener('change', function(event){
+    //     if (event.target.files && event.target.files[0]) {
+    //         var reader = new FileReader();
+    //         reader.onload = function(e) {
+    //             imagePreview.src = e.target.result;
+    //             imagePreview.style.display = 'block';
+    //         };
+    //         reader.readAsDataURL(event.target.files[0]);
+    //     }
+    // });
+
+    const imagePreview = document.getElementById('imagePreview');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+    fileInput.addEventListener('change', function(event){
+        if (event.target.files && event.target.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+                removeImageBtn.style.display = 'block'; // Show the remove button
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    });
+
+    removeImageBtn.addEventListener('click', function() {
+        fileInput.value = ''; // Clear the file input
+        imagePreview.style.display = 'none'; // Hide the image preview
+        removeImageBtn.style.display = 'none'; // Hide the remove button
+    });
+// });
+
+
     if (editInfoForm) {
         editInfoForm.onsubmit = function (e) {
             e.preventDefault();
