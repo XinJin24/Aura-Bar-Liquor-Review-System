@@ -1,6 +1,7 @@
 <div class="container">
     <h1 class="title">{{title}}</h1>
     <form id="login_form" action="/login" method="POST">
+        <div id="error" class="hidden-div">error message</div>
         <div>
             <label for="emailAddressInput">
                 EmailAddress:
@@ -17,7 +18,6 @@
             <button type="submit" id="btnSubmit" >Submit</button>
         </div>
     </form>
-    <div id="error" class="hidden-div">error message</div>
     <a href="/register">Click Here To Register!</a>
     <script src="../public/js/login.js"></script>
 </div>

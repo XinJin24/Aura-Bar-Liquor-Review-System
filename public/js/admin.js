@@ -132,15 +132,15 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = function(e) {
                 imagePreview.src = e.target.result;
                 imagePreview.style.display = 'block';
-                removeImageBtn.style.display = 'block'; // Show the remove button
+                removeImageBtn.style.display = 'block';
             };
             reader.readAsDataURL(event.target.files[0]);
         }
     });
     removeImageBtn.addEventListener('click', function() {
-        fileInput.value = ''; // Clear the file input
-        imagePreview.style.display = 'none'; // Hide the image preview
-        removeImageBtn.style.display = 'none'; // Hide the remove button
+        fileInput.value = '';
+        imagePreview.style.display = 'none';
+        removeImageBtn.style.display = 'none';
     });
 
     const updateInput = document.getElementById('drinkPicture_update');
@@ -152,16 +152,16 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = function(e) {
                 newPreview.src = e.target.result;
                 newPreview.style.display = 'block';
-                removePreviewBtn.style.display = 'block'; // Show the remove button
+                removePreviewBtn.style.display = 'block';
             };
             reader.readAsDataURL(event.target.files[0]);
         }
     });
 
     removePreviewBtn.addEventListener('click', function() {
-        updateInput.value = ''; // Clear the file input
-        newPreview.style.display = 'none'; // Hide the image preview
-        removePreviewBtn.style.display = 'none'; // Hide the remove button
+        updateInput.value = '';
+        newPreview.style.display = 'none';
+        removePreviewBtn.style.display = 'none';
     });
 
     document.getElementById('submitUpdateStocks').addEventListener('click', function (e) {
@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h2>${drink.name}</h2>
                             <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
                             <p>Category: ${drink.category}</p>
-                            <p>Rating: ${drink.rating}</p>
+                            <p>Rating: ${generateStarRating(drink.rating)}</p>
                             <p>Price: ${drink.price}</p>
                             <p>Stocks: ${drink.stocks}</p>
                             <p>Reserved Counts: ${drink.reservedCounts}</p>
@@ -358,7 +358,7 @@ function fetchAllDrinks() {
                     <h2>${drink.name}</h2>
                     <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
                     <p>Category: ${drink.category}</p>
-                    <p>Rating: ${drink.rating}</p>
+                    <p>Rating: ${generateStarRating(drink.rating)}</p>
                     <p>Price: ${drink.price}</p>
                     <p>Stocks: ${drink.stocks}</p>
                     <p>Reserved Counts: ${drink.reservedCounts}</p>
@@ -564,13 +564,13 @@ function fetchAndSortDrinks(sortBy) {
                 } else {
                     buttonsHTML += `<button class="btn btn-danger restockButton" data-drinkid="${drink._id}">Restock Drink</button>`;
                 }
-
                 li.innerHTML = `
                     <h2>${drink.name}</h2>
                     <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
                     <p>Category: ${drink.category}</p>
-                    <p>Rating: ${drink.rating}</p>
+                    <p>Rating: ${generateStarRating(drink.rating)}</p>
                     <p>Price: ${drink.price}</p>
+                    <p>Stock: ${drink.stocks}</p>
                     <p>Reserved Counts: ${drink.reservedCounts}</p>
                     ${buttonsHTML}
                 `;
@@ -582,4 +582,17 @@ function fetchAndSortDrinks(sortBy) {
             console.error("Error fetching sorted drinks:", error);
         }
     });
+}
+
+
+function generateStarRating(rating) {
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            html += '<span class="filled-star">&#9733;</span>';
+        }else{
+            html += '<span class="empty-star">&#9734;</span>';
+        }
+    }
+    return html;
 }

@@ -29,6 +29,17 @@ const hbs = exphbs.create({
             const eventDate = Date.parse(date);
             const now = Date.now();
             return eventDate >= now;
+        },
+        generateStarRating: function(rating) {
+            let html = '';
+            for(let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    html += '<span class="filled-star">&#9733;</span>';
+                } else {
+                    html += '<span class="empty-star">&#9734;</span>';
+                }
+            }
+            return html;
         }
     }
 });
@@ -50,33 +61,6 @@ app.use(session({
     saveUninitialized: true,
     resave: false
 }));
-
-// const isLoggedIn = (req, res, next) => {
-//     if (!req.session.user) {
-//         return res.redirect('/login');
-//     }
-//     next();
-// };
-//
-// const protectedRoutes = ['/home','/login', '/drinks', '/reviews', '/users', '/logout', '/register'];
-// app.use(protectedRoutes, isLoggedIn);
-//
-// const redirectLoggedIn = (req, res, next) => {
-//     if (req.session.user) {
-//         return res.redirect('/home');
-//     }
-//     next();
-// };
-
-// app.use(['/login', '/register'], redirectLoggedIn);
-//
-// app.use('/logout', (req, res) => {
-//     if (!req.session.user) {
-//         return res.render('login', { title: 'Login' });
-//     }
-//     req.session.destroy();
-//     return res.render('logout', { title: 'logout' });
-// });
 
 
 configRoutes(app);

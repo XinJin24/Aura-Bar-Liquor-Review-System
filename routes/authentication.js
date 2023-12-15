@@ -55,7 +55,16 @@ router
         userProfilePictureLocation = user.profilePictureLocation;
     }
     let allDrinks = await getAllDrinks();
-    allDrinks = allDrinks.filter(drink => drink.available);
+
+    allDrinks.sort((a, b) => {
+        if (a.available && !b.available) {
+            return -1;
+        }
+        if (!a.available && b.available) {
+            return 1;
+        }
+        return 0;
+    });
 
     if (req.session.user && req.session.user.role === "admin") {
         for (let drink of allDrinks) {
@@ -67,57 +76,6 @@ router
         lastName: userLstName, userProfilePictureLocation: userProfilePictureLocation, login: login, isAdmin: isAdmin
     });
 })
-    // .post(async (req, res) => {
-    //     let name = xss(req.body.name);
-    //     let category = xss(req.body.category);
-    //     let rating = xss(req.body.rating);
-    //     if (!name && !category && !rating) {
-    //         res.status(400).render('home', {
-    //             title: "Search error", message: 'Sort/Filter missing'
-    //         });
-    //     }
-    //     try {
-    //         name = validation.validateName(name, "drinkName");
-    //         category = validation.validateDrinkCategory(category, "drinkCategory");
-    //         rating = validation.validateRating(rating);
-    //     } catch (error) {
-    //         return res.status(400).render('error', {
-    //             title: "InputError", message: error
-    //         })
-    //     }
-    //
-    //     try {//  let categoryList = await getDrinkInfoByCategory(category); let ratingList = await getDrinkInfoByRating(rating);
-    //
-    //         if (name) {
-    //             let nameList = await getDrinkInfoByName(name); //drinkname?
-    //             if (nameList.length === 0) {
-    //                 return res.render('home', {title: "Profile", message: "Not found"});
-    //             } else {
-    //                 return res.render('home', {title: "Profile", sortTerm: nameList});
-    //             }
-    //         } else if (category) {
-    //             let categoryList = await getDrinkInfoByCategory(category); //drinkname?
-    //             if (categoryList.length === 0) {
-    //                 return res.render('home', {title: "Profile", message: "Not found"});
-    //             } else {
-    //                 return res.render('home', {title: "Profile", sortTerm: categoryList});
-    //             }
-    //         } else if (rating) {
-    //             let ratingList = await getDrinkInfoByRating(rating); //drinkname?
-    //             if (ratingList.length === 0) {
-    //                 return res.render('home', {title: "Profile", message: "Not found"});
-    //             } else {
-    //                 return res.render('home', {title: "Profile", sortTerm: ratingList});
-    //             }
-    //         } else {
-    //             return res.status(500).render('home', {title: "error", message: "Internal Server Error"});
-    //         }
-    //     } catch (error) {
-    //         console.error(error);
-    //         return res.status(500).render('error', {title: "Error", message: "Validation Error: getDrinkInfoByName"})
-    //     }
-    // })
-
 
 router
     .route('/register')

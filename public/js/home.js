@@ -24,8 +24,9 @@ function fetchAllDrinks() {
                     <h2>${drink.name}</h2>
                     <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
                     <p>Category: ${drink.category}</p>
-                    <p>Rating: ${drink.rating}</p>
+                    <p>Rating: ${generateStarRating(drink.rating)}</p>
                     <p>Price: ${drink.price}</p>
+                    <p>Stock: ${drink.stocks}</p>
                     <p>Reserved Counts: ${drink.reservedCounts}</p>
                     <button class="btn btn-primary" onclick="redirectToPage('${drink._id}')">View Details</button>
                 `;
@@ -62,8 +63,9 @@ function fetchAndSortDrinks(sortBy) {
                     <h2>${drink.name}</h2>
                     <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
                     <p>Category: ${drink.category}</p>
-                    <p>Rating: ${drink.rating}</p>
+                    <p>Rating: ${generateStarRating(drink.rating)}</p>
                     <p>Price: ${drink.price}</p>
+                    <p>Stock: ${drink.stocks}</p>
                     <p>Reserved Counts: ${drink.reservedCounts}</p>
                     <button class="btn btn-primary" onclick="redirectToPage('${drink._id}')">View Details</button>
                 `;
@@ -161,8 +163,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h2>${drink.name}</h2>
                             <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
                             <p>Category: ${drink.category}</p>
-                            <p>Rating: ${drink.rating}</p>
+                            <p>Rating: ${generateStarRating(drink.rating)}</p>
                             <p>Price: ${drink.price}</p>
+                            <p>Stock: ${drink.stocks}</p>
                             <p>Reserved Counts: ${drink.reservedCounts}</p>
                             <button class="btn btn-primary" onclick="redirectToPage('${drink._id}')">View Details</button>
                         `;
@@ -180,3 +183,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+function generateStarRating(rating) {
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            html += '<span class="filled-star">&#9733;</span>';
+        }else{
+            html += '<span class="empty-star">&#9734;</span>';
+        }
+    }
+    return html;
+}

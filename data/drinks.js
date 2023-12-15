@@ -209,7 +209,6 @@ export const getDrinkInfoByDrinkId = async (
         stocks: drink.stocks,
         nameInLowerCase: drink.nameInLowerCase
     };
-
     return drinkInfo;
 }
 
@@ -251,6 +250,7 @@ export const getAllReviewsOnADrink = async (drinkId) => {
         singleReview.owner = user.firstName + " " + user.lastName;
         singleReview.reviewText = review.reviewText;
         singleReview.timestamp = review.timeStamp;
+        singleReview.rating = review.rating;
         reviewsArray.push(singleReview);
     }
     const sortedReviews = reviewsArray.sort((a, b) => {

@@ -7,11 +7,11 @@
             <p>Name: {{drinkInfo.name}}</p>
             <p>Category: {{drinkInfo.category}}</p>
             <p>Recipe: {{drinkInfo.recipe}}</p>
-            <p>Rating: {{drinkInfo.rating}}</p>
+            <p>Rating: {{{generateStarRating drinkInfo.rating}}}</p>
             <p>Price: {{drinkInfo.price}}</p>
             <p>Stocks: {{drinkInfo.stocks}}</p>
             <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink Picture" id="drinkPhoto"/><br>
-            {{# if drinkInfo.isReservable}}
+            {{# if isReservable}}
                 <button class="btn btn-success" id="reserveButton" data-drinkid="{{drinkInfo._id}}">Reserve</button>
             {{/if}}
         </div>
@@ -33,6 +33,7 @@
                             </div>
                         </div>
                         <p>{{reviewText}}</p>
+                        <p>Rating: {{{generateStarRating rating}}}</p>
                         {{#if reviewPicture}}
                             <img src="{{reviewPicture}}" alt="review_Picture" id="reviewPhoto"/><br>
                         {{/if}}

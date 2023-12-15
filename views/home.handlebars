@@ -1,30 +1,7 @@
-
-<!--    <form id="nameForm" method="post">-->
-<!--        <label for="name">Drink Name:</label>-->
-<!--        <input name="name" id="name"></input>-->
-<!--        <button type="submit" class="btn btn-primary">Filter By Drink Name</button>-->
-
-<!--    </form>-->
-
-<!--    <form id="categoryForm" method="post">-->
-<!--        <label for="category">Drink Category:</label>-->
-<!--        <input name="category" id="category">-->
-<!--        <button type="submit" class="btn btn-primary">Filter By Drink Category</button>-->
-<!--    </form>-->
-<!--    <form id="sortingForm" method="post">-->
-<!--        <label for="sorting">Select Order</label>-->
-<!--        <select name= "sorting" id="sorting">-->
-<!--            <option value="-">--</option>-->
-<!--            <option value="ascending">ascending</option>-->
-<!--            <option value="descending">descending</option>-->
-<!--        </select>-->
-<!--        <button type="submit" class="btn btn-primary">sort</button>-->
-<!--    </form>-->
-
 <div>
     {{#if login}}
         <div class="col-md-12 text-right">
-            <img src="{{userProfilePictureLocation}}" alt="Profile Picture" class="profile-picture" />
+            <img src="{{userProfilePictureLocation}}" alt="Profile Picture" class="profile-picture"/>
             <span>{{firstName}} {{lastName}}</span>
         </div>
         <button id="messageBtn" class="btn btn-secondary">Send Message</button>
@@ -53,12 +30,15 @@
                 {{#each drinks}}
                     <li class="alldrinks">
                         <h2>{{name}}</h2>
-                        <img src="{{drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
+                        <img src="{{drinkPictureLocation}}" alt="drink Picture" class="drink-picture"/>
                         <p>Category: {{category}}</p>
-                        <p>Rating: {{rating}}</p>
+                        <p>Rating: {{{generateStarRating rating}}}</p>
                         <p>Price: {{price}}</p>
                         <p>Stock: {{stocks}}</p>
                         <p>Reserved Counts: {{reservedCounts}}</p>
+                        {{# unless available}}
+                            <p id="sold_out_text">Sold Out</p>
+                        {{/unless}}
                         <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Details</button>
                     </li>
                 {{/each}}
@@ -82,7 +62,8 @@
         People often want to know about the quality of service, pricing, ambiance, and the variety of drinks available.
         Our project can address this need by providing a platform for reviews and ratings.
         The project also aims to enhance the user experience for those looking for liquor options.
-        By providing a user-friendly app, we're not only helping consumers find the best options but also saving their time and effort.
+        By providing a user-friendly app, we're not only helping consumers find the best options but also saving their
+        time and effort.
     </p>
     <script src="../public/js/home.js"></script>
 </div>

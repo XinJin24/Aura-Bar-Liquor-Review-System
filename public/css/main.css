@@ -100,5 +100,13 @@
 }
 .review-header {
     display: flex;
-    align-items: center; /* This ensures vertical alignment in the center */
+    align-items: center;
+}
+
+.filled-star {
+    color: gold;
+}
+
+.empty-star {
+    color: lightgray;
 }
