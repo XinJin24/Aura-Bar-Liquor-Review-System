@@ -123,6 +123,47 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    const fileInput = document.getElementById('drinkPicture');
+    const imagePreview = document.getElementById('imagePreview');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+    fileInput.addEventListener('change', function(event){
+        if (event.target.files && event.target.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+                removeImageBtn.style.display = 'block'; // Show the remove button
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    });
+    removeImageBtn.addEventListener('click', function() {
+        fileInput.value = ''; // Clear the file input
+        imagePreview.style.display = 'none'; // Hide the image preview
+        removeImageBtn.style.display = 'none'; // Hide the remove button
+    });
+
+    const updateInput = document.getElementById('drinkPicture_update');
+    const newPreview = document.getElementById('newPreview');
+    const removePreviewBtn = document.getElementById('removePreviewBtn');
+    updateInput.addEventListener('change', function(event){
+        if (event.target.files && event.target.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                newPreview.src = e.target.result;
+                newPreview.style.display = 'block';
+                removePreviewBtn.style.display = 'block'; // Show the remove button
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    });
+
+    removePreviewBtn.addEventListener('click', function() {
+        updateInput.value = ''; // Clear the file input
+        newPreview.style.display = 'none'; // Hide the image preview
+        removePreviewBtn.style.display = 'none'; // Hide the remove button
+    });
+
     document.getElementById('submitUpdateStocks').addEventListener('click', function (e) {
         e.preventDefault();
         submitUpdateStocksForm();
@@ -409,7 +450,7 @@ function populateUpdateForm(drinkData) {
     document.getElementById('price_update').value = drinkData.price;
     document.getElementById('stocks_update').value = drinkData.stocks;
     document.getElementById('drinkPicture_update').src = drinkData.drinkPictureLocation;
-    document.getElementById('currentDrinkImage').src = drinkData.drinkPictureLocation;
+    // document.getElementById('currentDrinkImage').src = drinkData.drinkPictureLocation;
 }
 
 function openUpdateDrinkModal() {
