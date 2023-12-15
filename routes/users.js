@@ -113,6 +113,16 @@ router
                     if(user.updatedUser !== true){
                         return res.status(500).json({ success: false, message: "internal server error" });
                     }
+                    const newUserInfo = user.newUserInfo;
+                    req.session.user = {
+                        userId: newUserInfo.userId,
+                        firstName: newUserInfo.firstName,
+                        lastName: newUserInfo.lastName,
+                        email: newUserInfo.email,
+                        phoneNumber: newUserInfo.phoneNumber,
+                        profilePictureLocation: newUserInfo.profilePictureLocation,
+                        role: newUserInfo.role
+                    };
                     return res.status(200).json({ success: true, message: "successfully updated the user info"});
                 }catch (error){
                     return res.status(500).json({ success: false, message: error });

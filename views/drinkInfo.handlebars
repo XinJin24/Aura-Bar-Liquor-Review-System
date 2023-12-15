@@ -27,9 +27,8 @@
                                 <span>{{owner}}</span>
                                 <span>{{timestamp}}</span>
                                 {{#if myPost}}
-                                    <button class="" id="reviewEditBtn">Edit</button>
-                                    <button class="btn btn-danger deleteButton" data-reviewid="{{reviewId}}">Delete
-                                    </button>
+                                    <button class="btn editReviewButton" data-reviewid="{{reviewId}}">Edit</button>
+                                    <button class="btn deleteButton" data-reviewid="{{reviewId}}">Delete</button>
                                 {{/if}}
                             </div>
                         </div>
@@ -70,6 +69,30 @@
         {{/unless}}
     {{/if}}
 
-
+    <div id="updateReviewModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" id="closeUpdateModal">&times;</span>
+            <h2>Update Review</h2>
+            <div id="updateReview_error" class="hidden-div"></div>
+            <form id="updateReviewForm">
+                <input type="hidden" id="updateReviewId" name="updateReviewId">
+                <div>
+                    <label for="updateReviewText">Review:</label>
+                    <textarea id="updateReviewText" name="updateReviewText" required></textarea>
+                </div>
+                <div>
+                    <label for="updateRating">Rating (1-5):</label>
+                    <input type="number" id="updateRating" name="updateRating" required min="1" max="5">
+                </div>
+                <div>
+                    <label for="updateReviewPhoto">Review Photo:</label>
+                    <input type="file" id="updateReviewPhoto" name="updateReviewPhoto" accept="image/*">
+                </div>
+                <div>
+                    <button type="submit" id="submitUpdateReview">Update Review</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script src="../public/js/drinkInfo.js"></script>
 </main>

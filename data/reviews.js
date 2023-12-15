@@ -83,7 +83,7 @@ export const createReview = async (
                 { $pull: { reviews: reviewIdToRemove } }
             );
 
-            const deleteTheNewlyCreatedReview = await reviewCollection.deleteOne({ _id: reviewIdToRemove });
+            const deleteTheNewlyCreatedReview = await reviewCollection.deleteOne({ _id: new ObjectId(reviewIdToRemove) });
 
             if (removeTheReivewIdFromUserCollection.modifiedCount !== 0) {
                 console.log('error happened, the newly created review was removed from the user collection');
@@ -120,14 +120,17 @@ export const updateReview = async (
     userId = validation.validateId(userId, "userId");
     reviewText = validation.validateReviewText(reviewText);
     rating = validation.validateRating(rating);
-    reviewPictureLocation = await validation.validateIfFileExist(reviewPictureLocation, "Review Picture Location");
 
     const reviewCollection = await reviews();
-    const review = await reviewCollection.findOne({_id: reviewId});
+    const review = await reviewCollection.findOne({_id: new ObjectId(reviewId)});
 
     if (!review) {
         throw `Error: review with reviewId ${reviewId} not found`;
     }
+    if(reviewPictureLocation){
+        reviewPictureLocation = await validation.validateIfFileExist(reviewPictureLocation);
+    }
+
     const newReview = {
         timeStamp: timeStamp,
         drinkId: drinkId,
@@ -141,9 +144,6 @@ export const updateReview = async (
         {_id: review._id},
         {$set: newReview}
     );
-    if (updateReview.modifiedCount === 0) {
-        throw `Error: Failed to update review with reviewId ${reviewId}`;
-    }
 
     const updateDrinkRating = await updateAllDrinkRating();
 

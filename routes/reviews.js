@@ -6,6 +6,7 @@ import router from "./drinks.js";
 import xss from "xss";
 
 import multer from "multer";
+
 const upload = multer({
     dest: "../public/uploads/",
     limits: {fileSize: 10485760},
@@ -75,24 +76,23 @@ router
 
     })
     //updating a review
-    .put(async (req, res) => {
+    .put(upload.single("updateReviewPhoto"), async (req, res) => {
         //code here for POST
+        if (!req.session.user) {
+            return res.status(401).json({error: "Not authorized"});
+        }
         if (req.session.user) {
-            let reviewId = null;
-            let reviewText = null;
-            let rating = null;
-            let reviewPictureLocation = null;
+            let reviewId = req.params.id.toString();
+            let reviewText = xss(req.body.updateReviewText);
+            let rating = xss(req.body.updateRating);
+            let reviewPictureLocation = req.file;
+
             try {
-                reviewId = validation.validateId(req.params.id, "reviewId");
-                reviewText = validation.validateReviewText(req.body.reviewText);
-                rating = validation.validateRating(req.body.rating);
-                reviewPictureLocation = validation.validateIfFileExist(req.body.reviewPictureLocation);
+                reviewId = validation.validateId(reviewId, "reviewId");
+                reviewText = validation.validateReviewText(reviewText);
+                rating = validation.validateRating(rating);
             } catch (error) {
-                return res.status(400).render("modifyReview", {
-                    error: error,
-                    login: true,
-                    title: "Update Review"
-                });
+                return res.status(400).json({error: "input error"});
             }
             try {
                 const userIdFromDB = await getUserIdByEmail(req.session.user.email);
@@ -101,20 +101,15 @@ router
                 if (!reviewsMadeByUser.includes(reviewId)) {
                     throw `Error: You don't have access to ${reviewId}, it is not your review!`
                 }
-
             } catch (error) {
-                return res.status(400).render("modifyReview", {
-                    error: error,
-                    login: true,
-                    title: "Update Review"
-                });
+                return res.status(401).json({error: error});
             }
             try {
                 const review = await getReviewInfoByReviewId(reviewId);
                 const updatedReview = await updateReview(
                     reviewId, validation.generateCurrentDate(), review.drinkId, review.userId, reviewText, rating, reviewPictureLocation);
                 if (updatedReview.updatedReview === true) {
-                    return res.status(200).redirect('/review/' + reviewId);
+                    res.status(200).json({success: true, message: "Review updated successfully"});
                 }
             } catch (error) {
                 console.error(error);
@@ -124,11 +119,8 @@ router
                 });
             }
         } else {
-            return res.status(401).render("error", {
-                errorMsg: "please login first to edit a review",
-                login: false,
-                title: "Error",
-            });
+            console.error(error);
+            res.status(400).json({error: error.toString()});
         }
     })
     .delete(async (req, res) => {
@@ -157,8 +149,6 @@ router
             res.status(400).json({error: error.toString()});
         }
     });
-
-
 
 
 export default router;

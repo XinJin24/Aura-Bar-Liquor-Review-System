@@ -422,7 +422,6 @@ router
 router
     .route('/review/new')
     .post(upload.single("reviewPhotoInput"), async (req, res) => {
-        console.log("correct route------------------------------------------------------------");
         if (req.session.user) {
             let reviewText, rating, reviewPhotoInput, drinkId, userId;
             try {
