@@ -7,7 +7,7 @@ let validateDrinkName = (name, valName) => {
     }
     name = name.trim();
     const hasAlphabet = /[a-zA-Z]/.test(name);
-    const validCharacters = /^[a-zA-Z0-9\sáéíóúüñäëïöü]*$/;
+    const validCharacters = /^[a-zA-Z0-9\sáéíóúüñäëïöü']*$/;
     if (!hasAlphabet || !validCharacters.test(name)) {
         throw `Error: ${valName} must contain at least one alphabet character and only include alphabets, numbers, spaces, and special characters áéíóúüñäëïöü`;
     }

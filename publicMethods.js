@@ -211,7 +211,7 @@ const exportedMethods = {
         }
         name = name.trim();
         const hasAlphabet = /[a-zA-Z]/.test(name);
-        const validCharacters = /^[a-zA-Z0-9\sáéíóúüñäëïöü]*$/;
+        const validCharacters = /^[a-zA-Z0-9\sáéíóúüñäëïöü']*$/;
         if (!hasAlphabet || !validCharacters.test(name)) {
             throw `Error: ${valName} must contain at least one alphabet character and only include alphabets, numbers, spaces, and special characters áéíóúüñäëïöü`;
         }
@@ -255,26 +255,6 @@ const exportedMethods = {
             throw `Error: ${valName} cannot be a negative value.`;
         }
         return price;
-    },
-    validateIfArray(arr, valName) {
-        if (!Array.isArray(arr)) {
-            throw `Error: ${valName} must be an array.`;
-        }
-        if (arr.length === 0) {
-            return arr;
-        }
-        for (const element of arr) {
-            if (typeof element !== 'string' || !ObjectId.isValid(element)) {
-                throw `Error: All elements in ${valName} must be valid ObjectId.`;
-            }
-        }
-        return arr;
-    },
-    validateIfTrueOrFalse(val, valName) {
-        if (val !== true && val !== false) {
-            throw `Error: ${valName} must be either true or false.`;
-        }
-        return val;
     },
     validatePhoneNumber(phoneNumber) {
         if (!phoneNumber) {
