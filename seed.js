@@ -710,7 +710,7 @@ try {
 
     drink26 = await createDrink("Boulevardier", "mix", "- 1 oz Campari\n" +
         "- 1 oz sweet red vermouth\n" +
-        "- 1 oz to 1.5 oz bourbon (rye whiskey is often used instead in modern-day versions)", drinkPicturePath26, 19);
+        "- 1 oz to 1.5 oz bourbon (rye whiskey is often used instead in modern-day versions)", drinkPicturePath26, 10,19);
 
     drink27 = await createDrink("Gin and Tonic", "gin", "- 2 oz gin\n" +
         "- 4 to 6 oz tonic water", drinkPicturePath27, 10, 12);
