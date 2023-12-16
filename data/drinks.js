@@ -216,9 +216,9 @@ export const getAllDrinks = async () => {
     const drinkCollection = await drinks();
     const allDrinks = await drinkCollection.find({}).toArray();
 
-    if (!allDrinks || allDrinks.length === 0) {
-        throw `Error: No drinks found`;
-    }
+    // if (!allDrinks || allDrinks.length === 0) {
+    //     throw `Error: No drinks found`;
+    // }
 
     const sortedDrinks = allDrinks.sort((a, b) => b.rating - a.rating);
     return sortedDrinks;
