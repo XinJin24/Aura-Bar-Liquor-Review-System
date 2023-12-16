@@ -77,7 +77,7 @@ const drinkPicturePath14 = join(currentDirPath, "drinkPhotos/drink14.jpg");
 const drinkPicturePath15 = join(currentDirPath, "drinkPhotos/drink15.jpg");
 const drinkPicturePath16 = join(currentDirPath, "drinkPhotos/drink16.jpg");
 const drinkPicturePath17 = join(currentDirPath, "drinkPhotos/drink17.jpg");
-const drinkPicturePath18 = join(currentDirPath, "drinkPhotos/drink18.jpg");
+const drinkPicturePath18 = join(currentDirPath, "drinkPhotos/drink18.jpg");//join(currentDirPath, "drinkPhotos\\drink18.jpg");
 const drinkPicturePath19 = join(currentDirPath, "drinkPhotos/drink19.jpg");
 const drinkPicturePath20 = join(currentDirPath, "drinkPhotos/drink20.jpg");
 
