@@ -197,7 +197,7 @@ export const getDrinkInfoByDrinkId = async (
     const drink = await drinkCollection.findOne({_id: new ObjectId(drinkId)});
 
     if (!drink) {
-        throw `Error: drink with drinkId ${drinkId} not found`;
+        return;
     }
 
     const drinkInfo = {
@@ -246,17 +246,21 @@ export const getAllReviewsOnADrink = async (drinkId) => {
         const reviewCollection = await reviews();
         const userCollection = await users();
         const review = await reviewCollection.findOne({_id: new ObjectId(reviewId)});
-        const user = await userCollection.findOne({_id: new ObjectId(review.userId)});
-        const singleReview = {};
-        singleReview.userProfilePictureLocation = user.profilePictureLocation;
-        singleReview.reviewId = review._id.toString();
-        singleReview.reviewPicture = review.reviewPictureLocation;
-        singleReview.userId = user._id.toString();
-        singleReview.owner = user.firstName + " " + user.lastName;
-        singleReview.reviewText = review.reviewText;
-        singleReview.timestamp = review.timeStamp;
-        singleReview.rating = review.rating;
-        reviewsArray.push(singleReview);
+        if(review){
+            const user = await userCollection.findOne({_id: new ObjectId(review.userId)});
+            if(user){
+                const singleReview = {};
+                singleReview.userProfilePictureLocation = user.profilePictureLocation;
+                singleReview.reviewId = review._id.toString();
+                singleReview.reviewPicture = review.reviewPictureLocation;
+                singleReview.userId = user._id.toString();
+                singleReview.owner = user.firstName + " " + user.lastName;
+                singleReview.reviewText = review.reviewText;
+                singleReview.timestamp = review.timeStamp;
+                singleReview.rating = review.rating;
+                reviewsArray.push(singleReview);
+            }
+        }
     }
     const sortedReviews = reviewsArray.sort((a, b) => {
         return new Date(b.timestamp) - new Date(a.timestamp);
@@ -347,11 +351,14 @@ export const updateAllDrinkRating = async () => {
         for (const drink of allDrinks) {
             const reviews = drink.reviews;
             if (reviews.length !== 0) {
-                const reviewCount = reviews.length;
+                let reviewCount = 0;
                 let totalRating = 0;
                 for (const review of reviews) {
                     const oneReview = await getReviewInfoByReviewId(review);
-                    totalRating += oneReview.rating;
+                    if(oneReview){
+                        reviewCount++;
+                        totalRating += oneReview.rating;
+                    }
                 }
                 const rating = (totalRating / reviewCount).toFixed(1);
                 const updatedDrinkRating = {

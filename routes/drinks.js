@@ -99,6 +99,7 @@ router
                 return res.status(400).render("drinkInfo", {
                     error: error,
                     login: true,
+                    errorMsg: "Please enter a valid drink ID",
                     title: "Drink Detail"
                 });
             }
@@ -111,8 +112,13 @@ router
                 const sessionUserAllReviews = await getAllReviewsByUserId(sessionUserId);
                 for(const review of reviews){
                     review.myPost =false;
+                    // if the reviewId is pointing to a userId
                     if(review.userId === sessionUserId){
-                        review.myPost =true;
+                        //if the user's reviews has the reviewid
+                        const sessionUserReview = await getAllReviewsByUserId(sessionUserId)
+                        if(sessionUserAllReviews.includes(review.reviewId)){
+                            review.myPost =true;
+                        }
                     }
                     if(sessionUserAllReviews.includes(review.reviewId)){
                         hasReview = true;
@@ -137,6 +143,7 @@ router
                 console.error(error);
                 return res.status(500).render('error', {
                     title: "Error",
+                    errorMsg: "Please enter a valid drink ID",
                     message: "Internal Server Error"
                 });
             }

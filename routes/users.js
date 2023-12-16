@@ -41,21 +41,30 @@ router
                 let drinkReservedArray = [];
                 let reviewsArray = [];
                 for (let i = 0; i < drinkReserved.length; i++) {
-                    drinkReservedArray.push(await getDrinkInfoByDrinkId(drinkReserved[i].drinkId));
+                    const drinkDetail = await getDrinkInfoByDrinkId(drinkReserved[i].drinkId);
+                    if(drinkDetail){
+                        drinkReservedArray.push();
+                    }
                 }
                 for (let j = 0; j < reviews.length; j++) {
                     const review = await getReviewInfoByReviewId(reviews[j].toString());
-                    const drink = await getDrinkInfoByDrinkId(review.drinkId.toString());
-                    const reviewsDisplayOnUserProfile={
-                        reviewId: review._id,
-                        reviewText : review.reviewText,
-                        timestamp: review.timeStamp,
-                        drinkId: review.drinkId,
-                        drinkName: drink.name,
-                        reviewPicture: review.reviewPicture,
-                        drinkPicture: drink.drinkPictureLocation
+                    let drinkDetail;
+                    if(review){
+                        drinkDetail = await getDrinkInfoByDrinkId(review.drinkId.toString());
                     }
-                    reviewsArray.push(reviewsDisplayOnUserProfile);
+
+                    if(review && drinkDetail){
+                        const reviewsDisplayOnUserProfile={
+                            reviewId: review._id,
+                            reviewText : review.reviewText,
+                            timestamp: review.timeStamp,
+                            drinkId: review.drinkId,
+                            drinkName: drinkDetail.name,
+                            reviewPicture: review.reviewPicture,
+                            drinkPicture: drinkDetail.drinkPictureLocation
+                        }
+                        reviewsArray.push(reviewsDisplayOnUserProfile);
+                    }
                 }
                 //render drink, review, user info to user home page
                 return res.render('profile',

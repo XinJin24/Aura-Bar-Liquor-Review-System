@@ -115,7 +115,6 @@ export const updateReview = async (
     reviewPictureLocation
 ) => {
     reviewId = validation.validateId(reviewId, "reviewId");
-    timeStamp = validation.validateDateTime(timeStamp);
     drinkId = validation.validateId(drinkId, "drinkId");
     userId = validation.validateId(userId, "userId");
     reviewText = validation.validateReviewText(reviewText);
@@ -171,13 +170,13 @@ export const deleteReview = async (
 
 
     const deleteReviewFromUser = await deleteOneReviewFromUser(reviewId, userId);
-    if (deleteReviewFromUser !== true) {
-        throw `Error: some error happened when deleting reviewId: ${reviewId}`
-    }
+    // if (deleteReviewFromUser !== true) {
+    //     throw `Error: some error happened when deleting reviewId: ${reviewId}`
+    // }
     const deleteReviewFromDrink = await deleteReviewIdFromADrink(reviewId, drinkId);
-    if (deleteReviewFromDrink.reviewIdDeleted !== true) {
-        throw `Error: some error happened when deleting reviewId: ${reviewId} from drink id ${drinkId}`
-    }
+    // if (deleteReviewFromDrink.reviewIdDeleted !== true) {
+    //     throw `Error: some error happened when deleting reviewId: ${reviewId} from drink id ${drinkId}`
+    // }
     const deleteReview = await reviewCollection.deleteOne({_id: new ObjectId(reviewId)});
     if (deleteReview.deletedCount === 0) {
         throw `Error: could not delete review with reviewId: ${reviewId}`;
@@ -197,7 +196,8 @@ export const getReviewInfoByReviewId = async (reviewId) => {
     const reviewCollection = await reviews();
     const review = await reviewCollection.findOne({_id: new ObjectId(reviewId)});
     if (!review) {
-        throw `Error: review with reviewId ${reviewId} not found`;
+        // throw `Error: review with reviewId ${reviewId} not found`;
+        return;
     }
     const reviewInfo = {
         _id: review._id.toString(),
