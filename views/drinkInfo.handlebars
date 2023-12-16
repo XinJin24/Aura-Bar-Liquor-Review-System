@@ -10,7 +10,7 @@
             <p>Rating: {{{generateStarRating drinkInfo.rating}}}</p>
             <p>Price: {{drinkInfo.price}}</p>
             <p>Stocks: {{drinkInfo.stocks}}</p>
-            <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink Picture" id="drinkPhoto"/><br>
+            <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink Picture" id="drinkPhoto"><br>
             {{# if isReservable}}
                 <button class="btn btn-success" id="reserveButton" data-drinkid="{{drinkInfo._id}}">Reserve</button>
             {{/if}}
@@ -22,7 +22,7 @@
                 {{#each reviews}}
                     <li class="review-item">
                         <div class="review-header">
-                            <img src="{{userProfilePictureLocation}}" alt="" id="customerPhoto"/>
+                            <img src="{{userProfilePictureLocation}}" alt="" id="customerPhoto">
                             <div class="customer-details">
                                 <span>{{owner}}</span>
                                 <span>{{timestamp}}</span>
@@ -35,7 +35,7 @@
                         <p>{{reviewText}}</p>
                         <p>Rating: {{{generateStarRating rating}}}</p>
                         {{#if reviewPicture}}
-                            <img src="{{reviewPicture}}" alt="review_Picture" id="reviewPhoto"/><br>
+                            <img src="{{reviewPicture}}" alt="review_Picture" id="reviewPhoto"><br>
                         {{/if}}
                     </li>
                 {{/each}}

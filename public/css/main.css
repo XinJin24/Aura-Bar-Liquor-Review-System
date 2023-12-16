@@ -110,3 +110,13 @@
 .empty-star {
     color: lightgray;
 }
+.reserved-picture {
+    max-width: 400px;
+    max-height: 400px;
+    margin-top: 10px;
+}
+.comment-picture {
+    max-width: 400px;
+    max-height: 400px;
+    margin-top: 10px;
+}

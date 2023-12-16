@@ -1,7 +1,7 @@
 <div>
     {{#if login}}
         <div class="col-md-12 text-right">
-            <img src="{{userProfilePictureLocation}}" alt="Profile Picture" class="profile-picture"/>
+            <img src="{{userProfilePictureLocation}}" alt="Profile Picture" class="profile-picture">
             <span>{{firstName}} {{lastName}}</span>
         </div>
         <button id="messageBtn" class="btn btn-secondary">Send Message</button>
@@ -30,7 +30,7 @@
                 {{#each drinks}}
                     <li class="alldrinks">
                         <h2>{{name}}</h2>
-                        <img src="{{drinkPictureLocation}}" alt="drink Picture" class="drink-picture"/>
+                        <img src="{{drinkPictureLocation}}" alt="drink Picture" class="drink-picture">
                         <p>Category: {{category}}</p>
                         <p>Rating: {{{generateStarRating rating}}}</p>
                         <p>Price: {{price}}</p>
@@ -57,13 +57,6 @@
             </form>
         </div>
     </div>
-    <p>
-        Start by highlighting the fact that there is a growing demand for information about bars and liquor products.
-        People often want to know about the quality of service, pricing, ambiance, and the variety of drinks available.
-        Our project can address this need by providing a platform for reviews and ratings.
-        The project also aims to enhance the user experience for those looking for liquor options.
-        By providing a user-friendly app, we're not only helping consumers find the best options but also saving their
-        time and effort.
-    </p>
+
     <script src="../public/js/home.js"></script>
 </div>
