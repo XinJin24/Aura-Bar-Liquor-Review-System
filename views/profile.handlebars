@@ -12,9 +12,11 @@
         <h3>Reserved Drinks:</h3>
             <ul>
                 {{#each drinkReserved as |drink|}}
-                    <img src="{{drinkPictureLocation}}" alt="drink Picture" class="drink-picture" />
-                    <li>{{name}}</li>
+                    <li>
+                    <img src="{{drinkPictureLocation}}" alt="drink Picture" class="reserved-picture">
+                    {{name}}
                     <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Drink Details</button>
+                    </li>
                 {{/each}}
             </ul>
 
@@ -22,7 +24,7 @@
         <ul>
             {{#each reviews as |review|}}
                 <li>{{drinkName}}</li>
-                <img src="{{drinkPicture}}" alt="drink Picture" class="drink-picture" />
+                <img src="{{drinkPicture}}" alt="drink Picture" class="comment-picture">
                 <li>{{reviewText}}</li>
                 <li>{{timestamp}}</li>
                 <button class="btn btn-primary" onclick="redirectToPage('{{drinkId}}')">View Review Details</button>
@@ -56,7 +58,7 @@
                 <input type="password" id="confirmNewPassword" name="confirmNewPassword">
                 <label for="photoInput">Profile Photo:</label>
                 <input type="file" id="photoInput" name="photoInput" accept="image/*">
-                <img  id="imagePreview" src="" alt="Image Preview" style="display: none;" >
+                <img  id="imagePreview" src="" alt="Image Preview" style="display: none;">
                 <button type="button" id="removeImageBtn" style="display: none;">Remove Image</button>
                 <input type="submit" value="Update">
             </form>
