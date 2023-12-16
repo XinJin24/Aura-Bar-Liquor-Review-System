@@ -116,7 +116,6 @@ const exportedMethods = {
         if(!file || file === "")return "";
         if(typeof file === 'string'){
             try {
-                console.log("before error");
                 await access(file);
                 const currentFilePath = fileURLToPath(import.meta.url);
                 const currentDirPath = dirname(currentFilePath);
@@ -125,11 +124,11 @@ const exportedMethods = {
                 const fileName = `${Date.now()}_${file.split("\\").pop()}`;
                 const newFilePath = join(picturesDir, fileName);
                 try {
-                    //file already exist
+                    //file already exist, return
                     await access(newFilePath);
                     return `..\\pictures\\${fileName}`;
                 } catch (err) {
-                    //file not exist, copy
+                    //file not exist, copy it
                     await copyFile(file, newFilePath);
                     await access(newFilePath);
                     return `..\\pictures\\${fileName}`;
