@@ -93,6 +93,10 @@ export const updateDrink = async (
     } else {
         drinkPictureLocation = await validation.validateIfFileExist(drinkPictureLocation);
     }
+    let available = drink.available;
+    if(stocks === 0){
+        available = false;
+    }
 
     const updatedDrink = {
         name: name,
@@ -100,7 +104,8 @@ export const updateDrink = async (
         recipe: recipe,
         drinkPictureLocation: drinkPictureLocation,
         price: price,
-        stocks: stocks
+        stocks: stocks,
+        available: available
     };
 
     const updateDrink = await drinkCollection.updateOne(
@@ -216,9 +221,9 @@ export const getAllDrinks = async () => {
     const drinkCollection = await drinks();
     const allDrinks = await drinkCollection.find({}).toArray();
 
-    if (!allDrinks || allDrinks.length === 0) {
-        throw `Error: No drinks found`;
-    }
+    // if (!allDrinks || allDrinks.length === 0) {
+    //     throw `Error: No drinks found`;
+    // }
 
     const sortedDrinks = allDrinks.sort((a, b) => b.rating - a.rating);
     return sortedDrinks;
@@ -294,7 +299,6 @@ export const increaseReservedCounts = async (
     }
     return {increaseReservedCounts: true};
 }
-
 
 export const reserveDrink = async (
     userId, drinkId

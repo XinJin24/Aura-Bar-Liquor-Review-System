@@ -52,6 +52,7 @@ router
                         timestamp: review.timeStamp,
                         drinkId: review.drinkId,
                         drinkName: drink.name,
+                        reviewPicture: review.reviewPicture,
                         drinkPicture: drink.drinkPictureLocation
                     }
                     reviewsArray.push(reviewsDisplayOnUserProfile);
@@ -60,11 +61,12 @@ router
                 return res.render('profile',
                     {
                         isAdmin: req.session.user.role === "admin",
-                        login:true,
+                        login: true,
                         title: "Profile",
                         user: req.session.user,
                         drinkReserved: drinkReservedArray,
-                        reviews: reviewsArray
+                        reviews: reviewsArray,
+                        userId: req.session.user.userId
                     });
             } catch (error) {
                 //render error page that shows internal error

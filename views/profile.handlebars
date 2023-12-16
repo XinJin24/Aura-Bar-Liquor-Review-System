@@ -1,35 +1,42 @@
 <main>
     <h1>{{title}}</h1>
     {{#if user}}
-        <h2>Welcome, {{user.firstName}} {{user.lastName}}!</h2>
-        <label>Email:</label>
-        <p>{{user.email}}</p>
-        <label>Phone Number:</label>
-        <p>{{user.phoneNumber}}</p>
-        <label>Role:</label>
-        <p>{{user.role}}</p>
-        <button id="editUserInfoBtn" class="btn btn-secondary">Edit My Info</button>
-        <h3>Reserved Drinks:</h3>
+        <div>
+            <h2>Welcome, {{user.firstName}} {{user.lastName}}!</h2>
+            <label>Email:</label>
+            <p>{{user.email}}</p>
+            <label>Phone Number:</label>
+            <p>{{user.phoneNumber}}</p>
+            <label>Role:</label>
+            <p>{{user.role}}</p>
+            <button id="editUserInfoBtn" class="btn btn-secondary">Edit My Info</button>
+        </div>
+
+        <div>
+            <h3>Reserved Drinks:</h3>
             <ul>
                 {{#each drinkReserved as |drink|}}
                     <li>
-                    <img src="{{drinkPictureLocation}}" alt="drink Picture" class="reserved-picture">
-                    {{name}}
-                    <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Drink Details</button>
+                        <img src="{{drinkPictureLocation}}" alt="drink Picture" class="reserved-picture">
+                        {{name}}
+                        <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Drink Details</button>
                     </li>
                 {{/each}}
             </ul>
+        </div>
 
-        <h3>Reviews:</h3>
-        <ul>
-            {{#each reviews as |review|}}
-                <li>{{drinkName}}</li>
-                <img src="{{drinkPicture}}" alt="drink Picture" class="comment-picture">
-                <li>{{reviewText}}</li>
-                <li>{{timestamp}}</li>
-                <button class="btn btn-primary" onclick="redirectToPage('{{drinkId}}')">View Review Details</button>
-            {{/each}}
-        </ul>
+        <div>
+            <h3>Reviews:</h3>
+            <ul>
+                {{#each reviews as |review|}}
+                    <li>{{drinkName}}</li>
+                    <img src="{{reviewPicture}}" alt="drink Picture" class="comment-picture">
+                    <li>{{reviewText}}</li>
+                    <li>{{timestamp}}</li>
+                    <button class="btn btn-primary" onclick="redirectToPage('{{drinkId}}')">View Review Details</button>
+                {{/each}}
+            </ul>
+        </div>
     {{else}}
         <a href="/login">Please Log In To View Your Profile</a>
     {{/if}}

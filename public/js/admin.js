@@ -66,8 +66,9 @@ let validateStocks = (stocks) => {
 
     if (typeof stocks === 'string' && stocks.trim().length !== 0) {
         stocks = stocks.trim();
+
         if (!/^\d+$/.test(stocks)) {
-            throw `Error: stocks must be an integer.`;
+            throw `Error: stocks must be an valid integer( stocks >=0 )`;
         }
         stocks = Number(stocks);
     }
@@ -250,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h2>${drink.name}</h2>
                             <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
                             <p>Category: ${drink.category}</p>
-                            <p>Rating: ${generateStarRating(drink.rating)}</p>
+                            <p>Rating: ${generateStarRating(drink.rating)} ${drink.rating}</p>
                             <p>Price: ${drink.price}</p>
                             <p>Stocks: ${drink.stocks}</p>
                             <p>Reserved Counts: ${drink.reservedCounts}</p>
@@ -358,7 +359,7 @@ function fetchAllDrinks() {
                     <h2>${drink.name}</h2>
                     <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
                     <p>Category: ${drink.category}</p>
-                    <p>Rating: ${generateStarRating(drink.rating)}</p>
+                    <p>Rating: ${generateStarRating(drink.rating)} ${drink.rating}</p>
                     <p>Price: ${drink.price}</p>
                     <p>Stocks: ${drink.stocks}</p>
                     <p>Reserved Counts: ${drink.reservedCounts}</p>
@@ -481,7 +482,6 @@ function submitUpdateDrinkForm() {
         recipe_update = validateDrinkRecipe(recipe_update);
         stocks_update = validateStocks(stocks_update);
         price_update = validatePrice(price_update);
-
     } catch (error) {
         updateDrink_error.classList.remove('hidden-div');
         const msg = document.createElement('p');
@@ -509,7 +509,6 @@ function submitUpdateDrinkForm() {
         }
     });
 }
-
 
 function attachEventListeners() {
     document.querySelectorAll('.deleteButton').forEach(button => {
@@ -568,7 +567,7 @@ function fetchAndSortDrinks(sortBy) {
                     <h2>${drink.name}</h2>
                     <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
                     <p>Category: ${drink.category}</p>
-                    <p>Rating: ${generateStarRating(drink.rating)}</p>
+                    <p>Rating: ${generateStarRating(drink.rating)} ${drink.rating}</p>
                     <p>Price: ${drink.price}</p>
                     <p>Stock: ${drink.stocks}</p>
                     <p>Reserved Counts: ${drink.reservedCounts}</p>

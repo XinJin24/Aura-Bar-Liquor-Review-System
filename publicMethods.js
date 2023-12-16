@@ -265,12 +265,13 @@ const exportedMethods = {
             throw "Error: Phone number should be a valid string (no empty spaces)";
         }
         phoneNumber = phoneNumber.trim();
-        const phoneRegex = /^(\+\d{1,2}\s?)?(\d{1,4}\s?)?[\d\s-]+$/;
+        const phoneRegex = /^(\+\d{1,2}\s?)?(\d{1,4}\s?)?\d{4,14}$/;
         if (!phoneRegex.test(phoneNumber)) {
             throw "Error: Invalid phone number format";
         }
         return phoneNumber;
-    },validateCallForServiceMessage(message) {
+    },
+    validateCallForServiceMessage(message) {
         if (typeof message !== "string" || message.trim().length === 0) {
             throw `Error: message should be a valid string (no empty spaces)`;
         }

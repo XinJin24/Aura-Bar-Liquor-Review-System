@@ -14,16 +14,17 @@
     <nav>
         <ul>
             {{#if login}}
-                <li><a href="/user/{{userId}}">User Center</a></li>
-                <li><a href="/logout">Logout</a></li>
                 {{#if isAdmin}}
                     <li><a href="/admin">Admin Interface</a></li>
                 {{/if}}
+                <li><a href="/user/{{userId}}">User Center</a></li>
+                <li><a href="/home">Drink Store</a></li>
+                <li><a href="/logout">Logout</a></li>
             {{else}}
+                <li><a href="/home">Drink Store</a></li>
                 <li><a href="/register">Register</a></li>
                 <li><a href="/login">Log In</a></li>
             {{/if}}
-            <li><a href="/home">Drink Store</a></li>
         </ul>
     </nav>
 </header>

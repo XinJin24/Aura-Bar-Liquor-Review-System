@@ -69,15 +69,15 @@ let checkConfirm = (code1, code2) => {
 
 let checkPhoneNumber = (phoneNumber) => {
     if (!phoneNumber) {
-        throw `Phone number not supplied`;
+        throw "Error: Phone number not supplied";
     }
     if (typeof phoneNumber !== "string" || phoneNumber.trim().length === 0) {
-        throw `Phone number should be a valid string (no empty spaces)`;
+        throw "Error: Phone number should be a valid string (no empty spaces)";
     }
     phoneNumber = phoneNumber.trim();
-    const phoneRegex = /^(\+\d{1,2}\s?)?(\d{1,4}\s?)?[\d\s-]+$/;
+    const phoneRegex = /^(\+\d{1,2}\s?)?(\d{1,4}\s?)?\d{4,14}$/;
     if (!phoneRegex.test(phoneNumber)) {
-        throw `Invalid phone number format`;
+        throw "Error: Invalid phone number format";
     }
     return phoneNumber;
 }
@@ -187,7 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let newPassword = formData.get('newPassword');
             let confirmNewPassword = formData.get('confirmNewPassword');
 
-
             try {
                 firstName = checkName(firstName, "first name");
                 lastName = checkName(lastName, "last name");
@@ -248,5 +247,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-
 });

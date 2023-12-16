@@ -59,7 +59,6 @@ router
         }
     })
     .post(upload.single("drinkPicture"), async (req, res) => {
-        console.log("testing");
         if (req.session.user && req.session.user.role === "admin") {
             let name, category, recipe, price, stocks;
             try {

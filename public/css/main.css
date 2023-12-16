@@ -120,3 +120,54 @@
     max-height: 400px;
     margin-top: 10px;
 }
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: mediumvioletred;
+    color: white;
+    padding: 10px 0;
+}
+
+header nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+header nav ul li {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: white;
+    display: block;
+}
+
+header nav ul li a:hover {
+    background-color: #6B6E70;
+}
+
+@media screen and (max-width: 600px) {
+    header nav ul {
+        flex-direction: column;
+    }
+
+    header nav ul li {
+        text-align: center;
+        padding: 10px;
+    }
+}
