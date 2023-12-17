@@ -73,7 +73,7 @@ router
         }
     }
     return res.render('home', {
-        title: "Aura Liquor", drinks: allDrinks, firstName: userFirstName, userId: userId,
+        title: "Aura Liquor Home", drinks: allDrinks, firstName: userFirstName, userId: userId,
         lastName: userLstName, userProfilePictureLocation: userProfilePictureLocation, login: login, isAdmin: isAdmin
     });
 })
@@ -212,7 +212,7 @@ router.route("/sendMessage").post(async (req, res) => {
                     from: '+18334580397',
                     to: businessPhone
                 })
-                .then(message => console.log(message.sid))
+                .then(message => console.log("message sent to business. "+ message.sid))
 
             client.messages
                 .create({
@@ -220,7 +220,7 @@ router.route("/sendMessage").post(async (req, res) => {
                     from: '+18334580397',
                     to: "+19293428295"
                 })
-                .then(message => console.log(message.sid))
+                .then(message => console.log("message sent to user. "+message.sid))
 
             res.status(200).send('Message sent successfully');
         } catch (error) {
@@ -355,7 +355,7 @@ router
             }
         }
         return res.render('admin', {
-            title: "Admin Page", drinks: allDrinks, firstName: userFirstName, userId: userId,
+            title: "Admin Interface", drinks: allDrinks, firstName: userFirstName, userId: userId,
             lastName: userLstName, userProfilePictureLocation: userProfilePictureLocation, login: login, isAdmin: isAdmin
         });
     } else if(req.session.user && req.session.user.role === "user"){

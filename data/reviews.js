@@ -63,11 +63,25 @@ export const createReview = async (
                 throw `Error: Can't add the review since the drinkId isn't exist`;
             }
             let originalReviews = drink.reviews;
+            let userHistoryReviews = user.reviewIds;
+
+            let alreadyMadeAReview = userHistoryReviews.some(review => originalReviews.includes(review));
+
+            if (alreadyMadeAReview) {
+                throw "User has already reviewed this drink.";
+            }
+
             originalReviews.push(insertReview.insertedId.toString());
             const updatedDrink = await drinkCollection.updateOne(
                 {_id: new ObjectId(drinkId)},
                 {$set: {reviews:originalReviews}}
             );
+            const updateDrinkRating = await updateAllDrinkRating();
+            if (updateDrinkRating.updatedAllDrinkRating !==true) {
+                throw "Error: Some issue happened when updating all drinks' rating"
+            }
+            return {insertedReview: true};
+
         } catch (error){
             const reviewIdToRemove = insertReview.insertedId;
 
@@ -96,13 +110,13 @@ export const createReview = async (
             if (deleteTheNewlyCreatedReview.modifiedCount !== 0) {
                 console.log('error happened, the newly created review was removed from the review collection');
             }
+            const updateDrinkRating = await updateAllDrinkRating();
+            if (updateDrinkRating.updatedAllDrinkRating !==true) {
+                throw "Error: Some issue happened when updating all drinks' rating"
+            }
+            throw error;
         }
     }
-    const updateDrinkRating = await updateAllDrinkRating();
-    if (updateDrinkRating.updatedAllDrinkRating !==true) {
-        throw "Error: Some issue happened when updating all drinks' rating"
-    }
-    return {insertedReview: true};
 }
 
 export const updateReview = async (

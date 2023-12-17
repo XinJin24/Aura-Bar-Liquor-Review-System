@@ -1,16 +1,16 @@
-// Unit test for Data/drinks.js
-import {createDrink} from "../data/drinks.js";
-
-let drink1;
-let drink2;
-
-
-
+import {
+    createDrink,
+    getAllDrinks,
+    getAllReviewsOnADrink,
+    increaseReservedCounts,
+    reserveDrink,
+    updateAllDrinkRating, updateDrink
+} from "../data/drinks.js";
 
 try {
     const drink1 = await createDrink("unknown drink two", "vodka","this, that","C:\\Users\\jinxi\\git_repos\\Aura-Bar-Liquor-Review-System\\public\\drinkPictures\\2.jpg",
         0);
-    console.log(drink2)
+    console.log(drink1)
 }catch (error){
     console.log(error);
 }

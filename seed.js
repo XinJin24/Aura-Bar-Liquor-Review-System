@@ -535,15 +535,23 @@ try {
         drinkIds.push(drink._id.toString());
     }
 
-    for (let i = 1; i <= 100; i++) {
-        const randomDrinkId = drinkIds[Math.floor(Math.random() * drinkIds.length)];
-        const randomUserId = userIds[Math.floor(Math.random() * userIds.length)];
-        const randomReviewText = reviewTexts[Math.floor(Math.random() * reviewTexts.length)];
-        const randomRating = (1 + Math.random() * 4).toFixed(1);
-        const randomReviewPicture = reviewPictures[Math.floor(Math.random() * reviewPictures.length)];
+    const numberOfReviewsPerUser=5;
 
-        await createReview(randomDrinkId, randomUserId, randomReviewText, randomRating, randomReviewPicture);
+    for (const userId of userIds) {
+        let reviewedDrinks = new Set();
+        for (let i = 0; i < numberOfReviewsPerUser; i++) {
+            let randomDrinkId;
+            do {
+                randomDrinkId = drinkIds[Math.floor(Math.random() * drinkIds.length)];
+            } while (reviewedDrinks.has(randomDrinkId));
+            reviewedDrinks.add(randomDrinkId);
+            const randomReviewText = reviewTexts[Math.floor(Math.random() * reviewTexts.length)];
+            const randomRating = (1 + Math.random() * 4).toFixed(1);
+            const randomReviewPicture = reviewPictures[Math.floor(Math.random() * reviewPictures.length)];
+            await createReview(randomDrinkId, userId, randomReviewText, randomRating, randomReviewPicture);
+        }
     }
+
     await updateAllDrinkRating();
 
     for (const userId of userIds) {

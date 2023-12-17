@@ -80,7 +80,7 @@ router
                     {
                         isAdmin: req.session.user.role === "admin",
                         login: true,
-                        title: "Profile",
+                        title: "User Center",
                         user: req.session.user,
                         drinkReserved: drinkReservedArray,
                         reviews: reviewsArray,
