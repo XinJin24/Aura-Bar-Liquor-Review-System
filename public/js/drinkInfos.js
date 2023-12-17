@@ -144,6 +144,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const fileInput = document.getElementById('reviewPhotoInput');
+    const imagePreview = document.getElementById('previewImg');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+    fileInput.addEventListener('change', function(event){
+        if (event.target.files && event.target.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+                removeImageBtn.style.display = 'block'; // Show the remove button
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    });
+    removeImageBtn.addEventListener('click', function() {
+        fileInput.value = '';
+        imagePreview.style.display = 'none';
+        removeImageBtn.style.display = 'none';
+    });
+
     if (reserveButton) {
         reserveButton.addEventListener('click', function () {
             const drinkId = this.getAttribute('data-drinkid');
