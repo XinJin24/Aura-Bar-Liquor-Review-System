@@ -42,7 +42,7 @@ This is CS546 Project Repo
 ## Members
 
 <div align="left">
-Zimeng Zhao <br/>Ruikang Li<br/>Zijin Wang<br/>Xin Jin
+Zimeng Zhao <br/>Xin Jin
 </div>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
