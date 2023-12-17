@@ -3,14 +3,13 @@
 
     {{#if login}}
         <div>
-            <h2>Drink Details</h2>
             <p>Name: {{drinkInfo.name}}</p>
             <p>Category: {{drinkInfo.category}}</p>
             <p>Recipe: {{drinkInfo.recipe}}</p>
             <p>Rating: {{{generateStarRating drinkInfo.rating}}} {{drinkInfo.rating}}</p>
             <p>Price: {{drinkInfo.price}}</p>
             <p>Stocks: {{drinkInfo.stocks}}</p>
-            <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink Picture" id="drinkPhoto"><br>
+            <img src="{{drinkInfo.drinkPictureLocation}}" alt="drink_Picture" id="drinkPhoto"><br>
             {{# if isReservable}}
                 <button class="btn btn-success" id="reserveButton" data-drinkid="{{drinkInfo._id}}">Reserve</button>
             {{/if}}
@@ -26,14 +25,16 @@
                             <div class="customer-details">
                                 <span>{{owner}}</span>
                                 <span>{{timestamp}}</span>
-                                {{#if myPost}}
+                                {{#if canEdit}}
                                     <button class="btn editReviewButton" data-reviewid="{{reviewId}}">Edit</button>
+                                {{/if}}
+                                {{#if canRemove}}
                                     <button class="btn deleteButton" data-reviewid="{{reviewId}}">Delete</button>
                                 {{/if}}
                             </div>
                         </div>
                         <p>{{reviewText}}</p>
-                        <p>Rating: {{{generateStarRating rating}}}</p>
+                        <p>Rating: {{{generateStarRating rating}}} {{rating}}</p>
                         {{#if reviewPicture}}
                             <img src="{{reviewPicture}}" alt="review_Picture" id="reviewPhoto"><br>
                         {{/if}}

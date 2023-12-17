@@ -3,12 +3,17 @@ import Router, {query} from "express"
 const router = Router();
 import validation from "../publicMethods.js";
 import {createUser, getUserInfoByUserId, getUserPasswordById, loginUser} from "../data/users.js";
-import {getAllDrinks} from "../data/drinks.js";
+import {getAllDrinks, getAllReviewsOnADrink} from "../data/drinks.js";
 import xss from "xss";
-import AWS from 'aws-sdk';
 import multer from "multer";
 import bcrypt from "bcrypt";
-import {createReview} from "../data/reviews.js";
+import {createReview, getReviewInfoByReviewId} from "../data/reviews.js";
+import twilio from 'twilio';
+
+const accountSid = 'ACb22d7dddd58f2c92edc3422e1d16efe6';
+const authToken = 'd463c5a92ff6f534804ea60b99e6550d';
+
+const client = twilio(accountSid, authToken);
 
 const businessPhone = "+19293335817";
 const upload = multer({
@@ -19,11 +24,7 @@ const upload = multer({
         next(err);
     },
 });
-AWS.config.update({
-    accessKeyId: "AKIAQAGUPWCDLUD5Y7PQ",
-    secretAccessKey: "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",
-    region: 'us-east-1'
-});
+
 router
     .route('/').get(async (req, res) => {
     if (req.session.user) {
@@ -170,7 +171,7 @@ router
         } catch (error) {
             return res.status(400).render('error', {
                 title: "Inputs Error",
-                message: error
+                errorMsg: error,
             });
         }
     });
@@ -191,20 +192,6 @@ router.route("/logout").get(async (req, res) => {
 });
 
 
-const sns = new AWS.SNS();
-const sendSMS = async (phoneNumber, message) => {
-    const params = {
-        Message: message,
-        PhoneNumber: phoneNumber,
-    };
-    try {
-        const info = await sns.publish(params).promise();
-        console.log('SMS sent: ', info);
-    } catch (error) {
-        console.error('Error sending SMS:', error);
-    }
-};
-
 router.route("/sendMessage").post(async (req, res) => {
     if (req.session.user) {
         let message = null;
@@ -215,13 +202,26 @@ router.route("/sendMessage").post(async (req, res) => {
         } catch (error) {
             return res.status(400).render('error', {
                 title: "Inputs Error",
-                message: error
+                errorMsg: error
             });
         }
         try {
-            await sendSMS(businessPhone, message);
-            await sendSMS(userPhoneNumber, "Message From: Aura Bar: your message was " +
-                "successfully sent to the Customer Service Team. We will service you soon. ");
+            client.messages
+                .create({
+                    body: "This message is from Aura Bar Customer: " + message,
+                    from: '+18334580397',
+                    to: businessPhone
+                })
+                .then(message => console.log(message.sid))
+
+            client.messages
+                .create({
+                    body: "Your message was successfully received by the Aura Service Team. We will have someone to serve your request soon!          Aura Management",
+                    from: '+18334580397',
+                    to: "+19293428295"
+                })
+                .then(message => console.log(message.sid))
+
             res.status(200).send('Message sent successfully');
         } catch (error) {
             res.status(500).send('Error sending message');
@@ -229,9 +229,7 @@ router.route("/sendMessage").post(async (req, res) => {
     } else {
         return res.status(401).render("error", {
             errorMsg: "Please Login to send a message",
-            login: false,
-            title: "Error",
-            redirect: "/login"
+            title: "Error"
         });
     }
 });
@@ -363,16 +361,12 @@ router
     } else if(req.session.user && req.session.user.role === "user"){
         return res.status(401).render("error", {
             errorMsg: "Sorry, This page is solely for admin!",
-            login: false,
-            title: "Access Error",
-            redirect: "/home"
+            title: "Access Error"
         });
     } else{
         return res.status(401).render("error", {
             errorMsg: "please use your admin credentials to log in!",
-            login: false,
-            title: "Error",
-            redirect: "/login"
+            title: "Error"
         });
     }
 });
@@ -384,20 +378,27 @@ router
             let reviewText, rating, reviewPhotoInput, drinkId, userId;
             try {
                 drinkId = validation.validateId(xss(req.body.drinkId));
+                userId = req.session.user.userId;
+                const existingReviews = await getAllReviewsOnADrink(drinkId);
+                if(existingReviews.length >= 1){
+                    for(const singleReview of existingReviews){
+                        if(singleReview.userId === userId){
+                            return res.status(500).json({error: `you have made a review on this drink already, feel free to edit or delete it!`});
+                        }
+                    }
+                }
                 reviewText = validation.validateReviewText(xss(req.body.reviewText));
                 rating = validation.validateRating(xss(req.body.rating));
-                userId = req.session.user.userId;
-
                 reviewPhotoInput = req.file;
 
                 const newReview = await createReview(drinkId, userId, reviewText, rating, reviewPhotoInput);
-                res.status(200).json({success: true});
+                return res.status(200).json({success: true});
             } catch (error) {
                 console.error(error);
-                res.status(500).json({error: `Internal Server Error, reanson: ${error}`});
+                return res.status(500).json({error: `Internal Server Error, reason: ${error}`});
             }
         } else {
-            res.status(401).json({error: "Please Login to add a drink."});
+            return res.status(401).json({error: "Please Login to add a drink."});
         }
     });
 

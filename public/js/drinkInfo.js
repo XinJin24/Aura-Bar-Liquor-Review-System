@@ -3,7 +3,7 @@ let validateReviewText = (description) => {
         throw `Error: description should be a valid string (no empty spaces)`;
     }
     description = description.trim();
-    if (description.length < 5 || description > 10000) {
+    if (description.length < 5 || description.length > 10000) {
         throw `Error: description should have more than 5 chars and less than 10 thousand chars`;
     }
     return description;
@@ -129,11 +129,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     error: function (xhr, status, error) {
                         errorMessage.classList.remove('hidden-div');
-                        errorMessage.innerHTML = error;
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMessage.innerHTML = xhr.responseJSON.error;
+                        } else {
+                            errorMessage.innerHTML = 'An error occurred: ' + error;
+                        }
                     }
                 });
             } catch (error) {
-
+                errorMessage.classList.remove('hidden-div');
+                errorMessage.innerHTML = error;
             }
 
         });

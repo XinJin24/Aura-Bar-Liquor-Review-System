@@ -173,7 +173,7 @@ const exportedMethods = {
             throw `Error: description should be a valid string (no empty spaces)`;
         }
         description = description.trim();
-        if (description.length < 5 || description > 10000) {
+        if (description.length < 5 || description.length > 10000) {
             throw `Error: description should have more than 5 chars and less than 10 thousand chars`;
         }
         return description;
@@ -249,6 +249,7 @@ const exportedMethods = {
     },
     validatePrice(price, valName) {
         price = Number(price);
+        price = parseInt(price, 10);
         if (typeof price !== "number") {
             throw `Error: ${valName} must be a valid number.`;
         }
@@ -265,9 +266,10 @@ const exportedMethods = {
             throw "Error: Phone number should be a valid string (no empty spaces)";
         }
         phoneNumber = phoneNumber.trim();
-        const phoneRegex = /^(\+\d{1,2}\s?)?(\d{1,4}\s?)?\d{4,14}$/;
+
+        const phoneRegex = /^\+\d{1,3}\s?(\d{1,4}\s?)?\d{4,14}$/;
         if (!phoneRegex.test(phoneNumber)) {
-            throw "Error: Invalid phone number format";
+            throw "Error: Invalid phone number format. A country code is required.";
         }
         return phoneNumber;
     },
@@ -276,7 +278,7 @@ const exportedMethods = {
             throw `Error: message should be a valid string (no empty spaces)`;
         }
         message = message.trim();
-        if (message.length < 2 || message > 200) {
+        if (message.length < 2 || message.length > 200) {
             throw `Error: message should have more than 2 chars and less than 10 thousand chars`;
         }
         return message;
