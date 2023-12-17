@@ -7,7 +7,7 @@ import {
     loginUser,
     updateUser
 
-} from "../data/users.js"
+} from "../data/user.js"
 
 
 import {getDrinkInfoByDrinkId, updateAllDrinkRating} from "../data/drinks.js";

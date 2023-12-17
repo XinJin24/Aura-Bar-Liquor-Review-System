@@ -2,7 +2,7 @@ import {access, copyFile, mkdir, unlink} from 'fs/promises';
 import {ObjectId} from "mongodb";
 import {dirname, join} from "path";
 import {fileURLToPath} from "url";
-import {copyPictureAndReturnPath} from "./data/users.js";
+import {copyPictureAndReturnPath} from "./data/user.js";
 
 const exportedMethods = {
     validateId(id, valName) {

@@ -4,7 +4,7 @@ import {
 } from "./data/drinks.js"
 import {fileURLToPath} from "url";
 import {dirname, join} from "path";
-import {addReviewIdToAUser, createUser, getAllUsers} from "./data/users.js";
+import {addReviewIdToAUser, createUser, getAllUsers} from "./data/user.js";
 import {createReview, getAllReviews} from "./data/reviews.js";
 
 const currentFilePath = fileURLToPath(import.meta.url);

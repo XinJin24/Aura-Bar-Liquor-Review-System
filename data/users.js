@@ -294,6 +294,21 @@ export const deleteOneReviewFromUser = async (
     return true;
 }
 
+
+
+export const addReviewIdToAUser = async (
+    reviewId, userId
+) => {
+    const userCollection = await users();
+    const user = await userCollection.findOne({_id: new ObjectId(userId)});
+    const UpdatedReviewId = [...user.reviewIds, reviewId];
+    const updateResult = await userCollection.updateOne(
+        { _id: user._id },
+        { $set: { reviewIds: UpdatedReviewId } }
+    );
+    return user;
+};
+
 export const copyPictureAndReturnPath = async (file) => {
     try {
 
@@ -308,21 +323,9 @@ export const copyPictureAndReturnPath = async (file) => {
         throw  `Error: error when processing file: ${err.message}`;
     }
 };
+
 export const getAllUsers = async () => {
     const userCollection = await users();
     const user = await userCollection.find({}).toArray();
-    return user;
-};
-
-export const addReviewIdToAUser = async (
-    reviewId, userId
-) => {
-    const userCollection = await users();
-    const user = await userCollection.findOne({_id: new ObjectId(userId)});
-    const UpdatedReviewId = [...user.reviewIds, reviewId];
-    const updateResult = await userCollection.updateOne(
-        { _id: user._id },
-        { $set: { reviewIds: UpdatedReviewId } }
-    );
     return user;
 };
