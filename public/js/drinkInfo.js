@@ -129,7 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     error: function (xhr, status, error) {
                         errorMessage.classList.remove('hidden-div');
-                        errorMessage.innerHTML = error;
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMessage.innerHTML = xhr.responseJSON.error;
+                        } else {
+                            errorMessage.innerHTML = 'An error occurred: ' + error;
+                        }
                     }
                 });
             } catch (error) {

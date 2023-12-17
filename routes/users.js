@@ -43,7 +43,7 @@ router
                 for (let i = 0; i < drinkReserved.length; i++) {
                     const drinkDetail = await getDrinkInfoByDrinkId(drinkReserved[i].drinkId);
                     if(drinkDetail){
-                        drinkReservedArray.push();
+                        drinkReservedArray.push(drinkDetail);
                     }
                 }
                 for (let j = 0; j < reviews.length; j++) {
@@ -60,7 +60,7 @@ router
                             timestamp: review.timeStamp,
                             drinkId: review.drinkId,
                             drinkName: drinkDetail.name,
-                            reviewPicture: review.reviewPicture,
+                            reviewPicture: review.reviewPictureLocation,
                             drinkPicture: drinkDetail.drinkPictureLocation
                         }
                         reviewsArray.push(reviewsDisplayOnUserProfile);

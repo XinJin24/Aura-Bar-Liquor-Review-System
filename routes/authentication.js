@@ -3,11 +3,11 @@ import Router, {query} from "express"
 const router = Router();
 import validation from "../publicMethods.js";
 import {createUser, getUserInfoByUserId, getUserPasswordById, loginUser} from "../data/users.js";
-import {getAllDrinks} from "../data/drinks.js";
+import {getAllDrinks, getAllReviewsOnADrink} from "../data/drinks.js";
 import xss from "xss";
 import multer from "multer";
 import bcrypt from "bcrypt";
-import {createReview} from "../data/reviews.js";
+import {createReview, getReviewInfoByReviewId} from "../data/reviews.js";
 import twilio from 'twilio';
 
 const accountSid = 'ACb22d7dddd58f2c92edc3422e1d16efe6';
@@ -378,20 +378,27 @@ router
             let reviewText, rating, reviewPhotoInput, drinkId, userId;
             try {
                 drinkId = validation.validateId(xss(req.body.drinkId));
+                userId = req.session.user.userId;
+                const existingReviews = await getAllReviewsOnADrink(drinkId);
+                if(existingReviews.length >= 1){
+                    for(const singleReview of existingReviews){
+                        if(singleReview.userId === userId){
+                            return res.status(500).json({error: `you have made a review on this drink already, feel free to edit or delete it!`});
+                        }
+                    }
+                }
                 reviewText = validation.validateReviewText(xss(req.body.reviewText));
                 rating = validation.validateRating(xss(req.body.rating));
-                userId = req.session.user.userId;
-
                 reviewPhotoInput = req.file;
 
                 const newReview = await createReview(drinkId, userId, reviewText, rating, reviewPhotoInput);
-                res.status(200).json({success: true});
+                return res.status(200).json({success: true});
             } catch (error) {
                 console.error(error);
-                res.status(500).json({error: `Internal Server Error, reanson: ${error}`});
+                return res.status(500).json({error: `Internal Server Error, reason: ${error}`});
             }
         } else {
-            res.status(401).json({error: "Please Login to add a drink."});
+            return res.status(401).json({error: "Please Login to add a drink."});
         }
     });
 
