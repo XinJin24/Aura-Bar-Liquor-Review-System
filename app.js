@@ -62,13 +62,28 @@ app.use(session({
     resave: false
 }));
 
+const anthenticate = (req, res, next) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+    next();
+};
+
+app.use('/logout', anthenticate);
+app.use('/sendMessage', anthenticate);
+app.use('/checkPassword', anthenticate);
+app.use('/admin', anthenticate);
+app.use('/review', anthenticate);
+app.use('/user', anthenticate);
+app.use('/drink', anthenticate)
 
 configRoutes(app);
 
 app.use('*', (req, res) => {
-    res.render('Error', { title: '404', errorMsg:"wrong route!" });
+    res.render('Error', { title: 'Page No Found', errorMsg:"wrong route!" });
 });
 
 app.listen(3000, () => {
+    console.log("We've now got a server!");
     console.log("Server is running on http://localhost:3000");
 });
