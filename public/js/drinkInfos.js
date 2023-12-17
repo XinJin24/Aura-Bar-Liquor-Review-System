@@ -54,23 +54,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const updateInput = document.getElementById('updateReviewPhoto');
     const previewUpdateImg = document.getElementById('previewUpdateImg');
     const deleteImageBtn = document.getElementById('deleteImageBtn');
-    updateInput.addEventListener('change', function(event){
-        if (event.target.files && event.target.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                previewUpdateImg.src = e.target.result;
-                previewUpdateImg.style.display = 'block';
-                deleteImageBtn.style.display = 'block'; // Show the remove button
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        }
-    });
+    if(updateInput){
+        updateInput.addEventListener('change', function(event){
+            if (event.target.files && event.target.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    previewUpdateImg.src = e.target.result;
+                    previewUpdateImg.style.display = 'block';
+                    deleteImageBtn.style.display = 'block'; // Show the remove button
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        });
 
-    deleteImageBtn.addEventListener('click', function() {
-        updateInput.value = '';
-        previewUpdateImg.style.display = 'none';
-        deleteImageBtn.style.display = 'none';
-    });
+        deleteImageBtn.addEventListener('click', function() {
+            updateInput.value = '';
+            previewUpdateImg.style.display = 'none';
+            deleteImageBtn.style.display = 'none';
+        });
+    }
+
 
     document.getElementById('closeUpdateModal').addEventListener('click', () => {
         document.getElementById('updateReviewModal').style.display = 'none';
@@ -79,6 +82,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const reserveButton = document.getElementById('reserveButton');
     const addReviewForm = document.getElementById('addReviewForm');
     const updateReviewForm = document.getElementById('updateReviewForm');
+
+    const reviewPhotoInput = document.getElementById('reviewPhotoInput');
+    const imagePreview = document.getElementById('previewImg');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+    if(reviewPhotoInput){
+        reviewPhotoInput.addEventListener('change', function(event){
+            if (event.target.files && event.target.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                    removeImageBtn.style.display = 'block'; // Show the remove button
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        });
+        removeImageBtn.addEventListener('click', function() {
+            reviewPhotoInput.value = '';
+            imagePreview.style.display = 'none';
+            removeImageBtn.style.display = 'none';
+        });
+    }
+
+
 
     document.getElementById('closeUpdateModal').addEventListener('click', () => {
         document.getElementById('updateReviewModal').style.display = 'none';
@@ -165,25 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const fileInput = document.getElementById('reviewPhotoInput');
-    const imagePreview = document.getElementById('previewImg');
-    const removeImageBtn = document.getElementById('removeImageBtn');
-    fileInput.addEventListener('change', function(event){
-        if (event.target.files && event.target.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                imagePreview.src = e.target.result;
-                imagePreview.style.display = 'block';
-                removeImageBtn.style.display = 'block'; // Show the remove button
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        }
-    });
-    removeImageBtn.addEventListener('click', function() {
-        fileInput.value = '';
-        imagePreview.style.display = 'none';
-        removeImageBtn.style.display = 'none';
-    });
 
 
 

@@ -171,3 +171,8 @@ header nav ul li a:hover {
         padding: 10px;
     }
 }
+.personalImage {
+    max-width: 300px;
+    max-height: 300px;
+    margin-top: 10px;
+}
