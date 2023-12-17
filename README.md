@@ -54,7 +54,7 @@ Zimeng Zhao <br/>Xin Jin
 <div align="center">
 <!-- <img src="https://github.com/tzuminglu/2FA-with-email/blob/main/example.jpeg" width="320"> -->
 </div>
-The objective of this project is to create a platform that allows users to post information about strays and to view the strays in an interactive map to find and help them better.
+Welcome to our Aura Bar Management app, specifically crafted for those passionate about bars and liquor. Our platform responds to the growing need for detailed information about drink quality, service, pricing, and ambiance. It features a user-friendly interface, offering comprehensive reviews and ratings to assist in finding the best liquor options. Key functionalities include a versatile login interface, a vivid liquor display page, in-depth liquor details with user reviews, a personalized user profile, and a robust bar management section for administrators. Enhance your liquor discovery experience with added features like photo-inclusive reviews, online reservations, and an easy-to-use contact menu. 
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
