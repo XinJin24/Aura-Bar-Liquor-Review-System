@@ -43,6 +43,7 @@ router
                 for (let i = 0; i < drinkReserved.length; i++) {
                     const drinkDetail = await getDrinkInfoByDrinkId(drinkReserved[i].drinkId);
                     if(drinkDetail){
+                        drinkDetail.timestamp = drinkReserved[i].timestamp;
                         drinkReservedArray.push(drinkDetail);
                     }
                 }
@@ -66,6 +67,14 @@ router
                         reviewsArray.push(reviewsDisplayOnUserProfile);
                     }
                 }
+                reviewsArray = reviewsArray.sort((a, b) => {
+                    return new Date(b.timestamp) - new Date(a.timestamp);
+                });
+                drinkReservedArray = drinkReservedArray.sort((a, b) => {
+                    return new Date(b.timestamp) - new Date(a.timestamp);
+                });
+
+
                 //render drink, review, user info to user home page
                 return res.render('profile',
                     {
