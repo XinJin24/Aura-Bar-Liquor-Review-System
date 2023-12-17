@@ -175,4 +175,34 @@ header nav ul li a:hover {
     max-width: 300px;
     max-height: 300px;
     margin-top: 10px;
+    object-fit: fill;
+}
+
+#previewImg {
+    width: 200px;
+    height: 200px;
+    object-fit: fill;
+}
+
+#reviewPhotoInput {
+    width: 200px;
+    height: 40px;
+    object-fit: fill;
+}
+#updateReviewPhoto {
+    width: 200px;
+    height: 40px;
+    object-fit: fill;
+}
+
+#previewUpdateImg {
+    width: 200px;
+    height: 200px;
+    object-fit: fill;
+}
+
+#newPreview{
+    width: 200px;
+    height: 200px;
+    margin-top: 10px;
 }
