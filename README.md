@@ -79,19 +79,20 @@ To get a local copy up and running follow these simple example steps.
 
 ### How to start the project:
 1. Install MongoDB & node.js.
+2. make sure the creation of Database name aura_bar_liquor_system and collections name of users, reviews and users
 
-2. Make sure the following ports are not occupied: `27017`(MongoDB service), `3000`.
+3. Make sure the following ports are not occupied: `27017`(MongoDB service), `3000`.
 
-3. Open your terminal, enter the command below, and choose a folder in which to clone the repository.
+4. Open your terminal, enter the command below, and choose a folder in which to clone the repository.
     ```sh
     git clone https://github.com/XinJin96/Aura-Bar-Liquor-Review-System.git
     ```
 
-4. Go to the project root directory and run below code in terminal to install NPM packages
+5. Go to the project root directory and run below code in terminal to install NPM packages
     ```sh
       npm i
     ```
-5. Run below code in terminal to start the program
+6. Run below code in terminal to start the program
     ```sh
       npm start
     ```
