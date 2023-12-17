@@ -6,7 +6,8 @@
         </div>
     {{/if}}
     <h1>{{title}}</h1>
-    <button id="addDrinkButton" class="btn btn-success">Add New Drink</button><br>
+    <button id="addDrinkButton" class="btn btn-success">Add New Drink</button>
+    <br>
     <button id="showAllButton" class="btn btn-primary" style="display: none;">Show All</button>
     <input type="text" id="searchBar" placeholder="Search drinks...">
     <button id="searchButton">Search</button>
@@ -64,7 +65,8 @@
         People often want to know about the quality of service, pricing, ambiance, and the variety of drinks available.
         Our project can address this need by providing a platform for reviews and ratings.
         The project also aims to enhance the user experience for those looking for liquor options.
-        By providing a user-friendly app, we're not only helping consumers find the best options but also saving their time and effort.
+        By providing a user-friendly app, we're not only helping consumers find the best options but also saving their
+        time and effort.
     </p>
     <script src="../public/js/admin.js"></script>
 
@@ -98,7 +100,9 @@
                 <div>
                     <label for="drinkPicture">Upload Image *:</label>
                     <input type="file" id="drinkPicture" name="drinkPicture" accept="image/*" required>
-                    <img  id="imagePreview" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Image Preview" style="display: none;">
+                    <img id="imagePreview"
+                         src="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                         alt="Image Preview" style="display: none;">
                     <button type="button" id="removeImageBtn" style="display: none;">Remove Image</button>
                 </div>
                 <button type="button" id="submitNewDrink">Add Drink</button>
@@ -136,8 +140,10 @@
                 <div>
                     <label for="drinkPicture_update">Upload Image:</label>
                     <input type="file" id="drinkPicture_update" name="drinkPicture_update" accept="image/*" required>
-<!--                    <img id="currentDrinkImage" src="" alt="Current Drink Image" style="max-width: 100px; max-height: 100px;"/>-->
-                    <img  id="newPreview" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="newPreview" style="display: none;">
+                    <!--                    <img id="currentDrinkImage" src="" alt="Current Drink Image" style="max-width: 100px; max-height: 100px;"/>-->
+                    <img id="newPreview"
+                         src="data:image/gif;base64,R0lGODlhAQABAIAAAP///////yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                         alt="newPreview" style="display: none;">
                     <button type="button" id="removePreviewBtn" style="display: none;">Remove Image</button>
                 </div>
                 <button type="button" id="submitUpdateDrink">Save Changes</button>

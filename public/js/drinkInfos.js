@@ -51,6 +51,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    const updateInput = document.getElementById('updateReviewPhoto');
+    const previewUpdateImg = document.getElementById('previewUpdateImg');
+    const deleteImageBtn = document.getElementById('deleteImageBtn');
+    updateInput.addEventListener('change', function(event){
+        if (event.target.files && event.target.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                previewUpdateImg.src = e.target.result;
+                previewUpdateImg.style.display = 'block';
+                deleteImageBtn.style.display = 'block'; // Show the remove button
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    });
+
+    deleteImageBtn.addEventListener('click', function() {
+        updateInput.value = '';
+        previewUpdateImg.style.display = 'none';
+        deleteImageBtn.style.display = 'none';
+    });
+
     document.getElementById('closeUpdateModal').addEventListener('click', () => {
         document.getElementById('updateReviewModal').style.display = 'none';
     });
@@ -163,6 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
         imagePreview.style.display = 'none';
         removeImageBtn.style.display = 'none';
     });
+
+
 
     if (reserveButton) {
         reserveButton.addEventListener('click', function () {
