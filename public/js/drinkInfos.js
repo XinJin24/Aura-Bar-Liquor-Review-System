@@ -25,7 +25,7 @@ let validateRating = (rating) => {
     } else {
         throw "Rating should be a number or a string representing a number.";
     }
-    if (numericRating < 0 || numericRating > 5) {
+    if (numericRating < 1 || numericRating > 5) {
         throw "Rating should be between 0 and 5.";
     }
     if (!/^\d+(\.\d{1,2})?$/.test(numericRating.toString())) {
