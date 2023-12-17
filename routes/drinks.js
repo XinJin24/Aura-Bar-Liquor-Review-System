@@ -13,7 +13,7 @@ import {
 import xss from "xss";
 
 import multer from "multer";
-import {getAllReviewsByUserId} from "../data/users.js";
+import {getAllReviewsByUserId} from "../data/user.js";
 
 const upload = multer({
     dest: "../public/uploads/",

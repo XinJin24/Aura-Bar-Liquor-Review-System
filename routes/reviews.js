@@ -1,5 +1,5 @@
 import validation from "../publicMethods.js";
-import {getUserIdByEmail, getUserInfoByUserId} from "../data/users.js";
+import {getUserIdByEmail, getUserInfoByUserId} from "../data/user.js";
 import {createReview, deleteReview, getReviewInfoByReviewId, updateReview} from "../data/reviews.js";
 import {getDrinkInfoByDrinkId} from "../data/drinks.js";
 import router from "./drinks.js";

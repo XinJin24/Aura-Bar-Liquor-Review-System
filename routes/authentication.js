@@ -2,7 +2,7 @@ import Router, {query} from "express"
 
 const router = Router();
 import validation from "../publicMethods.js";
-import {createUser, getUserInfoByUserId, getUserPasswordById, loginUser} from "../data/users.js";
+import {createUser, getUserInfoByUserId, getUserPasswordById, loginUser} from "../data/user.js";
 import {getAllDrinks, getAllReviewsOnADrink} from "../data/drinks.js";
 import xss from "xss";
 import multer from "multer";

@@ -8,7 +8,7 @@ import {
     getUserIdByEmail,
     getUserPasswordById,
     updateUser
-} from "../data/users.js";
+} from "../data/user.js";
 import {getReviewInfoByReviewId} from "../data/reviews.js"
 import {getDrinkInfoByDrinkId} from "../data/drinks.js"
 import xss from "xss";
