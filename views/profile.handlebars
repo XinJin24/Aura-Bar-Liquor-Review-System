@@ -20,7 +20,8 @@
                         <img src="{{drinkPictureLocation}}" alt="drink Picture" class="reserved-picture">
                         {{name}}
                         {{#if _id}}
-                            <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Drink Details</button>
+                            <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Drink Details
+                            </button>
                         {{/if}}
                     </li>
                 {{/each}}
@@ -32,7 +33,9 @@
             <ul>
                 {{#each reviews as |review|}}
                     <li>{{drinkName}}</li>
-                    <img src="{{reviewPicture}}" alt="drink Picture" class="comment-picture">
+                    {{# if reviewPicture}}
+                        <img src="{{reviewPicture}}" alt="drink Picture" class="comment-picture">
+                    {{/if}}
                     <li>{{reviewText}}</li>
                     <li>{{timestamp}}</li>
                     <button class="btn btn-primary" onclick="redirectToPage('{{drinkId}}')">View Review Details</button>
@@ -53,9 +56,13 @@
             <form id="editInfoForm" enctype="multipart/form-data">
                 <label for="firstName">First Name *:</label>
                 <input type="text" id="firstName" name="firstName" value="{{user.firstName}}">
+
                 <label for="lastName">Last Name *:</label>
+
                 <input type="text" id="lastName" name="lastName" value="{{user.lastName}}">
+                <br>
                 <label for="email">Email:</label>
+
                 <input type="text" id="email" name="email" value="{{user.email}}" readonly placeholder="can not be changed">
                 <label for="phoneNumber">Phone Number *:</label>
                 <input type="text" id="phoneNumber" name="phoneNumber" value="{{user.phoneNumber}}">
@@ -64,11 +71,16 @@
                 <label for="newPassword">New Password *:</label>
                 <input type="password" id="newPassword" name="newPassword">
                 <label for="confirmNewPassword">Confirm New Password *:</label>
+
                 <input type="password" id="confirmNewPassword" name="confirmNewPassword">
+                <br>
                 <label for="photoInput">Profile Photo:</label>
+
                 <input type="file" id="photoInput" name="photoInput" accept="image/*" placeholder="+15514329087">
+
                 <img id="imagePreview" src="" alt="Image Preview" style="display: none;">
                 <button type="button" id="removeImageBtn" style="display: none;">Remove Image</button>
+                <br>
                 <input type="submit" value="Update">
             </form>
         </div>
