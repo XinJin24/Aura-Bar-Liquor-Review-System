@@ -265,9 +265,10 @@ const exportedMethods = {
             throw "Error: Phone number should be a valid string (no empty spaces)";
         }
         phoneNumber = phoneNumber.trim();
-        const phoneRegex = /^(\+\d{1,2}\s?)?(\d{1,4}\s?)?\d{4,14}$/;
+
+        const phoneRegex = /^\+\d{1,3}\s?(\d{1,4}\s?)?\d{4,14}$/;
         if (!phoneRegex.test(phoneNumber)) {
-            throw "Error: Invalid phone number format";
+            throw "Error: Invalid phone number format. A country code is required.";
         }
         return phoneNumber;
     },

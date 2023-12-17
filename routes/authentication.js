@@ -5,10 +5,15 @@ import validation from "../publicMethods.js";
 import {createUser, getUserInfoByUserId, getUserPasswordById, loginUser} from "../data/users.js";
 import {getAllDrinks} from "../data/drinks.js";
 import xss from "xss";
-import AWS from 'aws-sdk';
 import multer from "multer";
 import bcrypt from "bcrypt";
 import {createReview} from "../data/reviews.js";
+import twilio from 'twilio';
+
+const accountSid = 'ACb22d7dddd58f2c92edc3422e1d16efe6';
+const authToken = '923d660e2c53fab971847ee0951beba2';
+
+const client = twilio(accountSid, authToken);
 
 const businessPhone = "+19293335817";
 const upload = multer({
@@ -19,11 +24,7 @@ const upload = multer({
         next(err);
     },
 });
-AWS.config.update({
-    accessKeyId: "AKIAQAGUPWCDLUD5Y7PQ",
-    secretAccessKey: "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",
-    region: 'us-east-1'
-});
+
 router
     .route('/').get(async (req, res) => {
     if (req.session.user) {
@@ -191,20 +192,6 @@ router.route("/logout").get(async (req, res) => {
 });
 
 
-const sns = new AWS.SNS();
-const sendSMS = async (phoneNumber, message) => {
-    const params = {
-        Message: message,
-        PhoneNumber: phoneNumber,
-    };
-    try {
-        const info = await sns.publish(params).promise();
-        console.log('SMS sent: ', info);
-    } catch (error) {
-        console.error('Error sending SMS:', error);
-    }
-};
-
 router.route("/sendMessage").post(async (req, res) => {
     if (req.session.user) {
         let message = null;
@@ -219,9 +206,21 @@ router.route("/sendMessage").post(async (req, res) => {
             });
         }
         try {
-            await sendSMS(businessPhone, message);
-            await sendSMS(userPhoneNumber, "Message From: Aura Bar: your message was " +
-                "successfully sent to the Customer Service Team. We will service you soon. ");
+            client.messages
+                .create({
+                    body: "This message is from Aura Bar Customer: " + message,
+                    from: '+18334580397',
+                    to: businessPhone
+                })
+                .then(message => console.log(message.sid));
+
+            client.messages
+                .create({
+                    body: "your message was successfully sent to the Aura Service Team. We will serve your request soon!    ---Aura Management",
+                    from: '+18334580397',
+                    to: userPhoneNumber
+                })
+                .then(message => console.log(message.sid));
             res.status(200).send('Message sent successfully');
         } catch (error) {
             res.status(500).send('Error sending message');
