@@ -1,11 +1,10 @@
 import {
-    addReviewIdToADrink,
     createDrink, getAllDrinks, reserveDrink, updateAllDrinkRating,
 } from "./data/drinks.js"
 import {fileURLToPath} from "url";
 import {dirname, join} from "path";
-import {addReviewIdToAUser, createUser, getAllUsers} from "./data/user.js";
-import {createReview, getAllReviews} from "./data/reviews.js";
+import {createUser, getAllUsers} from "./data/user.js";
+import {createReview} from "./data/reviews.js";
 
 const currentFilePath = fileURLToPath(import.meta.url);
 const currentDirPath = dirname(currentFilePath) + "/test/";
@@ -540,7 +539,7 @@ try {
         const randomDrinkId = drinkIds[Math.floor(Math.random() * drinkIds.length)];
         const randomUserId = userIds[Math.floor(Math.random() * userIds.length)];
         const randomReviewText = reviewTexts[Math.floor(Math.random() * reviewTexts.length)];
-        const randomRating = (Math.random() * 5).toFixed(1);
+        const randomRating = (1 + Math.random() * 4).toFixed(1);
         const randomReviewPicture = reviewPictures[Math.floor(Math.random() * reviewPictures.length)];
 
         await createReview(randomDrinkId, randomUserId, randomReviewText, randomRating, randomReviewPicture);
@@ -559,7 +558,6 @@ try {
             }
         }
     }
-
     console.log("Finished loading all drinks, users, reviews, and added reservations");
 } catch (error) {
     console.log(error);

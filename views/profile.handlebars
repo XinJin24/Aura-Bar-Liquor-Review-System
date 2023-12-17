@@ -56,28 +56,29 @@
             <form id="editInfoForm" enctype="multipart/form-data">
                 <label for="firstName">First Name *:</label>
                 <input type="text" id="firstName" name="firstName" value="{{user.firstName}}">
-
+                <br>
                 <label for="lastName">Last Name *:</label>
-
                 <input type="text" id="lastName" name="lastName" value="{{user.lastName}}">
                 <br>
                 <label for="email">Email:</label>
-
-                <input type="text" id="email" name="email" value="{{user.email}}" readonly placeholder="can not be changed">
+                <input type="text" id="email" name="email" value="{{user.email}}" readonly
+                       placeholder="can not be changed">
+                <br>
                 <label for="phoneNumber">Phone Number *:</label>
                 <input type="text" id="phoneNumber" name="phoneNumber" value="{{user.phoneNumber}}">
+                <br>
                 <label for="oldPassword">Old Password *:</label>
                 <input type="password" id="oldPassword" name="oldPassword">
+                <br>
                 <label for="newPassword">New Password *:</label>
                 <input type="password" id="newPassword" name="newPassword">
+                <br>
                 <label for="confirmNewPassword">Confirm New Password *:</label>
-
                 <input type="password" id="confirmNewPassword" name="confirmNewPassword">
                 <br>
                 <label for="photoInput">Profile Photo:</label>
-
                 <input type="file" id="photoInput" name="photoInput" accept="image/*" placeholder="+15514329087">
-
+                <br>
                 <img id="imagePreview" src="" alt="Image Preview" style="display: none;">
                 <button type="button" id="removeImageBtn" style="display: none;">Remove Image</button>
                 <br>
@@ -85,6 +86,5 @@
             </form>
         </div>
     </div>
-
 </main>
 

@@ -1,7 +1,7 @@
 import validation from "../publicMethods.js";
 import {drinks, reviews, users} from "../config/mongoCollections.js";
 import {ObjectId} from "mongodb";
-import {deleteOneReviewFromUser} from "./users.js";
+import {deleteOneReviewFromUser} from "./user.js";
 import {deleteReviewIdFromADrink, updateAllDrinkRating} from "./drinks.js";
 
 /**
