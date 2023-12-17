@@ -509,16 +509,16 @@ try {
         "- Freshly squeezed orange juice, to top*", drinkPicturePath43, 10, 14);
 
 
-    user1 = await createUser("Mike", "River", "mike.river1@example.com", "9293335817", "Abc123!@#", profilePicture1, "admin");
-    user2 = await createUser("John", "Doe", "john.doe2@example.com", "9293335817", "Abc123!@#", profilePicture2, "user");
-    user3 = await createUser("Jane", "Smith", "jane.smith3@example.com", "9293335817", "Abc123!@#", profilePicture3, "admin");
-    user4 = await createUser("Alice", "Taylor", "alice.taylor4@example.com", "9293335817", "Abc123!@#", profilePicture4, "user");
-    user5 = await createUser("Bob", "Brown", "bob.brown5@example.com", "9293335817", "Abc123!@#", profilePicture5, "admin");
-    user6 = await createUser("Emma", "Wilson", "emma.wilson6@example.com", "9293335817", "Abc123!@#", profilePicture6, "user");
-    user7 = await createUser("Ethan", "Miller", "ethan.miller7@example.com", "9293335817", "Abc123!@#", profilePicture7, "admin");
-    user8 = await createUser("Sophia", "Davis", "sophia.davis8@example.com", "9293335817", "Abc123!@#", profilePicture8, "user");
-    user9 = await createUser("Noah", "Garcia", "noah.garcia9@example.com", "9293335817", "Abc123!@#", profilePicture9, "admin");
-    user10 = await createUser("Liam", "Martinez", "liam.martinez10@example.com", "9293335817", "Abc123!@#", profilePicture10, "user");
+    user1 = await createUser("Mike", "River", "mike.river1@example.com", "+19293335817", "Abc123!@#", profilePicture1, "admin");
+    user2 = await createUser("John", "Doe", "john.doe2@example.com", "+19293335817", "Abc123!@#", profilePicture2, "user");
+    user3 = await createUser("Jane", "Smith", "jane.smith3@example.com", "+19293335817", "Abc123!@#", profilePicture3, "admin");
+    user4 = await createUser("Alice", "Taylor", "alice.taylor4@example.com", "+19293335817", "Abc123!@#", profilePicture4, "user");
+    user5 = await createUser("Bob", "Brown", "bob.brown5@example.com", "+19293335817", "Abc123!@#", profilePicture5, "admin");
+    user6 = await createUser("Emma", "Wilson", "emma.wilson6@example.com", "+19293335817", "Abc123!@#", profilePicture6, "user");
+    user7 = await createUser("Ethan", "Miller", "ethan.miller7@example.com", "+19293335817", "Abc123!@#", profilePicture7, "admin");
+    user8 = await createUser("Sophia", "Davis", "sophia.davis8@example.com", "+19293335817", "Abc123!@#", profilePicture8, "user");
+    user9 = await createUser("Noah", "Garcia", "noah.garcia9@example.com", "+19293335817", "Abc123!@#", profilePicture9, "admin");
+    user10 = await createUser("Liam", "Martinez", "liam.martinez10@example.com", "+19293335817", "Abc123!@#", profilePicture10, "user");
 
 
     const drinkIds = [];
@@ -544,15 +544,6 @@ try {
         const randomReviewPicture = reviewPictures[Math.floor(Math.random() * reviewPictures.length)];
 
         await createReview(randomDrinkId, randomUserId, randomReviewText, randomRating, randomReviewPicture);
-    }
-
-    const reviews = await getAllReviews();
-    for (const review of reviews) {
-        const reviewId = review._id.toString();
-        const drinkId = review.drinkId.toString();
-        const userId = review.userId.toString();
-        await addReviewIdToAUser(reviewId, userId);
-        await addReviewIdToADrink(reviewId, drinkId);
     }
     await updateAllDrinkRating();
 

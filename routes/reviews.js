@@ -60,17 +60,14 @@ router
             } catch (error) {
                 return res.status(400).render("error", {
                     errorMsg: error,
-                    login: true,
-                    title: "Error",
+                    title: "Error"
                 });
             }
         } else {
             //if no logged in
             return res.status(401).render("error", {
                 errorMsg: "please login first to edit a drink",
-                login: false,
-                title: "Error",
-                redirect: "/"
+                title: "Error"
             });
         }
 
@@ -115,7 +112,7 @@ router
                 console.error(error);
                 return res.status(500).render('error', {
                     title: "Error",
-                    message: "Internal Server Error"
+                    errorMsg: "Internal Server Error"
                 });
             }
         } else {
@@ -134,7 +131,7 @@ router
             const userIdFromDB = await getUserIdByEmail(req.session.user.email);
             const user = await getUserInfoByUserId(userIdFromDB);
 
-            if (!user.reviewIds.includes(reviewId)) {
+            if (req.session.user.role!=="admin" && !user.reviewIds.includes(reviewId)) {
                 return res.status(403).json({error: 'You cannot delete review: ' + reviewId + ', it is not your review!'});
             }
 

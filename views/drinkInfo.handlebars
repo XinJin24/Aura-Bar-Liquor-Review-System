@@ -26,14 +26,16 @@
                             <div class="customer-details">
                                 <span>{{owner}}</span>
                                 <span>{{timestamp}}</span>
-                                {{#if myPost}}
+                                {{#if canEdit}}
                                     <button class="btn editReviewButton" data-reviewid="{{reviewId}}">Edit</button>
+                                {{/if}}
+                                {{#if canRemove}}
                                     <button class="btn deleteButton" data-reviewid="{{reviewId}}">Delete</button>
                                 {{/if}}
                             </div>
                         </div>
                         <p>{{reviewText}}</p>
-                        <p>Rating: {{{generateStarRating rating}}}</p>
+                        <p>Rating: {{{generateStarRating rating}}} {{rating}}</p>
                         {{#if reviewPicture}}
                             <img src="{{reviewPicture}}" alt="review_Picture" id="reviewPhoto"><br>
                         {{/if}}

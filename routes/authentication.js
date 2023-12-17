@@ -11,7 +11,7 @@ import {createReview} from "../data/reviews.js";
 import twilio from 'twilio';
 
 const accountSid = 'ACb22d7dddd58f2c92edc3422e1d16efe6';
-const authToken = '923d660e2c53fab971847ee0951beba2';
+const authToken = 'd463c5a92ff6f534804ea60b99e6550d';
 
 const client = twilio(accountSid, authToken);
 
@@ -171,7 +171,7 @@ router
         } catch (error) {
             return res.status(400).render('error', {
                 title: "Inputs Error",
-                message: error
+                errorMsg: error,
             });
         }
     });
@@ -202,7 +202,7 @@ router.route("/sendMessage").post(async (req, res) => {
         } catch (error) {
             return res.status(400).render('error', {
                 title: "Inputs Error",
-                message: error
+                errorMsg: error
             });
         }
         try {
@@ -212,15 +212,16 @@ router.route("/sendMessage").post(async (req, res) => {
                     from: '+18334580397',
                     to: businessPhone
                 })
-                .then(message => console.log(message.sid));
+                .then(message => console.log(message.sid))
 
             client.messages
                 .create({
-                    body: "your message was successfully sent to the Aura Service Team. We will serve your request soon!    ---Aura Management",
+                    body: "Your message was successfully received by the Aura Service Team. We will have someone to serve your request soon!          Aura Management",
                     from: '+18334580397',
-                    to: userPhoneNumber
+                    to: "+19293428295"
                 })
-                .then(message => console.log(message.sid));
+                .then(message => console.log(message.sid))
+
             res.status(200).send('Message sent successfully');
         } catch (error) {
             res.status(500).send('Error sending message');
@@ -228,9 +229,7 @@ router.route("/sendMessage").post(async (req, res) => {
     } else {
         return res.status(401).render("error", {
             errorMsg: "Please Login to send a message",
-            login: false,
-            title: "Error",
-            redirect: "/login"
+            title: "Error"
         });
     }
 });
@@ -362,16 +361,12 @@ router
     } else if(req.session.user && req.session.user.role === "user"){
         return res.status(401).render("error", {
             errorMsg: "Sorry, This page is solely for admin!",
-            login: false,
-            title: "Access Error",
-            redirect: "/home"
+            title: "Access Error"
         });
     } else{
         return res.status(401).render("error", {
             errorMsg: "please use your admin credentials to log in!",
-            login: false,
-            title: "Error",
-            redirect: "/login"
+            title: "Error"
         });
     }
 });

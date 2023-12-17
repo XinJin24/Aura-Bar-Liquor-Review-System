@@ -44,16 +44,12 @@ router
         } else if (req.session.user && req.session.user.role !== "admin") {
             res.status(403).render("error", {
                 errorMsg: "Sorry, You are not admin, hence you cannot add a drink...",
-                login: true,
-                isAdmin: false,
                 title: "Authorization Error"
             });
         } else {
             //if not logged in
             return res.status(401).render("error", {
                 errorMsg: "Please Login to add a drink.",
-                login: false,
-                isAdmin: false,
                 title: "Error"
             });
         }
@@ -111,14 +107,18 @@ router
                 let hasReview = false;
                 const sessionUserAllReviews = await getAllReviewsByUserId(sessionUserId);
                 for(const review of reviews){
-                    review.myPost =false;
+                    review.canEdit =false;
                     // if the reviewId is pointing to a userId
                     if(review.userId === sessionUserId){
                         //if the user's reviews has the reviewid
                         const sessionUserReview = await getAllReviewsByUserId(sessionUserId)
                         if(sessionUserAllReviews.includes(review.reviewId)){
-                            review.myPost =true;
+                            review.canEdit =true;
+                            review.canRemove = true;
                         }
+                    }
+                    if(req.session.user.role ==='admin'){
+                        review.canRemove = true;
                     }
                     if(sessionUserAllReviews.includes(review.reviewId)){
                         hasReview = true;
@@ -142,17 +142,15 @@ router
             } catch (error) {
                 console.error(error);
                 return res.status(500).render('error', {
-                    title: "Error",
-                    errorMsg: "Please enter a valid drink ID",
-                    message: "Internal Server Error"
+                    title: "Internal Server Error",
+                    errorMsg: "Please enter a valid drink ID"
                 });
             }
             //if not logged in
         } else {
             return res.status(401).render("error", {
                 errorMsg: "Please Login to view details about this drink.",
-                login: false,
-                title: "Error",
+                title: "Error"
             });
         }
     })
@@ -160,15 +158,13 @@ router
         if (!req.session.user) {
             return res.status(401).render("error", {
                 errorMsg: "Please login first to edit a drink",
-                login: false,
-                title: "Error",
+                title: "Error"
             });
         }
         if (req.session.user && req.session.user.role !== "admin") {
             return res.status(401).render("error", {
                 errorMsg: "You do not have privileges to edit a drink",
-                login: true,
-                title: "Error",
+                title: "Error"
             });
         }
 
@@ -195,8 +191,7 @@ router
             console.error(error);
             return res.status(500).render("error", {
                 errorMsg: error,
-                login: true,
-                title: "Error",
+                title: "Error"
             });
         }
     })

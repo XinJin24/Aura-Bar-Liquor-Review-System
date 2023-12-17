@@ -66,7 +66,7 @@ app.use(session({
 configRoutes(app);
 
 app.use('*', (req, res) => {
-    res.render('Error', { title: '404' });
+    res.render('Error', { title: '404', errorMsg:"wrong route!" });
 });
 
 app.listen(3000, () => {

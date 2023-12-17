@@ -99,6 +99,8 @@ $('#registration_form').submit((event)=>{
     if(!valid1)
     {
         event.preventDefault();
+        $('#error').empty();
+        $('#error').hide();
         try{
             if($('#firstNameInput').length)
                 checkName($('#firstNameInput').val())
@@ -125,7 +127,6 @@ $('#registration_form').submit((event)=>{
         }
     }
 })
-
 
 document.addEventListener('DOMContentLoaded', function () {
     let imageInput = document.getElementById('photoInput');

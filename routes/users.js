@@ -81,7 +81,7 @@ router
                 //render error page that shows internal error
                 res.status(404).render('error', {
                     errorMsg: error,
-                    login: true
+                    title: "Internal Server Error"
                 })
             }
         } else {

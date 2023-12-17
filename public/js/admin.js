@@ -104,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.deleteButton').forEach(button => {
         button.addEventListener('click', function () {
-            console.log("delete clicked");
             const drinkId = this.getAttribute('data-drinkid');
             deleteDrink(drinkId);
         });
@@ -498,7 +497,6 @@ function submitUpdateDrinkForm() {
         processData: false,
         contentType: false,
         success: function (response) {
-            console.log(response);
             alert('Drink updated successfully');
             closeUpdateDrinkModal();
             location.reload();
