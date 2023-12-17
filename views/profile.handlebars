@@ -51,22 +51,22 @@
             <h2>Edit My Info</h2>
             <div id="error" class="hidden-div"></div>
             <form id="editInfoForm" enctype="multipart/form-data">
-                <label for="firstName">First Name:</label>
+                <label for="firstName">First Name *:</label>
                 <input type="text" id="firstName" name="firstName" value="{{user.firstName}}">
-                <label for="lastName">Last Name:</label>
+                <label for="lastName">Last Name *:</label>
                 <input type="text" id="lastName" name="lastName" value="{{user.lastName}}">
                 <label for="email">Email:</label>
-                <input type="text" id="email" name="email" value="{{user.email}}" readonly>
-                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="email" name="email" value="{{user.email}}" readonly placeholder="can not be changed">
+                <label for="phoneNumber">Phone Number *:</label>
                 <input type="text" id="phoneNumber" name="phoneNumber" value="{{user.phoneNumber}}">
-                <label for="oldPassword">Old Password:</label>
+                <label for="oldPassword">Old Password *:</label>
                 <input type="password" id="oldPassword" name="oldPassword">
-                <label for="newPassword">New Password:</label>
+                <label for="newPassword">New Password *:</label>
                 <input type="password" id="newPassword" name="newPassword">
-                <label for="confirmNewPassword">Confirm New Password:</label>
+                <label for="confirmNewPassword">Confirm New Password *:</label>
                 <input type="password" id="confirmNewPassword" name="confirmNewPassword">
                 <label for="photoInput">Profile Photo:</label>
-                <input type="file" id="photoInput" name="photoInput" accept="image/*">
+                <input type="file" id="photoInput" name="photoInput" accept="image/*" placeholder="+15514329087">
                 <img id="imagePreview" src="" alt="Image Preview" style="display: none;">
                 <button type="button" id="removeImageBtn" style="display: none;">Remove Image</button>
                 <input type="submit" value="Update">

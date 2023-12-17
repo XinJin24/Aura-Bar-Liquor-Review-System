@@ -132,16 +132,26 @@ $('#registration_form').submit((event)=>{
 document.addEventListener('DOMContentLoaded', function () {
     let imageInput = document.getElementById('photoInput');
     let imagePreview = document.getElementById('previewImg');
+    let removeImageBtn = document.getElementById('removeImageBtn');
 
-    imageInput.addEventListener('change', function () {
-        if (this.files && this.files[0]) {
-            let reader = new FileReader();
-            reader.onload = function (e) {
+    imageInput.addEventListener('change', function(event){
+        if (event.target.files && event.target.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
                 imagePreview.src = e.target.result;
+                imagePreview.style.display = 'block';
+                removeImageBtn.style.display = 'block';
             };
-            reader.readAsDataURL(this.files[0]);
+            reader.readAsDataURL(event.target.files[0]);
         }
     });
+
+    removeImageBtn.addEventListener('click', function() {
+        imageInput.value = '';
+        imagePreview.style.display = 'none';
+        removeImageBtn.style.display = 'none';
+    });
+
 });
 
 

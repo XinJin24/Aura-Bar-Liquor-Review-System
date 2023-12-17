@@ -4,45 +4,46 @@
     <form id="registration_form" action="/register" method="POST" enctype="multipart/form-data">
         <div>
             <label for="firstNameInput">
-                First Name:
-                <input type="text" id="firstNameInput" name="firstNameInput">
+                First Name *:
+                <input type="text" id="firstNameInput" name="firstNameInput" >
             </label>
         </div>
         <div>
             <label for="lastNameInput">
-                Last Name:
+                Last Name *:
                 <input type="text" id="lastNameInput" name="lastNameInput">
             </label>
         </div>
         <div>
             <label for="emailAddressInput">
-                Email Address:
+                Email Address *:
                 <input type="text" id="emailAddressInput" name="emailAddressInput">
             </label>
         </div>
         <div>
             <label for="phoneNumberInput">
-                Phone Number:
-                <input type="text" id="phoneNumberInput" name="phoneNumberInput">
+                Phone Number *:
+                <input type="text" id="phoneNumberInput" name="phoneNumberInput" placeholder="+15514329087">
             </label>
         </div>
         <div>
             <label for="passwordInput">
-                Password:
+                Password *:
                 <input type="password" id="passwordInput" name="passwordInput">
             </label>
         </div>
         <div>
             <label for="confirmPasswordInput">
-                Confirm Password:
+                Confirm Password *:
                 <input type="password" id="confirmPasswordInput" name="confirmPasswordInput" >
             </label>
         </div>
         <div>
             <label for="photoInput">
-                Upload Image:
+                Upload Image :
                 <input type="file" id="photoInput" name="photoInput" accept="image/*">
                 <img id="previewImg" alt="previewImg" src="#" >
+                <button type="button" id="removeImageBtn" style="display: none;">Remove Image</button>
             </label>
         </div>
         <div>

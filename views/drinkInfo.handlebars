@@ -51,16 +51,18 @@
                 <form id="addReviewForm" method="POST">
                     <input type="hidden" id="drinkId" name="drinkId" value="{{drinkInfo._id}}">
                     <div>
-                        <label for="reviewText">Review:</label>
+                        <label for="reviewText">Review *:</label>
                         <textarea id="reviewText" name="reviewText" required></textarea>
                     </div>
                     <div>
-                        <label for="rating">Rating (1-5):</label>
+                        <label for="rating">Rating (1-5) *:</label>
                         <input type="number" id="rating" name="rating" required min="1" max="5">
                     </div>
                     <div>
                         <label for="reviewPhotoInput">Review Photo:</label>
                         <input type="file" id="reviewPhotoInput" name="reviewPhotoInput" accept="image/*">
+                        <img id="previewImg" alt="previewImg" src="#" >
+                        <button type="button" id="removeImageBtn" style="display: none;">Remove Image</button>
                     </div>
                     <div>
                         <button type="submit" id="postReview">Post Review</button>
@@ -79,11 +81,11 @@
             <form id="updateReviewForm">
                 <input type="hidden" id="updateReviewId" name="updateReviewId">
                 <div>
-                    <label for="updateReviewText">Review:</label>
+                    <label for="updateReviewText">Review *:</label>
                     <textarea id="updateReviewText" name="updateReviewText" required></textarea>
                 </div>
                 <div>
-                    <label for="updateRating">Rating (1-5):</label>
+                    <label for="updateRating">Rating (1-5) *:</label>
                     <input type="number" id="updateRating" name="updateRating" required min="1" max="5">
                 </div>
                 <div>
