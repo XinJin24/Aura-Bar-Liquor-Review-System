@@ -1,6 +1,6 @@
 import drinkRoute from './drinks.js';
-import userRoute from './users.js';
-import reviewRoute from './reviews.js';
+import userRoute from './user.js';
+import reviewRoute from './review.js';
 import authRoute from './authentication.js';
 
 
