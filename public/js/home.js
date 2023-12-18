@@ -24,7 +24,7 @@ function fetchAllDrinks() {
                     <h2>${drink.name}</h2>
                     <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
                     <p>Category: ${drink.category}</p>
-                    <p>Rating: ${generateStarRating(drink.rating)}</p>
+                    <p>Rating: ${generateStarRating(drink.rating)} ${drink.rating}</p>
                     <p>Price: ${drink.price}</p>
                     <p>Stock: ${drink.stocks}</p>
                     <p>Reserved Counts: ${drink.reservedCounts}</p>
@@ -63,7 +63,7 @@ function fetchAndSortDrinks(sortBy) {
                     <h2>${drink.name}</h2>
                     <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
                     <p>Category: ${drink.category}</p>
-                    <p>Rating: ${generateStarRating(drink.rating)}</p>
+                    <p>Rating: ${generateStarRating(drink.rating)} ${drink.rating}</p>
                     <p>Price: ${drink.price}</p>
                     <p>Stock: ${drink.stocks}</p>
                     <p>Reserved Counts: ${drink.reservedCounts}</p>
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <h2>${drink.name}</h2>
                             <img src="${drink.drinkPictureLocation}" alt="drink Picture" class="drink-picture" />
                             <p>Category: ${drink.category}</p>
-                            <p>Rating: ${generateStarRating(drink.rating)}</p>
+                            <p>Rating: ${generateStarRating(drink.rating)} ${drink.rating}</p>
                             <p>Price: ${drink.price}</p>
                             <p>Stock: ${drink.stocks}</p>
                             <p>Reserved Counts: ${drink.reservedCounts}</p>

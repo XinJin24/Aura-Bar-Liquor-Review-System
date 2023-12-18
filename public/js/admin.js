@@ -127,6 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    document.getElementById('closeStocksModal').addEventListener('click', () => {
+        closeUpdateStocksModal();
+    });
+
     const fileInput = document.getElementById('drinkPicture');
     const imagePreview = document.getElementById('imagePreview');
     const removeImageBtn = document.getElementById('removeImageBtn');
@@ -583,6 +587,10 @@ function fetchAndSortDrinks(sortBy) {
             console.error("Error fetching sorted drinks:", error);
         }
     });
+}
+
+function closeUpdateStocksModal() {
+    document.getElementById('updateStocksModal').style.display = 'none';
 }
 
 

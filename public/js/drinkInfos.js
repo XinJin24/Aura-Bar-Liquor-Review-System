@@ -3,10 +3,14 @@ let validateReviewText = (description) => {
         throw `Error: description should be a valid string (no empty spaces)`;
     }
     description = description.trim();
+    const validCharactersMust = /.*[a-zA-Z].*/;
+    if (!validCharactersMust.test(description)) {
+        throw `Error: recipe must contain at least one alphabet character`;
+    }
     if (description.length < 5 || description.length > 10000) {
         throw `Error: description should have more than 5 chars and less than 10 thousand chars`;
     }
-    return description;
+    return description
 }
 
 let validateRating = (rating) => {

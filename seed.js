@@ -508,7 +508,7 @@ try {
         "- Freshly squeezed orange juice, to top*", drinkPicturePath43, 10, 14);
 
 
-    user1 = await createUser("Mike", "River", "mike.river1@example.com", "+19293335817", "Abc123!@#", profilePicture1, "admin");
+    user1 = await createUser("Mike", "River", "mike.river1@example.com", "+19293335817", "Abc123!@#", "", "admin");
     user2 = await createUser("John", "Doe", "john.doe2@example.com", "+19293335817", "Abc123!@#", profilePicture2, "user");
     user3 = await createUser("Jane", "Smith", "jane.smith3@example.com", "+19293335817", "Abc123!@#", profilePicture3, "admin");
     user4 = await createUser("Alice", "Taylor", "alice.taylor4@example.com", "+19293335817", "Abc123!@#", profilePicture4, "user");
