@@ -307,7 +307,7 @@ const exportedMethods = {
                 await unlink(absolutePath);
                 return {pictureDeleted: true}
             }catch (error){
-                console.log(error);
+                console.log("failed to delete the original picture because it is not exist in the disk");
             }
 
         } else {
