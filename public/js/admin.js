@@ -589,10 +589,6 @@ function fetchAndSortDrinks(sortBy) {
     });
 }
 
-function closeUpdateStocksModal() {
-    document.getElementById('updateStocksModal').style.display = 'none';
-}
-
 
 function generateStarRating(rating) {
     let html = '';
