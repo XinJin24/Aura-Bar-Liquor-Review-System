@@ -99,7 +99,7 @@ To get a local copy up and running follow these simple example steps.
    ```
    with value
    ```sh
-   ACb22d7dddd58f2c92edc3422e1d16efe6
+   *****
    ```
    and
    ```sh
@@ -107,7 +107,7 @@ To get a local copy up and running follow these simple example steps.
    ```
    with value
    ```sh
-   c1dfda4c285abb2f18660e6ebf323863
+   *****
    ```
 9. Run below code in terminal to start the program
     ```sh
