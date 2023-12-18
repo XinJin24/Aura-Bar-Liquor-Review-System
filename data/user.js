@@ -149,7 +149,7 @@ export const updateUser = async (
         throw `Error: Failed to update user with email ${email}`;
     }
     try {
-        if(oldProfilePictureLocation !=="public/pictures/defaultUserProfilePicture.jpg") {
+        if(oldProfilePictureLocation !=="public/pictures/defaultUserProfilePicture.jpg" && oldProfilePictureLocation !=="../pictures/defaultUserProfilePicture.jpg") {
             await validation.deleteAPicture(oldProfilePictureLocation);
         }
     } catch (error) {

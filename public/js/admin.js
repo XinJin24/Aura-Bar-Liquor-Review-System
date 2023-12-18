@@ -41,10 +41,6 @@ let validateDrinkRecipe = (recipe) => {
     if (!validCharactersMust.test(recipe)) {
         throw `Error: recipe must contain at least one alphabet character`;
     }
-    const validCharacters = /^[a-zA-Z0-9\sáéíóúüñäëïöü']*$/;
-    if (!validCharacters.test(recipe)) {
-        throw `Error: recipe must contain at least one alphabet character and only include alphabets, numbers, spaces, and special characters áéíóúüñäëïöü`;
-    }
     if (recipe.length < 5 || recipe.length > 10000) {
         throw `Error: recipe should have more than 5 chars and less than 10 thousand chars`;
     }
