@@ -374,6 +374,15 @@ router
                 drink.editable = true;
             }
         }
+        allDrinks.sort((a, b) => {
+            if (a.available && !b.available) {
+                return -1;
+            }
+            if (!a.available && b.available) {
+                return 1;
+            }
+            return 0;
+        });
         return res.render('admin', {
             title: "Admin Interface",
             drinks: allDrinks,

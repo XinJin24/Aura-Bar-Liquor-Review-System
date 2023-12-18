@@ -36,6 +36,9 @@
                         <p>Price: {{price}}</p>
                         <p>Stocks: {{stocks}}</p>
                         <p>Reserved Counts: {{reservedCounts}}</p>
+                        {{# unless available}}
+                            <p id="sold_out_text">Sold Out</p>
+                        {{/unless}}
                         <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Details</button>
                         <button class="btn btn-warning updateButton" data-drinkid="{{_id}}">Update Drink</button>
                         {{#if available}}

@@ -211,3 +211,8 @@ header nav ul li a:hover {
     height: 200px;
     margin-top: 10px;
 }
+
+#sold_out_text {
+    color: red;
+    font-weight: bold;
+}
