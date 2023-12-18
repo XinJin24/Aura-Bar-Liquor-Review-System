@@ -37,7 +37,7 @@
                         <p>Stock: {{stocks}}</p>
                         <p>Reserved Counts: {{reservedCounts}}</p>
                         {{# unless available}}
-                            <p id="sold_out_text">Sold Out</p>
+                            <p class="sold_out_text">Sold Out</p>
                         {{/unless}}
                         <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Details</button>
                     </li>

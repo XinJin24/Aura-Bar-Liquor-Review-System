@@ -7,11 +7,11 @@ import {getAllDrinks, getAllReviewsOnADrink} from "../data/drinks.js";
 import xss from "xss";
 import multer from "multer";
 import bcrypt from "bcrypt";
-import {createReview, getReviewInfoByReviewId} from "../data/reviews.js";
+import {createReview} from "../data/reviews.js";
 import twilio from 'twilio';
 
-const accountSid = 'ACb22d7dddd58f2c92edc3422e1d16efe6';
-const authToken = 'd463c5a92ff6f534804ea60b99e6550d';
+const accountSid = process.env.accountSid;
+const authToken = process.env.authToken;
 
 const client = twilio(accountSid, authToken);
 
@@ -206,21 +206,19 @@ router.route("/sendMessage").post(async (req, res) => {
             });
         }
         try {
-            client.messages
+            await client.messages
                 .create({
                     body: "This message is from Aura Bar Customer: " + message,
                     from: '+18334580397',
                     to: businessPhone
-                })
-                .then(message => console.log("message sent to business. " + message.sid))
+                });
 
-            client.messages
+            await client.messages
                 .create({
                     body: "Your message was successfully received by the Aura Service Team. We will have someone to serve your request soon!          Aura Management",
                     from: '+18334580397',
                     to: userPhoneNumber
-                })
-                .then(message => console.log("message sent to user. " + message.sid))
+                });
 
             return res.status(200).send('Message sent successfully');
         } catch (error) {

@@ -16,14 +16,11 @@
             <h3>Reserved Drinks:</h3>
             <ul>
                 {{#each drinkReserved as |drink|}}
-                    <li>
-                        <img src="{{drinkPictureLocation}}" alt="drink Picture" class="reserved-picture">
-                        {{name}}
+                    <li><img src="{{drinkPictureLocation}}" alt="drink Picture" class="reserved-picture"></li>
+                    <li>{{name}}</li>
                         {{#if _id}}
-                            <button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Drink Details
-                            </button>
+                            <li><button class="btn btn-primary" onclick="redirectToPage('{{_id}}')">View Drink Details</button><li>
                         {{/if}}
-                    </li>
                 {{/each}}
             </ul>
         </div>
@@ -38,7 +35,7 @@
                     {{/if}}
                     <li>{{reviewText}}</li>
                     <li>{{timestamp}}</li>
-                    <button class="btn btn-primary" onclick="redirectToPage('{{drinkId}}')">View Review Details</button>
+                    <li><button class="btn btn-primary" onclick="redirectToPage('{{drinkId}}')">View Review Details</button></li>
                 {{/each}}
             </ul>
         </div>
@@ -76,9 +73,9 @@
                 <input type="password" id="confirmNewPassword" name="confirmNewPassword">
                 <br>
                 <label for="photoInput">Profile Photo:</label>
-                <input type="file" id="photoInput" name="photoInput" accept="image/*" placeholder="+15514329087">
+                <input type="file" id="photoInput" name="photoInput" accept="image/*">
                 <br>
-                <img id="imagePreview" src="" alt="Image Preview" style="display: none;">
+                <img id="imagePreview" src="#" alt="Image Preview" style="display: none;">
                 <button type="button" id="removeImageBtn" style="display: none;">Remove Image</button>
                 <br>
                 <input type="submit" value="Update">

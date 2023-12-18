@@ -212,7 +212,7 @@ header nav ul li a:hover {
     margin-top: 10px;
 }
 
-#sold_out_text {
+.sold_out_text {
     color: red;
     font-weight: bold;
 }
