@@ -92,7 +92,9 @@ To get a local copy up and running follow these simple example steps.
     ```sh
       npm i
     ```
-6. Run below code in terminal to start the program
+6. Run Seed.js file to load all testing data
+7. Add Enviroment Variable accountSid with value ACb22d7dddd58f2c92edc3422e1d16efe6 and authToken with value c1dfda4c285abb2f18660e6ebf323863
+8. Run below code in terminal to start the program
     ```sh
       npm start
     ```
