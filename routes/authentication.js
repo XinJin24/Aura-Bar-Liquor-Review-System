@@ -2,7 +2,7 @@ import Router, {query} from "express"
 
 const router = Router();
 import validation from "../publicMethods.js";
-import {createUser, getUserInfoByUserId, getUserPasswordById, loginUser} from "../data/user.js";
+import {createUser, getUserInfoByEmail, getUserInfoByUserId, getUserPasswordById, loginUser} from "../data/user.js";
 import {getAllDrinks, getAllReviewsOnADrink} from "../data/drinks.js";
 import xss from "xss";
 import multer from "multer";
@@ -212,17 +212,17 @@ router.route("/sendMessage").post(async (req, res) => {
                     from: '+18334580397',
                     to: businessPhone
                 })
-                .then(message => console.log("message sent to business. "+ message.sid))
+                .then(message => console.log("message sent to business. " + message.sid))
 
             client.messages
                 .create({
                     body: "Your message was successfully received by the Aura Service Team. We will have someone to serve your request soon!          Aura Management",
                     from: '+18334580397',
-                    to: "+19293428295"
+                    to: userPhoneNumber
                 })
-                .then(message => console.log("message sent to user. "+message.sid))
+                .then(message => console.log("message sent to user. " + message.sid))
 
-            res.status(200).send('Message sent successfully');
+            return res.status(200).send('Message sent successfully');
         } catch (error) {
             res.status(500).send('Error sending message');
         }
@@ -233,7 +233,6 @@ router.route("/sendMessage").post(async (req, res) => {
         });
     }
 });
-
 
 router
     .route('/checkPassword')
@@ -246,26 +245,48 @@ router
             if (!match) {
                 return res.status(400).send("Error: Old password is incorrect.");
             }
-            res.status(200).send({ success: true, message: "Password is matched and ready to be used" });
+            return res.status(200).send({success: true, message: "Password is matched and ready to be used"});
         } catch (error) {
-            res.status(500).send({ success: false, message: "Internal server error." });
+            return res.status(500).send({success: false, message: "Internal server error."});
         }
-    })
+    });
+
+
+router
+    .route('/checkLogin')
+    .post(async (req, res) => {
+        try {
+            let userEmail = xss(req.body.userEmail);
+            let password = xss(req.body.password);
+            userEmail = validation.validateEmail(userEmail);
+            const user = await getUserInfoByEmail(userEmail);
+            if (user) {
+                const match = await bcrypt.compare(password, user.password);
+                if (match) {
+                    return res.status(200).send({success: true, message: "correct email and password combination"});
+                }
+            } else {
+                return res.status(500).send({success: false, message: "incorrect email and password combination"});
+            }
+            return res.status(500).send({success: false, message: "incorrect email and password combination"});
+        } catch (error) {
+            return res.status(500).send({success: false, message: "incorrect email and password combination"});
+        }
+    });
 
 
 router
     .route('/getUserId')
     .get(async (req, res) => {
-        if(req.session.user && req.session.user.userId) {
-            res.json({ userId: req.session.user.userId });
+        if (req.session.user && req.session.user.userId) {
+            return res.json({userId: req.session.user.userId});
         } else {
-            res.status(401).json({ message: 'Error: User not logged in' });
+            return res.status(401).json({message: 'Error: User not logged in'});
         }
-    })
+    });
 
 
-router.
-    route('/search').get(async (req, res) => {
+router.route('/search').get(async (req, res) => {
     const keyword = req.query.query;
     let drinks = await getAllDrinks();
     let availableDrinks = drinks.filter(drink => drink.available);
@@ -290,8 +311,7 @@ router.
 });
 
 
-router.
-    route('/getAllDrinks').get(async (req, res) => {
+router.route('/getAllDrinks').get(async (req, res) => {
     let drinks = await getAllDrinks();
     let availableDrinks = drinks.filter(drink => drink.available);
 
@@ -310,13 +330,13 @@ router.route('/sortDrinks').get(async (req, res) => {
     drinks = drinks.filter(drink => drink.available);
 
     if (sortBy === 'priceDesc') {
-        drinks =  drinks.sort((a, b) => b.price - a.price);
+        drinks = drinks.sort((a, b) => b.price - a.price);
     } else if (sortBy === 'priceAsc') {
-        drinks =  drinks.sort((a, b) => a.price - b.price);
+        drinks = drinks.sort((a, b) => a.price - b.price);
     } else if (sortBy === 'topRating') {
-        drinks =  drinks.sort((a, b) => b.rating - a.rating);
+        drinks = drinks.sort((a, b) => b.rating - a.rating);
     } else if (sortBy === 'topReserved') {
-        drinks =  drinks.sort((a, b) => b.reservedCounts - a.reservedCounts);
+        drinks = drinks.sort((a, b) => b.reservedCounts - a.reservedCounts);
     }
     if (req.session.user && req.session.user.role === "admin") {
         for (let drink of drinks) {
@@ -355,15 +375,21 @@ router
             }
         }
         return res.render('admin', {
-            title: "Admin Interface", drinks: allDrinks, firstName: userFirstName, userId: userId,
-            lastName: userLstName, userProfilePictureLocation: userProfilePictureLocation, login: login, isAdmin: isAdmin
+            title: "Admin Interface",
+            drinks: allDrinks,
+            firstName: userFirstName,
+            userId: userId,
+            lastName: userLstName,
+            userProfilePictureLocation: userProfilePictureLocation,
+            login: login,
+            isAdmin: isAdmin
         });
-    } else if(req.session.user && req.session.user.role === "user"){
+    } else if (req.session.user && req.session.user.role === "user") {
         return res.status(401).render("error", {
             errorMsg: "Sorry, This page is solely for admin!",
             title: "Access Error"
         });
-    } else{
+    } else {
         return res.status(401).render("error", {
             errorMsg: "please use your admin credentials to log in!",
             title: "Error"
@@ -380,9 +406,9 @@ router
                 drinkId = validation.validateId(xss(req.body.drinkId));
                 userId = req.session.user.userId;
                 const existingReviews = await getAllReviewsOnADrink(drinkId);
-                if(existingReviews.length >= 1){
-                    for(const singleReview of existingReviews){
-                        if(singleReview.userId === userId){
+                if (existingReviews.length >= 1) {
+                    for (const singleReview of existingReviews) {
+                        if (singleReview.userId === userId) {
                             return res.status(500).json({error: `you have made a review on this drink already, feel free to edit or delete it!`});
                         }
                     }

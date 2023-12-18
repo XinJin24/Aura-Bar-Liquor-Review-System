@@ -140,17 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('photoInput');
     const editInfoForm = document.getElementById("editInfoForm");
 
-    // fileInput.addEventListener('change', function(event){
-    //     if (event.target.files && event.target.files[0]) {
-    //         var reader = new FileReader();
-    //         reader.onload = function(e) {
-    //             imagePreview.src = e.target.result;
-    //             imagePreview.style.display = 'block';
-    //         };
-    //         reader.readAsDataURL(event.target.files[0]);
-    //     }
-    // });
-
     const imagePreview = document.getElementById('imagePreview');
     const removeImageBtn = document.getElementById('removeImageBtn');
     fileInput.addEventListener('change', function(event){
@@ -170,7 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
         imagePreview.style.display = 'none'; // Hide the image preview
         removeImageBtn.style.display = 'none'; // Hide the remove button
     });
-// });
 
 
     if (editInfoForm) {
@@ -197,6 +185,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 newPassword = checkPassword(newPassword, "new password");
                 confirmNewPassword = checkPassword(confirmNewPassword, "confirm password");
                 checkConfirm(newPassword, confirmNewPassword);
+
+                if(oldPassword === newPassword){
+                    throw "This password is the same as the old password";
+                }
 
                 $.ajax({
                     type: "POST",

@@ -116,6 +116,10 @@ export const updateUser = async (
     const userCollection = await users();
     const user = await userCollection.findOne({ email: email });
     // console.log('original' + user);
+    const match = await bcrypt.compare(password, user.password);
+    if(match){
+        throw "Error: This password is the same as the old password";
+    }
 
     if (!user) {
         throw `Error: User with email ${email} not found`;
@@ -229,6 +233,7 @@ export const getUserInfoByEmail = async (
     }
     return {
         userId: user._id,
+        password:user.password,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,

@@ -88,7 +88,7 @@ router
                     });
             } catch (error) {
                 //render error page that shows internal error
-                res.status(404).render('error', {
+                return res.status(404).render('error', {
                     errorMsg: error,
                     title: "Internal Server Error"
                 })
@@ -121,6 +121,11 @@ router
                 if (newPassword !== confirmNewPassword) {
                     throw "Error: new Passwords do not match";
                 }
+
+                if(oldPassword === newPassword){
+                    throw "This password is the same as the old password";
+                }
+
                 try{
                     const user = await updateUser(
                         firstName,

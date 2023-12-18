@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     location.reload();
                 },
                 error: function (error) {
-                    alert(error);
+                    alert("Error reserving drink");
                     console.error("Error reserving drink:", error);
                 }
             });

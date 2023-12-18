@@ -369,7 +369,17 @@ export const updateAllDrinkRating = async () => {
                     {_id: drink._id},
                     {$set: updatedDrinkRating}
                 );
+            }else{
+                const updatedDrinkRating = {
+                    rating: 0,
+                };
+                const drinkCollection = await drinks();
+                const updateDrink = await drinkCollection.updateOne(
+                    {_id: drink._id},
+                    {$set: updatedDrinkRating}
+                );
             }
+
         }
         return {updatedAllDrinkRating: true};
     } catch (error) {

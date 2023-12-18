@@ -42,7 +42,7 @@ router
             });
             //if not admin
         } else if (req.session.user && req.session.user.role !== "admin") {
-            res.status(403).render("error", {
+            return res.status(403).render("error", {
                 errorMsg: "Sorry, You are not admin, hence you cannot add a drink...",
                 title: "Authorization Error"
             });
@@ -231,7 +231,7 @@ router
                 return res.status(500).send("Error reserving drink.");
             }
         } else {
-            console.error("Error reserving drink:", error);
+            console.error("Error reserving drink");
             return res.status(401).send("Please Login in first to reverse a Drink");
         }
     });
@@ -247,9 +247,9 @@ router
             let stockAmount = xss(req.body.stockAmount);
             stockAmount = validation.validateStocks(stockAmount);
             await restockDrink(drinkId, stockAmount);
-            res.status(200).json({message: "Drink restocked successfully"});
+            return res.status(200).json({message: "Drink restocked successfully"});
         } catch (error) {
-            res.status(500).json({error: error.toString()});
+            return res.status(500).json({error: error.toString()});
         }
     });
 
@@ -261,9 +261,9 @@ router
         try {
             const drinkId = req.params.id;
             const drinkInfo = await getDrinkInfoByDrinkId(drinkId);
-            res.status(200).json(drinkInfo);
+            return res.status(200).json(drinkInfo);
         } catch (error) {
-            res.status(500).json({error: error.toString()});
+            return res.status(500).json({error: error.toString()});
         }
     });
 

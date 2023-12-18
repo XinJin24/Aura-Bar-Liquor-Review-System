@@ -106,7 +106,7 @@ router
                 const updatedReview = await updateReview(
                     reviewId, validation.generateCurrentDate(), review.drinkId, review.userId, reviewText, rating, reviewPictureLocation);
                 if (updatedReview.updatedReview === true) {
-                    res.status(200).json({success: true, message: "Review updated successfully"});
+                    return res.status(200).json({success: true, message: "Review updated successfully"});
                 }
             } catch (error) {
                 console.error(error);
@@ -117,7 +117,7 @@ router
             }
         } else {
             console.error(error);
-            res.status(400).json({error: error.toString()});
+            return res.status(400).json({error: error.toString()});
         }
     })
     .delete(async (req, res) => {
@@ -137,13 +137,13 @@ router
 
             const deletedReview = await deleteReview(reviewId);
             if (deletedReview.deletedReview) {
-                res.status(200).json({message: 'Review deleted successfully'});
+                return res.status(200).json({message: 'Review deleted successfully'});
             } else {
-                res.status(500).json({error: 'Internal Server Error'});
+                return res.status(500).json({error: 'Internal Server Error'});
             }
         } catch (error) {
             console.error(error);
-            res.status(400).json({error: error.toString()});
+            return res.status(400).json({error: error.toString()});
         }
     });
 
